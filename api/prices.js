@@ -196,10 +196,11 @@ export default async function handler(req, res) {
       try {
         await put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
           access: 'public',
-          addRandomSuffix: false
+          addRandomSuffix: false,
+          allowOverwrite: true
         });
       } catch (blobErr) {
-        console.warn('Blob put error:', blobErr.message);
+        console.error('Blob put error:', blobErr.message);
       }
 
       return res.status(200).json({
