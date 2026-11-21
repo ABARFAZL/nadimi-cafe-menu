@@ -15,8 +15,40 @@
     padding: 0;
   }
 
-  /* ================= 10 THEMES WITH DUAL DARK / LIGHT MODES ================= */
+  /* ================= LUXURY THEMES WITH DUAL DARK / LIGHT MODES ================= */
   
+  /* 0. Classic Grey & White (Nadimi Signature - تم خاکستری و سفید کلاسیک ندیمی) */
+  body.theme-classic_grey.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #adb3bd 0%, #7c8390 45%, #464c58 80%, #292d35 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.48) 0%, rgba(255,255,255,0.15) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(246, 247, 249, 0.96);
+    --card-border: rgba(0, 0, 0, 0.16);
+    --text-main: #0f172a;
+    --text-muted: #334155;
+    --accent: #1e293b;
+    --badge-bg: rgba(0, 0, 0, 0.08);
+    --price-color: #000000;
+    --table-header-bg: #1e293b;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.28));
+    --pill-bg: #1e293b;
+    --pill-text: #ffffff;
+  }
+  body.theme-classic_grey.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #3f444e 0%, #282c34 45%, #181a1f 80%, #0d0e11 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(200, 205, 215, 0.22) 0%, rgba(200, 205, 215, 0.05) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(28, 32, 40, 0.96);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --accent: #cbd5e1;
+    --badge-bg: rgba(255, 255, 255, 0.1);
+    --price-color: #ffffff;
+    --table-header-bg: #282c35;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.5));
+    --pill-bg: #282c35;
+    --pill-text: #f1f5f9;
+  }
+
   /* 1. Monochrome Slate */
   body.theme-monochrome.mode-dark {
     --bg-gradient: radial-gradient(ellipse at 50% 25%, #292d35 0%, #1a1c22 45%, #0f1013 80%, #08090a 100%);
@@ -735,9 +767,62 @@
     box-shadow: 0 2px 10px rgba(0,0,0,0.18);
     border: 1px solid var(--card-border);
   }
+
+  /* Subtle Font Size Controller (Direct TV Adjustment) */
+  .tv-font-controller {
+    position: fixed;
+    top: 8px;
+    right: 12px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: rgba(15, 23, 42, 0.72);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+    padding: 2px 7px;
+    opacity: 0.2;
+    transition: opacity 0.3s ease;
+  }
+  .tv-font-controller:hover, .tv-font-controller:active {
+    opacity: 1;
+  }
+  .tv-font-btn {
+    background: rgba(255, 255, 255, 0.12);
+    border: none;
+    color: #ffffff;
+    font-size: 1.3vh;
+    font-weight: 900;
+    width: 2.3vh;
+    height: 2.3vh;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+  .tv-font-btn:active {
+    transform: scale(0.9);
+  }
+  .tv-font-badge {
+    font-size: 1.1vh;
+    font-weight: 800;
+    color: #38bdf8;
+    padding: 0 4px;
+    direction: ltr;
+  }
 </style>
 </head>
-<body class="theme-monochrome mode-dark">
+<body class="theme-classic_grey mode-light">
+
+  <!-- Direct TV Screen Font Size Controller -->
+  <div class="tv-font-controller" title="تنظیم مستقیم اندازه قلم منو">
+    <button class="tv-font-btn" onclick="stepTvFont(-5)" title="کوچک‌تر کردن متن">A−</button>
+    <span class="tv-font-badge" id="tvFontScaleBadge">۱۰۰٪</span>
+    <button class="tv-font-btn" onclick="stepTvFont(5)" title="بزرگ‌تر کردن متن">A+</button>
+  </div>
 
   <!-- Header -->
   <div class="header">
@@ -1110,9 +1195,69 @@
     });
 
     let currentPrices = {};
-    let currentTheme = 'monochrome';
-    let currentMode = 'dark';
+    let currentTheme = 'classic_grey';
+    let currentMode = 'light';
     let scheduleConfig = { lightStart: '08:00', darkStart: '18:00' };
+    let currentFontScale = 100;
+
+    function applyFontSizeScale(scalePercent) {
+      currentFontScale = parseInt(scalePercent, 10) || 100;
+      currentFontScale = Math.min(150, Math.max(70, currentFontScale));
+      const factor = currentFontScale / 100;
+
+      let el = document.getElementById('dynamicFontScaleStyle');
+      if (!el) {
+        el = document.createElement('style');
+        el.id = 'dynamicFontScaleStyle';
+        document.head.appendChild(el);
+      }
+
+      el.textContent = `
+        :root { --font-scale: ${factor}; }
+        .header-info-item span:first-child { font-size: calc(1.1vh * var(--font-scale)) !important; }
+        .header-info-item span:last-child { font-size: calc(1.35vh * var(--font-scale)) !important; }
+        .cat-title { font-size: calc(1.8vh * var(--font-scale)) !important; }
+        .cat-sub { font-size: calc(1.15vh * var(--font-scale)) !important; }
+        .table-head th { font-size: calc(1.25vh * var(--font-scale)) !important; }
+        .item-name { font-size: calc(1.38vh * var(--font-scale)) !important; }
+        .item-desc { font-size: calc(1vh * var(--font-scale)) !important; }
+        .price-num { font-size: calc(1.5vh * var(--font-scale)) !important; }
+        .price-single-num { font-size: calc(1.75vh * var(--font-scale)) !important; }
+        .single-price-card .item-name { font-size: calc(1.45vh * var(--font-scale)) !important; }
+        .single-price-card .item-desc { font-size: calc(1.05vh * var(--font-scale)) !important; }
+        .matcha-header-title { font-size: calc(1.35vh * var(--font-scale)) !important; }
+        .teas-sub-label { font-size: calc(1.1vh * var(--font-scale)) !important; }
+        .footer-note { font-size: calc(1.25vh * var(--font-scale)) !important; }
+      `;
+
+      const badge = document.getElementById('tvFontScaleBadge');
+      if (badge) {
+        badge.textContent = toFarsi(currentFontScale) + '٪';
+      }
+    }
+
+    async function stepTvFont(delta) {
+      const nextScale = Math.min(150, Math.max(70, currentFontScale + delta));
+      applyFontSizeScale(nextScale);
+      try {
+        await fetch('/api/prices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fontSizeScale: nextScale })
+        });
+      } catch (e) {}
+    }
+
+    // Keyboard Shortcuts for TV: '+' or '=' increases font, '-' decreases font, '0' resets
+    window.addEventListener('keydown', (e) => {
+      if (e.key === '+' || e.key === '=') {
+        stepTvFont(5);
+      } else if (e.key === '-' || e.key === '_') {
+        stepTvFont(-5);
+      } else if (e.key === '0') {
+        stepTvFont(100 - currentFontScale);
+      }
+    });
 
     function computeActiveMode(mode, schedule) {
       if (mode === 'light') return 'mode-light';
@@ -1205,6 +1350,9 @@
           const remote = json.data;
           if (remote) {
             applyThemeAndMode(remote.theme, remote.mode, remote.schedule, remote.fontFamily);
+            if (remote.fontSizeScale !== undefined) {
+              applyFontSizeScale(remote.fontSizeScale);
+            }
 
             if (remote.headerLinks) {
               renderHeaderLinks(remote.headerLinks);

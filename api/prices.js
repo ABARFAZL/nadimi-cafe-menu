@@ -2,13 +2,14 @@
 import { put } from '@vercel/blob';
 
 const DEFAULT_STATE = {
-  theme: 'monochrome',
-  mode: 'dark', // 'dark' | 'light' | 'schedule'
+  theme: 'classic_grey',
+  mode: 'light', // 'dark' | 'light' | 'schedule'
   schedule: {
     lightStart: '08:00',
     darkStart: '18:00'
   },
   fontFamily: 'Vazirmatn',
+  fontSizeScale: 100, // 75 to 140 percent
   headerLinks: [
     { id: 'instagram', title: 'اینستاگرام', handle: '@nadimi.coffee', url: 'https://instagram.com/nadimi.coffee', iconType: 'instagram', active: true },
     { id: 'telegram', title: 'تلگرام', handle: '@nadimicoffee', url: 'https://t.me/nadimicoffee', iconType: 'telegram', active: true }
@@ -169,6 +170,9 @@ export default async function handler(req, res) {
       }
       if (incoming.fontFamily !== undefined) {
         memoryStore.fontFamily = incoming.fontFamily;
+      }
+      if (incoming.fontSizeScale !== undefined) {
+        memoryStore.fontSizeScale = parseInt(incoming.fontSizeScale, 10) || 100;
       }
       if (incoming.headerLinks !== undefined) {
         memoryStore.headerLinks = incoming.headerLinks;
