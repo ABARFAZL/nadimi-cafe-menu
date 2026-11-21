@@ -1335,18 +1335,19 @@
     }
     checkStandaloneMode();
 
-    // Check Online/Offline Status
+    // Check Online/Offline Status (Graceful fallback)
     function updateNetworkStatus() {
-      const banner = document.getElementById('offlineBanner');
-      if (!navigator.onLine) {
-        banner.style.display = 'block';
-      } else {
-        banner.style.display = 'none';
-      }
+      // Do not block UI preemptively on iOS/Safari since navigator.onLine is often false-positive
     }
-    window.addEventListener('online', updateNetworkStatus);
-    window.addEventListener('offline', updateNetworkStatus);
-    updateNetworkStatus();
+    window.addEventListener('online', () => {
+      const banner = document.getElementById('offlineBanner');
+      if (banner) banner.style.display = 'none';
+    });
+    window.addEventListener('offline', () => {
+      // only show if explicitly offline event fires
+      const banner = document.getElementById('offlineBanner');
+      if (banner) banner.style.display = 'block';
+    });
 
     // Tab Switching
     function switchTab(tabId, btn) {
@@ -1452,6 +1453,7 @@
 
       renderItems();
       showToast(`✓ محاسبه ${perc > 0 ? '+' : ''}${perc}٪ روی قیمت‌ها انجام شد`);
+      saveAllToServerSilent();
     }
 
     // Theme & Mode Setting (Syncs app theme too + Auto-saves instantly!)
@@ -1628,7 +1630,6 @@
     }
 
     async function saveAllToServerSilent() {
-      if (!navigator.onLine) return;
       document.querySelectorAll('.num-input').forEach(inp => {
         const key = inp.id.replace('inp_', '');
         appState.prices[key] = parseInt(inp.value, 10) || 0;
@@ -1639,12 +1640,16 @@
       if (darkEl) appState.schedule.darkStart = darkEl.value || '18:00';
 
       try {
-        await fetch('/api/prices', {
+        const res = await fetch('/api/prices', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(appState)
         });
-        showToast('✓ همگام با تلویزیون');
+        if (res.ok) {
+          showToast('✓ همگام با تلویزیون');
+          const banner = document.getElementById('offlineBanner');
+          if (banner) banner.style.display = 'none';
+        }
       } catch (e) {
         console.warn('Silent sync:', e);
       }
@@ -1652,31 +1657,34 @@
 
     // Save All to Server
     async function saveAllToServer() {
-      if (!navigator.onLine) {
-        alert('شما در حالت آفلاین هستید! اتصال به اینترنت برقرار نیست.');
-        return;
-      }
-
       // Collect inputs
       document.querySelectorAll('.num-input').forEach(inp => {
         const key = inp.id.replace('inp_', '');
         appState.prices[key] = parseInt(inp.value, 10) || 0;
       });
 
-      appState.schedule.lightStart = document.getElementById('inpLightStart').value || '08:00';
-      appState.schedule.darkStart = document.getElementById('inpDarkStart').value || '18:00';
+      const lightEl = document.getElementById('inpLightStart');
+      const darkEl = document.getElementById('inpDarkStart');
+      if (lightEl) appState.schedule.lightStart = lightEl.value || '08:00';
+      if (darkEl) appState.schedule.darkStart = darkEl.value || '18:00';
 
       try {
-        await fetch('/api/prices', {
+        const res = await fetch('/api/prices', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(appState)
         });
 
-        showToast('✓ تمام تغییرات، تم و قیمت‌ها روی تلویزیون لایو شدند!');
-        if (navigator.vibrate) navigator.vibrate([20, 50, 20]);
+        if (res.ok) {
+          showToast('✓ تمام تغییرات، تم و قیمت‌ها روی تلویزیون لایو شدند!');
+          const banner = document.getElementById('offlineBanner');
+          if (banner) banner.style.display = 'none';
+          if (navigator.vibrate) navigator.vibrate([20, 50, 20]);
+        } else {
+          showToast('⚠️ سرور پاسخ نداد، دوباره تلاش کنید');
+        }
       } catch (err) {
-        alert('خطا در اتصال به سرور ورسل');
+        showToast('⚠️ خطا در ارتباط با سرور (بررسی اتصال اینترنت)');
       }
     }
 
@@ -1723,7 +1731,9 @@
     initApp();
 
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(() => {});
+      navigator.serviceWorker.register('/sw.js').then((reg) => {
+        reg.update();
+      }).catch(() => {});
     }
   </script>
 </body>

@@ -1319,7 +1319,7 @@
       }
     });
 
-    // Keyboard Shortcuts for TV: '+' or '=' increases font, '-' decreases font, '0' resets, 'F' toggles Fullscreen
+    // Keyboard Shortcuts for TV: '+' or '=' increases font, '-' decreases font, '0' resets, 'F' or Enter toggles Fullscreen
     window.addEventListener('keydown', (e) => {
       if (e.key === '+' || e.key === '=') {
         stepTvFont(5);
@@ -1327,13 +1327,8 @@
         stepTvFont(-5);
       } else if (e.key === '0') {
         stepTvFont(100 - currentFontScale);
-      } else if (e.key === 'f' || e.key === 'F') {
+      } else if (e.key === 'f' || e.key === 'F' || e.key === 'Enter') {
         toggleFullScreen();
-      }
-    });
-        stepTvFont(-5);
-      } else if (e.key === '0') {
-        stepTvFont(100 - currentFontScale);
       }
     });
 
@@ -1349,8 +1344,8 @@
         return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
       };
 
-      const startLight = parseTime(schedule?.lightStart || '08:00');
-      const startDark = parseTime(schedule?.darkStart || '18:00');
+      const startLight = parseTime((schedule && schedule.lightStart) ? schedule.lightStart : '08:00');
+      const startDark = parseTime((schedule && schedule.darkStart) ? schedule.darkStart : '18:00');
 
       if (startLight < startDark) {
         return (curMins >= startLight && curMins < startDark) ? 'mode-light' : 'mode-dark';
@@ -1499,7 +1494,9 @@
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
+        navigator.serviceWorker.register('/sw.js').then((reg) => {
+          reg.update();
+        }).catch(() => {});
       });
     }
   </script>
