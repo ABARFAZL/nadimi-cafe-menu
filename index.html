@@ -630,13 +630,88 @@
     transition: background 0.3s, color 0.3s;
   }
 
-  .price-cell.updated-flash {
-    animation: flashGreen 1.2s ease;
+  /* ================= LUXURY ANIMATIONS: CATEGORIES, LINES & FLASHES ================= */
+  .card-header h2, .cat-title {
+    position: relative;
+    background: linear-gradient(90deg, var(--text-main) 0%, rgba(255,255,255,0.95) 50%, var(--text-main) 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShimmerSweep 7s ease-in-out infinite;
   }
 
-  @keyframes flashGreen {
-    0% { background: rgba(16, 185, 129, 0.45); }
-    100% { background: transparent; }
+  @keyframes textShimmerSweep {
+    0% { background-position: 200% center; }
+    50% { background-position: -200% center; }
+    100% { background-position: -200% center; }
+  }
+
+  .card-block {
+    position: relative;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.14), inset 0 0 15px rgba(255,255,255,0.03);
+    animation: blockAmbientGlow 6s ease-in-out infinite alternate;
+  }
+
+  @keyframes blockAmbientGlow {
+    0% { border-color: var(--card-border); }
+    100% { border-color: rgba(255, 255, 255, 0.22); }
+  }
+
+  /* Shimmer on colored price pills & lines */
+  .price-pill-box, .single-price-card, .tea-featured-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .price-pill-box::after, .tea-featured-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -150%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transform: skewX(-25deg);
+    animation: glassSheen 6s infinite;
+    pointer-events: none;
+  }
+
+  @keyframes glassSheen {
+    0%, 65% { left: -150%; }
+    100% { left: 250%; }
+  }
+
+  /* Realtime Price Flash: Green for Price Increase, Red for Price Decrease */
+  .price-cell.updated-flash-up, .price-pill-box.updated-flash-up, [data-p].updated-flash-up {
+    animation: flashGreenGlow 1.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .price-cell.updated-flash-down, .price-pill-box.updated-flash-down, [data-p].updated-flash-down {
+    animation: flashRedGlow 1.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  @keyframes flashGreenGlow {
+    0% {
+      background: rgba(16, 185, 129, 0.6) !important;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.95), inset 0 0 10px rgba(255, 255, 255, 0.6);
+      color: #ffffff !important;
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes flashRedGlow {
+    0% {
+      background: rgba(239, 68, 68, 0.6) !important;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.95), inset 0 0 10px rgba(255, 255, 255, 0.6);
+      color: #ffffff !important;
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   .fixed-price-banner {
@@ -1536,8 +1611,10 @@
                   const newVal = String(prices[key]);
                   const oldVal = currentPrices[key];
                   if (oldVal !== undefined && oldVal !== newVal) {
-                    el.classList.add('updated-flash');
-                    setTimeout(() => el.classList.remove('updated-flash'), 1200);
+                    const isIncrease = (+newVal) > (+oldVal);
+                    const flashClass = isIncrease ? 'updated-flash-up' : 'updated-flash-down';
+                    el.classList.add(flashClass);
+                    setTimeout(() => el.classList.remove(flashClass), 1500);
                   }
                   currentPrices[key] = newVal;
                   el.textContent = toFarsi(newVal);

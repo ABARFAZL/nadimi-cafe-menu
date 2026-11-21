@@ -863,6 +863,276 @@
     opacity: 1;
     transform: translateX(-50%) translateY(0);
   }
+
+  /* ================= LIQUID GLASS SYSTEM ================= */
+  .liquid-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  .liquid-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(85px);
+    opacity: 0.55;
+    animation: orbFloat 14s infinite alternate ease-in-out;
+  }
+  .orb-1 {
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, #3b82f6 0%, rgba(59, 130, 246, 0) 70%);
+    top: -40px; right: -40px;
+    animation-duration: 12s;
+  }
+  .orb-2 {
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, #8b5cf6 0%, rgba(139, 92, 246, 0) 70%);
+    top: 35%; left: -60px;
+    animation-duration: 16s;
+    animation-delay: -3s;
+  }
+  .orb-3 {
+    width: 260px; height: 260px;
+    background: radial-gradient(circle, #06b6d4 0%, rgba(6, 182, 212, 0) 70%);
+    bottom: 15%; right: -30px;
+    animation-duration: 18s;
+    animation-delay: -6s;
+  }
+  .orb-4 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, #10b981 0%, rgba(16, 185, 129, 0) 70%);
+    bottom: -50px; left: 10%;
+    animation-duration: 15s;
+    animation-delay: -4s;
+  }
+  @keyframes orbFloat {
+    0% { transform: translateY(0px) scale(1) rotate(0deg); }
+    50% { transform: translateY(35px) scale(1.12) rotate(15deg); }
+    100% { transform: translateY(-25px) scale(0.95) rotate(-10deg); }
+  }
+
+  body {
+    position: relative;
+    background: var(--app-bg);
+    min-height: 100vh;
+    color: var(--text-primary);
+    font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+  }
+
+  .admin-shell {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Liquid Glass App Header */
+  .app-header {
+    background: rgba(20, 26, 38, 0.72) !important;
+    backdrop-filter: blur(28px) saturate(200%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(200%) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  /* Liquid Glass Floating Navigation Bar */
+  .bottom-nav {
+    position: fixed !important;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 14px !important;
+    right: 14px !important;
+    background: rgba(22, 28, 42, 0.78) !important;
+    backdrop-filter: blur(32px) saturate(210%) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(210%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    border-radius: 28px !important;
+    display: flex !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+    padding: 8px 12px !important;
+    z-index: 2000 !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.28) !important;
+  }
+
+  .nav-item {
+    transition: transform 0.2s, color 0.2s;
+  }
+  .nav-item:active { transform: scale(0.92); }
+  .nav-item.active .nav-icon {
+    filter: drop-shadow(0 0 8px var(--accent));
+    transform: translateY(-2px);
+  }
+
+  /* Liquid Glass Compact Card */
+  .compact-card {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(24px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 18px !important;
+    padding: 12px 14px !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: border-color 0.25s, transform 0.2s;
+  }
+  .compact-card:active {
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .card-item-title {
+    font-size: 14.5px !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    letter-spacing: -0.2px;
+  }
+
+  .card-item-cat {
+    font-size: 10.5px !important;
+    font-weight: 800 !important;
+    color: var(--accent) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    padding: 2px 8px !important;
+    border-radius: 8px !important;
+  }
+
+  .price-rows-box {
+    display: flex;
+    flex-direction: column;
+    gap: 8px !important;
+    background: rgba(0, 0, 0, 0.28) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-radius: 14px !important;
+    padding: 8px 10px !important;
+  }
+
+  /* Liquid Touch Scroll Wheel & Stepper */
+  .price-line {
+    display: flex;
+    flex-direction: column !important;
+    gap: 6px !important;
+    padding: 6px 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .price-line:last-child { border-bottom: none; }
+
+  .price-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .price-line-title {
+    font-size: 12.5px !important;
+    font-weight: 800 !important;
+    color: var(--text-secondary);
+  }
+
+  .price-pill-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 4px 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    transition: background 0.2s, transform 0.15s;
+  }
+  .price-pill-indicator:active { transform: scale(0.96); }
+
+  .price-val-display {
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .price-val-unit {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  /* Horizontal Liquid Dial Roller Track */
+  .scroll-dial-wrapper {
+    position: relative;
+    width: 100%;
+    height: 38px;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: pan-y;
+  }
+  .scroll-dial-wrapper:active { cursor: grabbing; border-color: var(--accent); }
+
+  .dial-center-marker {
+    position: absolute;
+    left: 50%;
+    top: 4px;
+    bottom: 4px;
+    width: 2px;
+    background: #10b981;
+    transform: translateX(-50%);
+    z-index: 5;
+    box-shadow: 0 0 8px #10b981;
+    pointer-events: none;
+    border-radius: 1px;
+  }
+
+  .dial-roller-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 40px;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.05s linear;
+  }
+
+  .dial-tick {
+    flex-shrink: 0;
+    width: 2px;
+    height: 12px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 1px;
+  }
+  .dial-tick.major {
+    height: 20px;
+    background: rgba(255, 255, 255, 0.55);
+  }
+
+  .dial-hint-label {
+    position: absolute;
+    font-size: 10px;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+  }
+  .dial-hint-label.left-label { left: 8px; }
+  .dial-hint-label.right-label { right: 8px; }
+
+  .num-input-hidden {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    width: 1px; height: 1px;
+  }
+
+  .tab-content {
+    padding-bottom: calc(95px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
 </style>
 </head>
 <body class="theme-classic_grey">
@@ -1377,7 +1647,6 @@
       const q = document.getElementById('searchInput').value.trim().toLowerCase();
       container.innerHTML = '';
 
-      // Merge base schema + custom items
       const combined = [...menuSchema];
       (appState.customItems || []).forEach(ci => {
         combined.push({
@@ -1400,11 +1669,27 @@
           const val = appState.prices[p.key] !== undefined ? appState.prices[p.key] : 100;
           rows += `
             <div class="price-line">
-              <span class="price-line-title">${p.label}</span>
-              <div class="price-control-box">
-                <button class="step-btn" onclick="stepPrice('${p.key}', -5)">−</button>
-                <input type="number" class="num-input" id="inp_${p.key}" value="${val}" oninput="appState.prices['${p.key}'] = +this.value; triggerAutoSaveDebounced(100)" onchange="appState.prices['${p.key}'] = +this.value; triggerAutoSaveDebounced(20)">
-                <button class="step-btn" onclick="stepPrice('${p.key}', 5)">+</button>
+              <div class="price-meta-row">
+                <span class="price-line-title">${p.label}</span>
+                <div class="price-pill-indicator" onclick="promptPriceInput('${p.key}')" title="برای تایپ دستی ضربه بزنید">
+                  <span class="price-val-display" id="disp_${p.key}">${toFarsi(val)}</span>
+                  <span class="price-val-unit">هزار تومان</span>
+                </div>
+              </div>
+              <div class="scroll-dial-wrapper" id="dial_wrap_${p.key}" data-key="${p.key}" onwheel="onDialMouseWheel(event, '${p.key}')">
+                <div class="dial-center-marker"></div>
+                <span class="dial-hint-label left-label">− اسکرول</span>
+                <div class="dial-roller-content" id="roller_${p.key}">
+                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
+                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
+                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
+                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
+                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
+                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
+                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
+                </div>
+                <span class="dial-hint-label right-label">+ اسکرول</span>
+                <input type="number" class="num-input num-input-hidden" id="inp_${p.key}" value="${val}">
               </div>
             </div>
           `;
@@ -1419,17 +1704,90 @@
         `;
         container.appendChild(card);
       });
+
+      attachDialListeners();
+    }
+
+    function attachDialListeners() {
+      document.querySelectorAll('.scroll-dial-wrapper').forEach(wrap => {
+        const key = wrap.getAttribute('data-key');
+        let startX = 0;
+        let currentX = 0;
+        let accumulatedDelta = 0;
+        let isDragging = false;
+        const roller = wrap.querySelector('.dial-roller-content');
+
+        const onStart = (clientX) => {
+          isDragging = true;
+          startX = clientX;
+          accumulatedDelta = 0;
+        };
+
+        const onMove = (clientX) => {
+          if (!isDragging) return;
+          const dx = clientX - startX;
+          startX = clientX;
+          accumulatedDelta += dx;
+
+          if (roller) {
+            currentX = (currentX + dx) % 40;
+            roller.style.transform = `translateX(${currentX}px)`;
+          }
+
+          if (Math.abs(accumulatedDelta) >= 16) {
+            const step = accumulatedDelta > 0 ? 5 : -5;
+            accumulatedDelta = 0;
+            stepPrice(key, step);
+          }
+        };
+
+        const onEnd = () => {
+          isDragging = false;
+        };
+
+        wrap.ontouchstart = (e) => onStart(e.touches[0].clientX);
+        wrap.ontouchmove = (e) => {
+          onMove(e.touches[0].clientX);
+          e.preventDefault();
+        };
+        wrap.ontouchend = onEnd;
+        wrap.ontouchcancel = onEnd;
+
+        wrap.onmousedown = (e) => onStart(e.clientX);
+        window.addEventListener('mousemove', (e) => { if (isDragging) onMove(e.clientX); });
+        window.addEventListener('mouseup', () => { if (isDragging) onEnd(); });
+      });
+    }
+
+    function onDialMouseWheel(e, key) {
+      e.preventDefault();
+      const step = e.deltaY < 0 ? 5 : -5;
+      stepPrice(key, step);
     }
 
     function stepPrice(key, delta) {
-      const el = document.getElementById('inp_' + key);
-      if (el) {
-        let val = parseInt(el.value, 10) || 0;
-        val = Math.max(0, val + delta);
-        el.value = val;
-        appState.prices[key] = val;
-        if (navigator.vibrate) navigator.vibrate(15);
-        triggerAutoSaveDebounced(40);
+      let val = appState.prices[key] !== undefined ? appState.prices[key] : 100;
+      val = Math.max(0, val + delta);
+      appState.prices[key] = val;
+
+      const dispEl = document.getElementById('disp_' + key);
+      if (dispEl) dispEl.textContent = toFarsi(val);
+
+      const inpEl = document.getElementById('inp_' + key);
+      if (inpEl) inpEl.value = val;
+
+      if (navigator.vibrate) navigator.vibrate(10);
+      triggerAutoSaveDebounced(40);
+    }
+
+    function promptPriceInput(key) {
+      const current = appState.prices[key] !== undefined ? appState.prices[key] : 100;
+      const userVal = prompt('قیمت جدید را به هزار تومان وارد کنید:', current);
+      if (userVal !== null) {
+        const parsed = parseInt(userVal, 10);
+        if (!isNaN(parsed) && parsed >= 0) {
+          stepPrice(key, parsed - current);
+        }
       }
     }
 
@@ -1440,35 +1798,7 @@
       renderItems();
     }
 
-    // Percentage Slider Logic
-    function onSliderMove(val) {
-      const v = parseInt(val, 10);
-      document.getElementById('percBadge').textContent = (v > 0 ? '+' : '') + v + '٪';
-    }
-
-    function setSliderVal(v) {
-      document.getElementById('percSlider').value = v;
-      onSliderMove(v);
-    }
-
-    function applyPercentageToPrices() {
-      const perc = parseInt(document.getElementById('percSlider').value, 10) || 0;
-      if (perc === 0) return;
-      const scope = document.getElementById('percScope').value;
-
-      menuSchema.forEach(item => {
-        if (scope !== 'all' && item.category !== scope) return;
-        item.prices.forEach(p => {
-          let current = appState.prices[p.key] !== undefined ? appState.prices[p.key] : 100;
-          let updated = Math.round(current * (1 + perc / 100));
-          appState.prices[p.key] = updated;
-        });
-      });
-
-      renderItems();
-      showToast(`✓ محاسبه ${perc > 0 ? '+' : ''}${perc}٪ روی قیمت‌ها انجام شد`);
-      saveAllToServerSilent();
-    }
+    // Percentage module removed as requested
 
     // Theme & Mode Setting (Syncs app theme too + Auto-saves instantly!)
     function setAppTheme(theme) {
