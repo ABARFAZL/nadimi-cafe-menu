@@ -117,43 +117,51 @@ const DEFAULT_STATE = {
   }
 };
 
+const PERMANENT_BLOB_URL = 'https://fy19ibzbxkaeufs2.public.blob.vercel-storage.com/nadimi-menu-prices.json';
 let memoryStore = { ...DEFAULT_STATE };
-let latestBlobUrl = null;
+
+async function fetchLatestFromBlob() {
+  try {
+    const fetchResp = await fetch(PERMANENT_BLOB_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    if (fetchResp.ok) {
+      const blobData = await fetchResp.json();
+      if (blobData && blobData.prices) {
+        memoryStore = { ...DEFAULT_STATE, ...blobData };
+        return true;
+      }
+    }
+  } catch (e) {
+    console.warn('Blob fetch failed:', e.message);
+  }
+  return false;
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('CDN-Cache-Control', 'no-store');
+  res.setHeader('Vercel-CDN-Cache-Control', 'no-store');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
 
-  // GET
+  // GET: Always fetch latest from permanent Blob CDN
   if (req.method === 'GET') {
-    try {
-      if (latestBlobUrl) {
-        const fetchResp = await fetch(latestBlobUrl + '?t=' + Date.now());
-        if (fetchResp.ok) {
-          const blobData = await fetchResp.json();
-          if (blobData && blobData.prices) {
-            memoryStore = blobData;
-          }
-        }
-      }
-    } catch (e) {
-      console.warn('Blob read fallback:', e.message);
-    }
-
+    await fetchLatestFromBlob();
     return res.status(200).json({
       success: true,
       data: memoryStore
     });
   }
 
-  // POST
+  // POST: Update & Persist to Blob CDN immediately
   if (req.method === 'POST') {
     try {
+      await fetchLatestFromBlob(); // Start from current freshest state
+
       const incoming = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
       if (incoming.prices) {
@@ -186,13 +194,12 @@ export default async function handler(req, res) {
       memoryStore.lastUpdated = new Date().toISOString();
 
       try {
-        const blob = await put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
+        await put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
           access: 'public',
           addRandomSuffix: false
         });
-        latestBlobUrl = blob.url;
       } catch (blobErr) {
-        console.warn('Blob write error:', blobErr.message);
+        console.warn('Blob put error:', blobErr.message);
       }
 
       return res.status(200).json({
