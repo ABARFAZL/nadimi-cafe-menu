@@ -14,6 +14,7 @@ const DEFAULT_STATE = {
     { id: 'instagram', title: 'اینستاگرام', handle: '@nadimi.coffee', url: 'https://instagram.com/nadimi.coffee', iconType: 'instagram', active: true },
     { id: 'telegram', title: 'تلگرام', handle: '@nadimicoffee', url: 'https://t.me/nadimicoffee', iconType: 'telegram', active: true }
   ],
+  fullscreenToggleId: 0,
   customCategories: [],
   customItems: [],
   lastUpdated: new Date().toISOString(),
@@ -184,6 +185,9 @@ export default async function handler(req, res) {
       }
       if (incoming.headerLinks !== undefined) {
         memoryStore.headerLinks = incoming.headerLinks;
+      }
+      if (incoming.fullscreenToggleId !== undefined) {
+        memoryStore.fullscreenToggleId = incoming.fullscreenToggleId;
       }
       if (incoming.customCategories !== undefined) {
         memoryStore.customCategories = incoming.customCategories;

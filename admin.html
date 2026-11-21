@@ -223,7 +223,7 @@
   /* Tab View Container */
   .tab-content {
     display: none;
-    padding: 10px 14px;
+    padding: 10px 14px calc(140px + env(safe-area-inset-bottom, 0px)) 14px;
     animation: fadeIn 0.25s ease;
   }
   .tab-content.active { display: block; }
@@ -807,28 +807,60 @@
     font-size: 18px;
   }
 
-  /* Floating Save Pill - Floating safely above Bottom Nav & Home Indicator */
-  .floating-save-pill {
+  /* Ergonomic Action Dock - Fixed safely above Bottom Navigation & iPhone Home Indicator */
+  .admin-action-dock {
     position: fixed;
-    bottom: calc(82px + env(safe-area-inset-bottom, 0px));
-    left: 14px;
-    right: 14px;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    left: 0;
+    right: 0;
+    padding: 8px 12px;
+    background: var(--nav-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    gap: 8px;
+    z-index: 2200;
+    box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.22);
+  }
+
+  .btn-dock-save {
+    flex: 1.5;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: #ffffff;
     border: none;
-    padding: 10px;
-    border-radius: 14px;
+    padding: 11px 10px;
+    border-radius: 12px;
     font-size: 13.5px;
     font-weight: 900;
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
-    cursor: pointer;
-    z-index: 1500;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    cursor: pointer;
+    transition: transform 0.15s;
   }
-  .floating-save-pill:active { transform: scale(0.97); }
+  .btn-dock-save:active { transform: scale(0.97); }
+
+  .btn-dock-tv-fs {
+    flex: 1;
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff;
+    border: none;
+    padding: 11px 8px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .btn-dock-tv-fs:active { transform: scale(0.97); }
 
   /* Toast Notification */
   .toast-box {
@@ -1118,10 +1150,15 @@
     </div>
   </div>
 
-  <!-- Floating Save Button -->
-  <button class="floating-save-pill" onclick="saveAllToServer()">
-    💾 ذخیره و همگام‌سازی با تلویزیون
-  </button>
+  <!-- Ergonomic Action Dock (Always Above Navigation Bar) -->
+  <div class="admin-action-dock">
+    <button class="btn-dock-save" onclick="saveAllToServer()">
+      💾 ذخیره و اعمال آنی
+    </button>
+    <button class="btn-dock-tv-fs" onclick="remoteToggleTvFullscreen()">
+      ⛶ تمام‌صفحه تلویزیون
+    </button>
+  </div>
 
   <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
@@ -1685,6 +1722,26 @@
         }
       } catch (err) {
         showToast('⚠️ خطا در ارتباط با سرور (بررسی اتصال اینترنت)');
+      }
+    }
+
+    // Remote Fullscreen Toggle for TV Screen
+    async function remoteToggleTvFullscreen() {
+      if (navigator.vibrate) navigator.vibrate([30, 40]);
+      showToast('📡 ارسال فرمان تمام‌صفحه به تلویزیون...');
+      try {
+        const res = await fetch('/api/prices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullscreenToggleId: Date.now() })
+        });
+        if (res.ok) {
+          showToast('⛶ فرمان تمام‌صفحه با موفقیت به تلویزیون ارسال شد');
+        } else {
+          showToast('⚠️ خطا در ارسال فرمان به تلویزیون');
+        }
+      } catch (e) {
+        showToast('⚠️ خطا در اتصال شبکه');
       }
     }
 

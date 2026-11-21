@@ -1234,6 +1234,7 @@
     let currentMode = 'light';
     let scheduleConfig = { lightStart: '08:00', darkStart: '18:00' };
     let currentFontScale = 100;
+    let lastFullscreenActionId = 0;
 
     function applyFontSizeScale(scalePercent) {
       currentFontScale = parseInt(scalePercent, 10) || 100;
@@ -1293,17 +1294,37 @@
 
       if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
         if (requestFullScreen) {
-          requestFullScreen.call(docEl).catch(() => {});
+          try {
+            requestFullScreen.call(docEl).catch(() => {});
+          } catch(e) {}
         }
+        document.body.classList.add('tv-forced-fullscreen');
         const icon = document.getElementById('fsIcon');
         if (icon) icon.textContent = '✖ خروج';
+        showTvNotification('⛶ حالت تمام‌صفحه فعال شد');
       } else {
         if (cancelFullScreen) {
-          cancelFullScreen.call(doc).catch(() => {});
+          try {
+            cancelFullScreen.call(doc).catch(() => {});
+          } catch(e) {}
         }
+        document.body.classList.remove('tv-forced-fullscreen');
         const icon = document.getElementById('fsIcon');
         if (icon) icon.textContent = '⛶ تمام‌صفحه';
       }
+    }
+
+    function showTvNotification(msg) {
+      let notif = document.getElementById('tvToastNotif');
+      if (!notif) {
+        notif = document.createElement('div');
+        notif.id = 'tvToastNotif';
+        notif.style.cssText = 'position:fixed; top:2vh; left:50%; transform:translateX(-50%); background:rgba(16,185,129,0.95); color:#fff; padding:0.6vh 1.8vw; border-radius:12px; font-weight:900; font-size:1.4vh; z-index:99999; box-shadow:0 6px 20px rgba(0,0,0,0.4); opacity:0; transition:opacity 0.3s; pointer-events:none;';
+        document.body.appendChild(notif);
+      }
+      notif.textContent = msg;
+      notif.style.opacity = '1';
+      setTimeout(() => { if (notif) notif.style.opacity = '0'; }, 2500);
     }
 
     document.addEventListener('fullscreenchange', () => {
@@ -1465,6 +1486,13 @@
               renderCustomItems(remote.customItems, remote.prices);
             }
 
+            if (remote.fullscreenToggleId && remote.fullscreenToggleId > lastFullscreenActionId) {
+              if (lastFullscreenActionId !== 0) {
+                toggleFullScreen();
+              }
+              lastFullscreenActionId = remote.fullscreenToggleId;
+            }
+
             const prices = remote.prices;
             if (prices) {
               document.querySelectorAll('[data-p]').forEach(el => {
@@ -1489,7 +1517,7 @@
     }
 
     syncMenuState();
-    setInterval(syncMenuState, 2000);
+    setInterval(syncMenuState, 1000);
     setInterval(() => applyThemeAndMode(currentTheme, currentMode, scheduleConfig), 30000);
 
     if ('serviceWorker' in navigator) {
