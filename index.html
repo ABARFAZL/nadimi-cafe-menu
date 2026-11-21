@@ -479,36 +479,41 @@
     display: flex;
     gap: 1.5vw;
     flex: 1;
-    margin-top: 0.8vh;
-    margin-bottom: 0.6vh;
-    height: 82vh;
+    min-height: 0;
+    margin-top: 0.5vh;
+    margin-bottom: 0.4vh;
+    height: calc(100vh - 17vh);
+    max-height: calc(100vh - 17vh);
   }
 
   .menu-col {
     flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.9vh;
+    gap: 0.8vh;
+    min-height: 0;
     height: 100%;
   }
 
-  /* Cards */
+  /* Cards with Dynamic Auto-Fitting Flex (Guarantees zero-scroll in both windowed and fullscreen TV) */
   .card-block {
     background: var(--card-bg);
     border-radius: 14px;
     border: 1px solid var(--card-border);
-    padding: 0.7vh 1.1vw;
+    padding: 0.6vh 1.1vw;
     box-shadow: 0 6px 20px rgba(0,0,0,0.14);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     transition: all 0.35s ease;
+    min-height: 0;
+    overflow: hidden;
   }
 
-  .card-block.espresso-block { height: 26.5vh; }
-  .card-block.hot-block      { height: 54.5vh; }
-  .card-block.cold-block     { height: 53vh; }
-  .card-block.tea-block      { height: 28vh; }
+  .card-block.espresso-block { flex: 1.1; }
+  .card-block.hot-block      { flex: 2.3; }
+  .card-block.cold-block     { flex: 2.25; }
+  .card-block.tea-block      { flex: 1.25; }
 
   .border-top-dark {
     border-top: 3px solid var(--accent) !important;
@@ -768,31 +773,56 @@
     border: 1px solid var(--card-border);
   }
 
-  /* Subtle Font Size Controller (Direct TV Adjustment) */
-  .tv-font-controller {
+  /* Top Bar TV Controllers (Fullscreen & Font Controls) */
+  .tv-top-bar-controls {
     position: fixed;
     top: 8px;
     right: 12px;
     z-index: 9999;
     display: flex;
     align-items: center;
-    gap: 5px;
-    background: rgba(15, 23, 42, 0.72);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    border-radius: 20px;
-    padding: 2px 7px;
-    opacity: 0.2;
+    gap: 7px;
+    opacity: 0.65;
     transition: opacity 0.3s ease;
   }
-  .tv-font-controller:hover, .tv-font-controller:active {
+  .tv-top-bar-controls:hover {
     opacity: 1;
   }
+  .tv-fs-pill-btn {
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ffffff;
+    font-size: 1.25vh;
+    font-weight: 800;
+    padding: 3px 10px;
+    border-radius: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+  }
+  .tv-fs-pill-btn:hover {
+    background: var(--accent);
+    color: #0f172a;
+    border-color: var(--accent);
+  }
+  .tv-font-controller {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(15, 23, 42, 0.75);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    padding: 2px 6px;
+  }
   .tv-font-btn {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.14);
     border: none;
     color: #ffffff;
-    font-size: 1.3vh;
+    font-size: 1.25vh;
     font-weight: 900;
     width: 2.3vh;
     height: 2.3vh;
@@ -809,19 +839,24 @@
   .tv-font-badge {
     font-size: 1.1vh;
     font-weight: 800;
-    color: #38bdf8;
-    padding: 0 4px;
+    color: var(--accent);
+    padding: 0 3px;
     direction: ltr;
   }
 </style>
 </head>
 <body class="theme-classic_grey mode-light">
 
-  <!-- Direct TV Screen Font Size Controller -->
-  <div class="tv-font-controller" title="تنظیم مستقیم اندازه قلم منو">
-    <button class="tv-font-btn" onclick="stepTvFont(-5)" title="کوچک‌تر کردن متن">A−</button>
-    <span class="tv-font-badge" id="tvFontScaleBadge">۱۰۰٪</span>
-    <button class="tv-font-btn" onclick="stepTvFont(5)" title="بزرگ‌تر کردن متن">A+</button>
+  <!-- Direct TV Screen Controls (Fullscreen & Font) -->
+  <div class="tv-top-bar-controls">
+    <button class="tv-fs-pill-btn" onclick="toggleFullScreen()" title="تمام‌صفحه کردن تلویزیون">
+      <span id="fsIcon">⛶</span> تمام‌صفحه (Fullscreen)
+    </button>
+    <div class="tv-font-controller" title="تنظیم مستقیم اندازه قلم منو">
+      <button class="tv-font-btn" onclick="stepTvFont(-5)" title="کوچک‌تر کردن متن">A−</button>
+      <span class="tv-font-badge" id="tvFontScaleBadge">۱۰۰٪</span>
+      <button class="tv-font-btn" onclick="stepTvFont(5)" title="بزرگ‌تر کردن متن">A+</button>
+    </div>
   </div>
 
   <!-- Header -->
@@ -1248,11 +1283,54 @@
       } catch (e) {}
     }
 
-    // Keyboard Shortcuts for TV: '+' or '=' increases font, '-' decreases font, '0' resets
+    // Fullscreen Toggle for TV Screen
+    function toggleFullScreen() {
+      const doc = window.document;
+      const docEl = doc.documentElement;
+
+      const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+      const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+      if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        if (requestFullScreen) {
+          requestFullScreen.call(docEl).catch(() => {});
+        }
+        const icon = document.getElementById('fsIcon');
+        if (icon) icon.textContent = '✖ خروج';
+      } else {
+        if (cancelFullScreen) {
+          cancelFullScreen.call(doc).catch(() => {});
+        }
+        const icon = document.getElementById('fsIcon');
+        if (icon) icon.textContent = '⛶ تمام‌صفحه';
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      const isFs = !!document.fullscreenElement;
+      const icon = document.getElementById('fsIcon');
+      if (icon) icon.textContent = isFs ? '✖ خروج' : '⛶ تمام‌صفحه';
+    });
+
+    // Double click/tap anywhere on background to toggle Fullscreen
+    document.addEventListener('dblclick', (e) => {
+      if (!e.target.closest('button, a, input')) {
+        toggleFullScreen();
+      }
+    });
+
+    // Keyboard Shortcuts for TV: '+' or '=' increases font, '-' decreases font, '0' resets, 'F' toggles Fullscreen
     window.addEventListener('keydown', (e) => {
       if (e.key === '+' || e.key === '=') {
         stepTvFont(5);
       } else if (e.key === '-' || e.key === '_') {
+        stepTvFont(-5);
+      } else if (e.key === '0') {
+        stepTvFont(100 - currentFontScale);
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen();
+      }
+    });
         stepTvFont(-5);
       } else if (e.key === '0') {
         stepTvFont(100 - currentFontScale);
@@ -1341,6 +1419,36 @@
       });
     }
 
+    // Render Custom Items added from Mobile Admin
+    function renderCustomItems(customItems, prices) {
+      if (!customItems || !Array.isArray(customItems) || customItems.length === 0) return;
+      let container = document.getElementById('customItemsDynamicBox');
+      if (!container) {
+        container = document.createElement('div');
+        container.id = 'customItemsDynamicBox';
+        container.style.cssText = 'display:flex; flex-wrap:wrap; gap:0.6vw; margin-top:0.4vh;';
+        const teaCard = document.querySelector('.tea-block');
+        if (teaCard) teaCard.appendChild(container);
+      }
+      container.innerHTML = '';
+      customItems.forEach(ci => {
+        const val = prices && prices[ci.id] !== undefined ? prices[ci.id] : (ci.price || 100);
+        const itemEl = document.createElement('div');
+        itemEl.className = 'single-price-card';
+        itemEl.style.cssText = 'flex:1; min-width:110px; padding: 0.3vh 0.6vw;';
+        itemEl.innerHTML = `
+          <div class="price-pill-box" style="width:auto; padding:0 0.8vw;">
+            <span class="price-single-num" data-p="${ci.id}">${toFarsi(val)}</span>
+          </div>
+          <div class="card-item-title-box">
+            <span class="item-name">${ci.title}</span>
+            <span class="item-desc">سرو اختصاصی ندیمی</span>
+          </div>
+        `;
+        container.appendChild(itemEl);
+      });
+    }
+
     // Realtime Sync Engine (Live Polling every 2s)
     async function syncMenuState() {
       try {
@@ -1356,6 +1464,10 @@
 
             if (remote.headerLinks) {
               renderHeaderLinks(remote.headerLinks);
+            }
+
+            if (remote.customItems) {
+              renderCustomItems(remote.customItems, remote.prices);
             }
 
             const prices = remote.prices;
