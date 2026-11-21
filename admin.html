@@ -223,7 +223,7 @@
   /* Tab View Container */
   .tab-content {
     display: none;
-    padding: 10px 14px calc(140px + env(safe-area-inset-bottom, 0px)) 14px;
+    padding: 10px 14px calc(75px + env(safe-area-inset-bottom, 0px)) 14px;
     animation: fadeIn 0.25s ease;
   }
   .tab-content.active { display: block; }
@@ -807,60 +807,38 @@
     font-size: 18px;
   }
 
-  /* Ergonomic Action Dock - Fixed safely above Bottom Navigation & iPhone Home Indicator */
-  .admin-action-dock {
-    position: fixed;
-    bottom: calc(56px + env(safe-area-inset-bottom, 0px));
-    left: 0;
-    right: 0;
-    padding: 8px 12px;
-    background: var(--nav-bg);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid var(--card-border);
-    display: flex;
-    gap: 8px;
-    z-index: 2200;
-    box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.22);
-  }
-
-  .btn-dock-save {
-    flex: 1.5;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    color: #ffffff;
-    border: none;
-    padding: 11px 10px;
-    border-radius: 12px;
-    font-size: 13.5px;
-    font-weight: 900;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
-    cursor: pointer;
-    transition: transform 0.15s;
-  }
-  .btn-dock-save:active { transform: scale(0.97); }
-
-  .btn-dock-tv-fs {
-    flex: 1;
+  /* Header Remote TV Fullscreen Button */
+  .header-tv-fs-btn {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: #ffffff;
     border: none;
-    padding: 11px 8px;
-    border-radius: 12px;
-    font-size: 12.5px;
+    padding: 7px 11px;
+    border-radius: 10px;
+    font-size: 11px;
     font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 5px;
-    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
-    cursor: pointer;
+    gap: 4px;
     transition: transform 0.15s;
+    white-space: nowrap;
   }
-  .btn-dock-tv-fs:active { transform: scale(0.97); }
+  .header-tv-fs-btn:active { transform: scale(0.95); }
+
+  /* Live Sync Pulse Indicator */
+  .sync-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #10b981;
+    display: inline-block;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .sync-pulse-dot.pulsing {
+    transform: scale(1.6);
+    box-shadow: 0 0 10px #10b981;
+  }
 
   /* Toast Notification */
   .toast-box {
@@ -904,11 +882,20 @@
       </div>
     </div>
 
-    <!-- Smart Install Actions: ONLY visible if NOT installed as standalone! -->
-    <div class="install-actions" id="installActions">
-      <a href="/abarapp.mobileconfig" class="ios-profile-btn" title="نصب مستقیم پروفایل">
-        📲 نصب در آیفون
-      </a>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <div style="display:flex; align-items:center; gap:5px; background:rgba(16,185,129,0.12); padding:5px 8px; border-radius:8px; font-size:10px; font-weight:800; color:#10b981;">
+        <span class="sync-pulse-dot" id="syncPulseDot"></span>
+        <span>لایو</span>
+      </div>
+      <button class="header-tv-fs-btn" onclick="remoteToggleTvFullscreen()" title="فرمان تمام‌صفحه به تلویزیون">
+        ⛶ تمام‌صفحه TV
+      </button>
+      <!-- Smart Install Actions: ONLY visible if NOT installed as standalone! -->
+      <div class="install-actions" id="installActions">
+        <a href="/abarapp.mobileconfig" class="ios-profile-btn" title="نصب مستقیم پروفایل">
+          📲 نصب در آیفون
+        </a>
+      </div>
     </div>
   </header>
 
@@ -1148,16 +1135,6 @@
         مشاهده صفحه کامل منو روی تلویزیون
       </a>
     </div>
-  </div>
-
-  <!-- Ergonomic Action Dock (Always Above Navigation Bar) -->
-  <div class="admin-action-dock">
-    <button class="btn-dock-save" onclick="saveAllToServer()">
-      💾 ذخیره و اعمال آنی
-    </button>
-    <button class="btn-dock-tv-fs" onclick="remoteToggleTvFullscreen()">
-      ⛶ تمام‌صفحه تلویزیون
-    </button>
   </div>
 
   <!-- Bottom Navigation Bar -->
@@ -1426,7 +1403,7 @@
               <span class="price-line-title">${p.label}</span>
               <div class="price-control-box">
                 <button class="step-btn" onclick="stepPrice('${p.key}', -5)">−</button>
-                <input type="number" class="num-input" id="inp_${p.key}" value="${val}" onchange="appState.prices['${p.key}'] = +this.value">
+                <input type="number" class="num-input" id="inp_${p.key}" value="${val}" oninput="appState.prices['${p.key}'] = +this.value; triggerAutoSaveDebounced(100)" onchange="appState.prices['${p.key}'] = +this.value; triggerAutoSaveDebounced(20)">
                 <button class="step-btn" onclick="stepPrice('${p.key}', 5)">+</button>
               </div>
             </div>
@@ -1452,7 +1429,7 @@
         el.value = val;
         appState.prices[key] = val;
         if (navigator.vibrate) navigator.vibrate(15);
-        triggerAutoSaveDebounced(800);
+        triggerAutoSaveDebounced(40);
       }
     }
 
@@ -1658,8 +1635,16 @@
     }
 
     // Auto-Save Engine for Instant TV Updates
+    function showSyncPulse() {
+      const dot = document.getElementById('syncPulseDot');
+      if (dot) {
+        dot.classList.add('pulsing');
+        setTimeout(() => dot.classList.remove('pulsing'), 350);
+      }
+    }
+
     let autoSaveTimer = null;
-    function triggerAutoSaveDebounced(delay = 600) {
+    function triggerAutoSaveDebounced(delay = 50) {
       clearTimeout(autoSaveTimer);
       autoSaveTimer = setTimeout(() => {
         saveAllToServerSilent();
@@ -1669,7 +1654,8 @@
     async function saveAllToServerSilent() {
       document.querySelectorAll('.num-input').forEach(inp => {
         const key = inp.id.replace('inp_', '');
-        appState.prices[key] = parseInt(inp.value, 10) || 0;
+        const v = parseInt(inp.value, 10);
+        if (!isNaN(v)) appState.prices[key] = v;
       });
       const lightEl = document.getElementById('inpLightStart');
       const darkEl = document.getElementById('inpDarkStart');
@@ -1683,12 +1669,12 @@
           body: JSON.stringify(appState)
         });
         if (res.ok) {
-          showToast('✓ همگام با تلویزیون');
+          showSyncPulse();
           const banner = document.getElementById('offlineBanner');
           if (banner) banner.style.display = 'none';
         }
       } catch (e) {
-        console.warn('Silent sync:', e);
+        console.warn('Silent sync error:', e);
       }
     }
 

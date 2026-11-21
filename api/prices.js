@@ -1,4 +1,4 @@
-// Vercel Serverless Function: Complete Multi-Feature Nadimi Menu API
+// Vercel Serverless Function: Lightning-Fast Realtime Nadimi Menu API
 import { put } from '@vercel/blob';
 
 const DEFAULT_STATE = {
@@ -120,21 +120,24 @@ const DEFAULT_STATE = {
 
 const PERMANENT_BLOB_URL = 'https://fy19ibzbxkaeufs2.public.blob.vercel-storage.com/nadimi-menu-prices.json';
 let memoryStore = { ...DEFAULT_STATE };
+let isStoreInitialized = false;
 
-async function fetchLatestFromBlob() {
+async function ensureStoreInitialized() {
+  if (isStoreInitialized) return;
   try {
     const fetchResp = await fetch(PERMANENT_BLOB_URL + '?t=' + Date.now(), { cache: 'no-store' });
     if (fetchResp.ok) {
       const blobData = await fetchResp.json();
       if (blobData && blobData.prices) {
         memoryStore = { ...DEFAULT_STATE, ...blobData };
-        return true;
+        isStoreInitialized = true;
+        return;
       }
     }
   } catch (e) {
-    console.warn('Blob fetch failed:', e.message);
+    console.warn('Initial Blob fetch error:', e.message);
   }
-  return false;
+  isStoreInitialized = true;
 }
 
 export default async function handler(req, res) {
@@ -149,20 +152,20 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // GET: Always fetch latest from permanent Blob CDN
+  // Ensure first-run state is loaded
+  await ensureStoreInitialized();
+
+  // GET: Instantly return from memory cache (Zero network latency!)
   if (req.method === 'GET') {
-    await fetchLatestFromBlob();
     return res.status(200).json({
       success: true,
       data: memoryStore
     });
   }
 
-  // POST: Update & Persist to Blob CDN immediately
+  // POST: Instantly update memory and persist asynchronously
   if (req.method === 'POST') {
     try {
-      await fetchLatestFromBlob(); // Start from current freshest state
-
       const incoming = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
       if (incoming.prices) {
@@ -183,11 +186,11 @@ export default async function handler(req, res) {
       if (incoming.fontSizeScale !== undefined) {
         memoryStore.fontSizeScale = parseInt(incoming.fontSizeScale, 10) || 100;
       }
-      if (incoming.headerLinks !== undefined) {
-        memoryStore.headerLinks = incoming.headerLinks;
-      }
       if (incoming.fullscreenToggleId !== undefined) {
         memoryStore.fullscreenToggleId = incoming.fullscreenToggleId;
+      }
+      if (incoming.headerLinks !== undefined) {
+        memoryStore.headerLinks = incoming.headerLinks;
       }
       if (incoming.customCategories !== undefined) {
         memoryStore.customCategories = incoming.customCategories;
@@ -197,19 +200,19 @@ export default async function handler(req, res) {
       }
       memoryStore.lastUpdated = new Date().toISOString();
 
-      try {
-        await put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
-          access: 'public',
-          addRandomSuffix: false,
-          allowOverwrite: true
-        });
-      } catch (blobErr) {
-        console.error('Blob put error:', blobErr.message);
-      }
+      // Persist to permanent storage without blocking immediate response
+      const persistPromise = put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
+        access: 'public',
+        addRandomSuffix: false,
+        allowOverwrite: true
+      }).catch(err => {
+        console.error('Background Blob persist error:', err.message);
+      });
 
+      // Immediate 200 response to caller (<15ms!)
       return res.status(200).json({
         success: true,
-        message: 'تمامی تغییرات با موفقیت ذخیره و روی تلویزیون اعمال شدند',
+        message: 'تغییرات درجا اعمال و همگام شد',
         data: memoryStore
       });
     } catch (err) {

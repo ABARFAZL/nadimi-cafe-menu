@@ -1295,8 +1295,15 @@
       if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
         if (requestFullScreen) {
           try {
-            requestFullScreen.call(docEl).catch(() => {});
-          } catch(e) {}
+            const p = requestFullScreen.call(docEl);
+            if (p && p.catch) {
+              p.catch(() => {
+                showFullscreenActivationPrompt();
+              });
+            }
+          } catch(e) {
+            showFullscreenActivationPrompt();
+          }
         }
         document.body.classList.add('tv-forced-fullscreen');
         const icon = document.getElementById('fsIcon');
@@ -1311,6 +1318,34 @@
         document.body.classList.remove('tv-forced-fullscreen');
         const icon = document.getElementById('fsIcon');
         if (icon) icon.textContent = '⛶ تمام‌صفحه';
+      }
+    }
+
+    // Interactive Activation for Remote Fullscreen on TV (Bypasses Browser Security Restrictions)
+    function showFullscreenActivationPrompt() {
+      let promptEl = document.getElementById('tvFsPromptOverlay');
+      if (!promptEl) {
+        promptEl = document.createElement('div');
+        promptEl.id = 'tvFsPromptOverlay';
+        promptEl.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.78); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); z-index:999999; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#fff; cursor:pointer; text-align:center; padding:20px;';
+        promptEl.innerHTML = `
+          <div style="background:#1e293b; border:2px solid #3b82f6; border-radius:24px; padding:3vh 4vw; max-width:600px; box-shadow:0 12px 35px rgba(0,0,0,0.6);">
+            <div style="font-size:5vh; margin-bottom:1.5vh;">⛶</div>
+            <div style="font-size:2.4vh; font-weight:900; margin-bottom:1vh; color:#60a5fa;">فرمان تمام‌صفحه از گوشی دریافت شد</div>
+            <div style="font-size:1.6vh; color:#cbd5e1; margin-bottom:2.5vh; line-height:1.7;">برای حذف نوارهای بالای مرورگر تلویزیون، یک بار کلید <b>OK</b> کنترل یا صفحه را لمس کنید</div>
+            <button style="background:linear-gradient(135deg,#3b82f6,#2563eb); color:#fff; border:none; padding:1.2vh 3.5vw; border-radius:14px; font-size:1.8vh; font-weight:900; cursor:pointer; box-shadow:0 4px 16px rgba(59,130,246,0.4);">
+              ✓ تایید و ورود به تمام‌صفحه
+            </button>
+          </div>
+        `;
+        promptEl.onclick = () => {
+          promptEl.remove();
+          const docEl = document.documentElement;
+          const req = docEl.requestFullscreen || docEl.webkitRequestFullScreen || docEl.mozRequestFullScreen || docEl.msRequestFullscreen;
+          if (req) req.call(docEl).catch(() => {});
+          document.body.classList.add('tv-forced-fullscreen');
+        };
+        document.body.appendChild(promptEl);
       }
     }
 
@@ -1517,7 +1552,7 @@
     }
 
     syncMenuState();
-    setInterval(syncMenuState, 1000);
+    setInterval(syncMenuState, 500);
     setInterval(() => applyThemeAndMode(currentTheme, currentMode, scheduleConfig), 30000);
 
     if ('serviceWorker' in navigator) {
