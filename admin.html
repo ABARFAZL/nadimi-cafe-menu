@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>ABARAPP - مدیریت منوی ندیمی</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#090d16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ABARAPP">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Lalezar&family=Sahel:wght@400;700;900&family=Shabnam:wght@400;700;900&display=swap');
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Dynamic App Themes (Inherits same theme colors selected for menu!) */
+  :root, body.theme-monochrome {
+    --app-bg: #090d16;
+    --card-bg: #111827;
+    --card-border: rgba(255, 255, 255, 0.08);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.2);
+    --nav-bg: rgba(15, 23, 42, 0.96);
+  }
+  body.theme-espresso {
+    --app-bg: #0d0806;
+    --card-bg: #1c120c;
+    --card-border: rgba(212, 163, 115, 0.22);
+    --text-primary: #faedcd;
+    --text-secondary: #d4a373;
+    --accent: #d4a373;
+    --accent-glow: rgba(212, 163, 115, 0.2);
+    --nav-bg: rgba(28, 18, 12, 0.96);
+  }
+  body.theme-caramel {
+    --app-bg: #140b05;
+    --card-bg: #24140b;
+    --card-border: rgba(176, 137, 104, 0.22);
+    --text-primary: #f7ede2;
+    --text-secondary: #ddb892;
+    --accent: #ddb892;
+    --accent-glow: rgba(221, 184, 146, 0.2);
+    --nav-bg: rgba(36, 20, 11, 0.96);
+  }
+  body.theme-matcha {
+    --app-bg: #081005;
+    --card-bg: #121e0d;
+    --card-border: rgba(74, 222, 128, 0.2);
+    --text-primary: #f0fdf4;
+    --text-secondary: #86efac;
+    --accent: #4ade80;
+    --accent-glow: rgba(74, 222, 128, 0.2);
+    --nav-bg: rgba(18, 30, 13, 0.96);
+  }
+  body.theme-gold {
+    --app-bg: #0a0805;
+    --card-bg: #1c170e;
+    --card-border: rgba(245, 197, 24, 0.25);
+    --text-primary: #fefce8;
+    --text-secondary: #fef08a;
+    --accent: #ffd700;
+    --accent-glow: rgba(255, 215, 0, 0.2);
+    --nav-bg: rgba(28, 23, 14, 0.96);
+  }
+  body.theme-graphite {
+    --app-bg: #0a0b0e;
+    --card-bg: #161820;
+    --card-border: rgba(99, 107, 122, 0.25);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.2);
+    --nav-bg: rgba(22, 24, 32, 0.96);
+  }
+  body.theme-nordic {
+    --app-bg: #050e18;
+    --card-bg: #0e1e30;
+    --card-border: rgba(125, 177, 224, 0.22);
+    --text-primary: #f0f9ff;
+    --text-secondary: #bae6fd;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.2);
+    --nav-bg: rgba(14, 30, 48, 0.96);
+  }
+  body.theme-rose {
+    --app-bg: #120409;
+    --card-bg: #220c15;
+    --card-border: rgba(244, 114, 182, 0.22);
+    --text-primary: #fff1f2;
+    --text-secondary: #fbcfe8;
+    --accent: #f472b6;
+    --accent-glow: rgba(244, 114, 182, 0.2);
+    --nav-bg: rgba(34, 12, 21, 0.96);
+  }
+  body.theme-amber {
+    --app-bg: #120601;
+    --card-bg: #240f04;
+    --card-border: rgba(245, 158, 11, 0.25);
+    --text-primary: #fffbeb;
+    --text-secondary: #fde68a;
+    --accent: #f59e0b;
+    --accent-glow: rgba(245, 158, 11, 0.2);
+    --nav-bg: rgba(36, 15, 4, 0.96);
+  }
+  body.theme-silver {
+    --app-bg: #090e17;
+    --card-bg: #141c2b;
+    --card-border: rgba(148, 163, 184, 0.2);
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --accent: #38bdf8;
+    --accent-glow: rgba(56, 189, 248, 0.2);
+    --nav-bg: rgba(20, 28, 43, 0.96);
+  }
+
+  body {
+    background: var(--app-bg);
+    color: var(--text-primary);
+    font-family: 'Vazirmatn', -apple-system, sans-serif;
+    padding-bottom: 78px;
+    direction: rtl;
+    min-height: 100vh;
+    overflow-x: hidden;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  /* Offline Warning Banner */
+  .offline-banner {
+    display: none;
+    background: #ef4444;
+    color: #ffffff;
+    padding: 7px 12px;
+    font-size: 11.5px;
+    font-weight: 800;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 2500;
+  }
+
+  /* Compact Header */
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: var(--nav-bg);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--card-border);
+    padding: 9px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .brand-logo {
+    height: 28px;
+    filter: invert(1) brightness(1.2);
+  }
+
+  .brand-title {
+    font-size: 14px;
+    font-weight: 900;
+    color: #ffffff;
+    line-height: 1.1;
+  }
+
+  .brand-sub {
+    font-size: 10px;
+    color: var(--text-secondary);
+  }
+
+  /* Install Actions (Hidden automatically when in Standalone/Installed Mode!) */
+  .install-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ios-profile-btn {
+    background: var(--accent);
+    color: #0f172a;
+    text-decoration: none;
+    padding: 5px 9px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  /* Tab View Container */
+  .tab-content {
+    display: none;
+    padding: 10px 14px;
+    animation: fadeIn 0.25s ease;
+  }
+  .tab-content.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ================= TAB 1: PRICING & SLIDER ================= */
+  .percentage-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .perc-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-secondary);
+  }
+
+  .perc-badge {
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--accent);
+  }
+
+  .slider-range {
+    width: 100%;
+    accent-color: var(--accent);
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+  }
+
+  .quick-perc-row {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .quick-perc-row::-webkit-scrollbar { display: none; }
+
+  .perc-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .apply-perc-btn {
+    background: var(--accent);
+    color: #0f172a;
+    border: none;
+    padding: 7px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  /* Search & Category Filter */
+  .search-wrap {
+    margin-bottom: 8px;
+  }
+  .search-input {
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 7px 12px;
+    font-family: inherit;
+    font-size: 12.5px;
+    color: #ffffff;
+    outline: none;
+  }
+
+  .cat-scroll {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: 10px;
+  }
+  .cat-scroll::-webkit-scrollbar { display: none; }
+
+  .cat-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+    padding: 5px 11px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .cat-btn.active {
+    background: var(--accent);
+    color: #0f172a;
+    font-weight: 900;
+  }
+
+  /* Compact Cards */
+  .items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .compact-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card-item-title {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .card-item-cat {
+    font-size: 9.5px;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1px 6px;
+    border-radius: 6px;
+  }
+
+  .price-rows-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 5px 8px;
+  }
+
+  .price-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 0;
+  }
+
+  .price-line-title {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    flex: 1;
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .price-control-box {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .step-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    border: 1px solid var(--card-border);
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .num-input {
+    width: 56px;
+    height: 27px;
+    background: #000000;
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    color: var(--accent);
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 900;
+    text-align: center;
+    outline: none;
+  }
+
+  /* Add Item Button */
+  .add-item-trigger {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px dashed var(--accent);
+    color: var(--accent);
+    padding: 9px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    text-align: center;
+    margin-top: 6px;
+  }
+
+  /* ================= TAB 2: CATEGORIES & COLORS ================= */
+  .section-box {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .form-label {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--text-secondary);
+  }
+
+  .text-input {
+    background: #000000;
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 12.5px;
+    outline: none;
+  }
+
+  .color-picker-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .color-swatch-box {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .color-choice {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  .color-choice.selected {
+    border-color: #ffffff;
+    transform: scale(1.15);
+  }
+
+  .custom-color-input {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .action-btn {
+    background: var(--accent);
+    color: #0f172a;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  .suggest-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .suggest-chip {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* ================= TAB 3: THEMES & LIGHT/DARK ================= */
+  .theme-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .theme-card-choice {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1.5px solid var(--card-border);
+    border-radius: 12px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  .theme-card-choice.active {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+  }
+
+  .theme-preview-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+  }
+
+  .theme-card-text {
+    font-size: 11.5px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+
+  .mode-switch-group {
+    display: flex;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 3px;
+    gap: 3px;
+    margin-top: 6px;
+  }
+
+  .mode-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding: 6px 0;
+    border-radius: 9px;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .mode-btn.active {
+    background: var(--accent);
+    color: #0f172a;
+    font-weight: 900;
+  }
+
+  .time-picker-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    margin-top: 8px;
+  }
+
+  .time-pick {
+    background: #000000;
+    border: 1px solid var(--card-border);
+    color: var(--accent);
+    padding: 3px 6px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    outline: none;
+  }
+
+  /* ================= TAB 4: HEADER & LINKS ================= */
+  .font-select-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .font-chip {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    color: var(--text-primary);
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 800;
+    text-align: center;
+    cursor: pointer;
+  }
+  .font-chip.active {
+    border-color: var(--accent);
+    background: var(--accent-glow);
+    color: var(--accent);
+  }
+
+  .links-manager-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .link-edit-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 6px 8px;
+  }
+
+  .link-edit-row input {
+    background: #000000;
+    border: 1px solid var(--card-border);
+    color: #ffffff;
+    font-size: 11px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    outline: none;
+  }
+
+  .link-del-btn {
+    background: #ef4444;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    width: 22px;
+    height: 22px;
+    font-size: 11px;
+    font-weight: 900;
+    cursor: pointer;
+  }
+
+  /* ================= BOTTOM NAVIGATION BAR ================= */
+  .bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--card-border);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)) 4px;
+    z-index: 2000;
+  }
+
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    color: var(--text-secondary);
+    font-size: 10.5px;
+    font-weight: 700;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    flex: 1;
+    padding: 4px 0;
+    transition: color 0.2s;
+  }
+
+  .nav-item.active {
+    color: var(--accent);
+    font-weight: 900;
+  }
+
+  .nav-icon {
+    font-size: 17px;
+  }
+
+  /* Floating Save Pill */
+  .floating-save-pill {
+    position: fixed;
+    bottom: 74px;
+    left: 14px;
+    right: 14px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+    border: none;
+    padding: 10px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    font-weight: 900;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+    cursor: pointer;
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .floating-save-pill:active { transform: scale(0.97); }
+
+  /* Toast Notification */
+  .toast-box {
+    position: fixed;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: #10b981;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 12.5px;
+    padding: 7px 18px;
+    border-radius: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 3000;
+    white-space: nowrap;
+  }
+  .toast-box.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body class="theme-monochrome">
+
+  <!-- Offline Warning Banner -->
+  <div class="offline-banner" id="offlineBanner">
+    ⚠️ حالت آفلاین: تا زمان اتصال مجدد به اینترنت امکان ثبت تغییرات روی تلویزیون وجود ندارد.
+  </div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand-group">
+      <img src="/nadimi_logo_vector_hd.png" alt="Logo" class="brand-logo">
+      <div>
+        <div class="brand-title">ABARAPP</div>
+        <div class="brand-sub">مدیریت منوی ندیمی</div>
+      </div>
+    </div>
+
+    <!-- Smart Install Actions: ONLY visible if NOT installed as standalone! -->
+    <div class="install-actions" id="installActions">
+      <a href="/abarapp.mobileconfig" class="ios-profile-btn" title="نصب مستقیم پروفایل">
+        📲 نصب در آیفون
+      </a>
+    </div>
+  </header>
+
+  <!-- ================= TAB 1: PRICING & SLIDER ================= -->
+  <div class="tab-content active" id="tabPricing">
+    
+    <!-- Percentage Change Card (Slider / Quick Buttons) -->
+    <div class="percentage-card">
+      <div class="perc-title-row">
+        <span>⚡ تغییر درصدی قیمت‌ها:</span>
+        <span class="perc-badge" id="percBadge">+۰٪</span>
+      </div>
+      <input type="range" class="slider-range" id="percSlider" min="-50" max="100" value="0" step="5" oninput="onSliderMove(this.value)">
+      
+      <div class="quick-perc-row">
+        <button class="perc-btn" onclick="setSliderVal(-10)">−۱۰٪</button>
+        <button class="perc-btn" onclick="setSliderVal(-5)">−۵٪</button>
+        <button class="perc-btn" onclick="setSliderVal(0)">۰٪ (ریست)</button>
+        <button class="perc-btn" onclick="setSliderVal(5)">+۵٪</button>
+        <button class="perc-btn" onclick="setSliderVal(10)">+۱۰٪</button>
+        <button class="perc-btn" onclick="setSliderVal(15)">+۱۵٪</button>
+        <button class="perc-btn" onclick="setSliderVal(20)">+۲۰٪</button>
+      </div>
+
+      <div style="display:flex; gap:6px; align-items:center;">
+        <select id="percScope" class="text-input" style="flex:1; padding:5px; font-size:11px;">
+          <option value="all">اعمال روی تمام منو</option>
+          <option value="espresso">فقط اسپرسو بار</option>
+          <option value="hot">فقط نوشیدنی‌های گرم</option>
+          <option value="cold">فقط نوشیدنی‌های سرد</option>
+          <option value="matcha">فقط ماچا و خاص</option>
+          <option value="tea">فقط چای و دمنوش‌ها</option>
+        </select>
+        <button class="apply-perc-btn" onclick="applyPercentageToPrices()">محاسبه و اعمال</button>
+      </div>
+    </div>
+
+    <!-- Search & Category Filters -->
+    <div class="search-wrap">
+      <input type="text" id="searchInput" class="search-input" placeholder="🔍 جستجوی سریع نوشیدنی..." oninput="renderItems()">
+    </div>
+
+    <div class="cat-scroll">
+      <button class="cat-btn active" onclick="setFilterCat('all', this)">همه</button>
+      <button class="cat-btn" onclick="setFilterCat('espresso', this)">☕ اسپرسو</button>
+      <button class="cat-btn" onclick="setFilterCat('hot', this)">🔥 گرم</button>
+      <button class="cat-btn" onclick="setFilterCat('cold', this)">❄️ سرد</button>
+      <button class="cat-btn" onclick="setFilterCat('matcha', this)">🍵 ماچا</button>
+      <button class="cat-btn" onclick="setFilterCat('tea', this)">🌿 چای و دمنوش</button>
+    </div>
+
+    <!-- Items List -->
+    <div class="items-list" id="itemsList">
+      <!-- Populated via JS -->
+    </div>
+
+    <div class="add-item-trigger" onclick="openAddItemModal()">
+      + افزودن آیتم جدید به این دسته‌بندی
+    </div>
+  </div>
+
+  <!-- ================= TAB 2: CATEGORIES & CUSTOM COLORS ================= -->
+  <div class="tab-content" id="tabCategories">
+    <div class="section-box">
+      <span class="form-label">✨ دسته‌بندی‌های پیشنهادی برای کافه:</span>
+      <div class="suggest-row">
+        <button class="suggest-chip" onclick="quickAddCat('بار کیک و دسر', '#ec4899')">🍰 بار کیک و دسر</button>
+        <button class="suggest-chip" onclick="quickAddCat('ماکتل و بار سرد', '#06b6d4')">🍹 ماکتل و بار سرد</button>
+        <button class="suggest-chip" onclick="quickAddCat('شیک و اسموتی', '#8b5cf6')">🥤 شیک و اسموتی</button>
+        <button class="suggest-chip" onclick="quickAddCat('صبحانه و برانچ', '#f59e0b')">🍳 صبحانه و برانچ</button>
+        <button class="suggest-chip" onclick="quickAddCat('وافل و کروسان', '#d97706')">🥐 وافل و کروسان</button>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <div class="form-group">
+        <span class="form-label">نام دسته‌بندی جدید:</span>
+        <input type="text" id="newCatTitle" class="text-input" placeholder="مثلاً: بار ماکتل‌های دست‌ساز">
+      </div>
+
+      <div class="form-group">
+        <span class="form-label">انتخاب رنگ اختصاصی دسته‌بندی:</span>
+        <div class="color-picker-row">
+          <div class="color-swatch-box" id="swatchBox">
+            <span class="color-choice selected" style="background: #38bdf8;" onclick="pickColor('#38bdf8', this)"></span>
+            <span class="color-choice" style="background: #10b981;" onclick="pickColor('#10b981', this)"></span>
+            <span class="color-choice" style="background: #f59e0b;" onclick="pickColor('#f59e0b', this)"></span>
+            <span class="color-choice" style="background: #ec4899;" onclick="pickColor('#ec4899', this)"></span>
+            <span class="color-choice" style="background: #8b5cf6;" onclick="pickColor('#8b5cf6', this)"></span>
+            <span class="color-choice" style="background: #ef4444;" onclick="pickColor('#ef4444', this)"></span>
+            <span class="color-choice" style="background: #d4a373;" onclick="pickColor('#d4a373', this)"></span>
+          </div>
+          <input type="color" id="customColorPicker" class="custom-color-input" value="#38bdf8" onchange="pickColor(this.value, null)">
+        </div>
+      </div>
+
+      <button class="action-btn" onclick="addNewCategory()">+ ثبت دسته‌بندی جدید</button>
+    </div>
+
+    <div class="section-box">
+      <span class="form-label">دسته‌بندی‌های فعال شما:</span>
+      <div id="categoriesList" style="display:flex; flex-direction:column; gap:6px;">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 3: THEMES & LIGHT/DARK ================= -->
+  <div class="tab-content" id="tabThemes">
+    <div class="section-box">
+      <span class="form-label">🎨 انتخاب تم رنگی (تغییر همزمان تلویزیون و این اپلیکیشن):</span>
+      <div class="theme-grid">
+        <div class="theme-card-choice active" data-t="monochrome" onclick="setAppTheme('monochrome')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #464c58, #adb3bd);"></span>
+          <span class="theme-card-text">منوکروم دودی</span>
+        </div>
+        <div class="theme-card-choice" data-t="espresso" onclick="setAppTheme('espresso')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #281a13, #d4a373);"></span>
+          <span class="theme-card-text">اسپرسو دارک</span>
+        </div>
+        <div class="theme-card-choice" data-t="caramel" onclick="setAppTheme('caramel')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #b08968, #e6ccb2);"></span>
+          <span class="theme-card-text">موکا کارامل</span>
+        </div>
+        <div class="theme-card-choice" data-t="matcha" onclick="setAppTheme('matcha')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #2e4d1e, #99b898);"></span>
+          <span class="theme-card-text">ماچا ذن</span>
+        </div>
+        <div class="theme-card-choice" data-t="gold" onclick="setAppTheme('gold')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #1c1815, #ffd700);"></span>
+          <span class="theme-card-text">رویال گلد</span>
+        </div>
+        <div class="theme-card-choice" data-t="graphite" onclick="setAppTheme('graphite')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #16181e, #38bdf8);"></span>
+          <span class="theme-card-text">گرانیت متال</span>
+        </div>
+        <div class="theme-card-choice" data-t="nordic" onclick="setAppTheme('nordic')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #0f2133, #bae6fd);"></span>
+          <span class="theme-card-text">نوردیک آیس</span>
+        </div>
+        <div class="theme-card-choice" data-t="rose" onclick="setAppTheme('rose')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #260a14, #f472b6);"></span>
+          <span class="theme-card-text">رز لاته</span>
+        </div>
+        <div class="theme-card-choice" data-t="amber" onclick="setAppTheme('amber')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #3b1402, #f59e0b);"></span>
+          <span class="theme-card-text">آمبر کهربایی</span>
+        </div>
+        <div class="theme-card-choice" data-t="silver" onclick="setAppTheme('silver')">
+          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #cbd5e1, #ffffff);"></span>
+          <span class="theme-card-text">سیلور مینیمال</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <span class="form-label">🌓 حالت نوری تلویزیون (دارک مود / لایت مود):</span>
+      <div class="mode-switch-group">
+        <button class="mode-btn active" id="btnModeDark" onclick="setAppMode('dark')">🌙 همیشه تیره</button>
+        <button class="mode-btn" id="btnModeSchedule" onclick="setAppMode('schedule')">⏰ زمان‌بندی روز/شب</button>
+        <button class="mode-btn" id="btnModeLight" onclick="setAppMode('light')">☀️ همیشه روشن</button>
+      </div>
+
+      <div class="time-picker-box" id="scheduleBox" style="display: none;">
+        <div>
+          <span>☀️ شروع روز (روشن):</span>
+          <input type="time" id="inpLightStart" class="time-pick" value="08:00" onchange="markDirty()">
+        </div>
+        <div>
+          <span>🌙 شروع شب (تیره):</span>
+          <input type="time" id="inpDarkStart" class="time-pick" value="18:00" onchange="markDirty()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= TAB 4: HEADER & LINKS & FONTS ================= -->
+  <div class="tab-content" id="tabSettings">
+    <div class="section-box">
+      <span class="form-label">🔤 فونت متن‌های منوی تلویزیون:</span>
+      <div class="font-select-grid">
+        <div class="font-chip active" style="font-family:'Vazirmatn';" onclick="setFontChoice('Vazirmatn', this)">وزیرمتن (پیش‌فرض)</div>
+        <div class="font-chip" style="font-family:'Sahel';" onclick="setFontChoice('Sahel', this)">ساحل</div>
+        <div class="font-chip" style="font-family:'Shabnam';" onclick="setFontChoice('Shabnam', this)">شبنم</div>
+        <div class="font-chip" style="font-family:'Lalezar';" onclick="setFontChoice('Lalezar', this)">لاله‌زار</div>
+      </div>
+    </div>
+
+    <div class="section-box">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="form-label">🔗 لینک‌های بالای منو (شبکه‌های اجتماعی و تماس):</span>
+        <button class="perc-btn" onclick="addNewHeaderLink()">+ لینک جدید</button>
+      </div>
+      <div class="links-manager-list" id="linksManagerList">
+        <!-- Populated via JS -->
+      </div>
+    </div>
+
+    <div class="section-box">
+      <span class="form-label">🖥️ پیش‌نمایش مستقیم تلویزیون:</span>
+      <a href="/index.html" target="_blank" class="action-btn" style="text-align:center; text-decoration:none; display:block;">
+        مشاهده صفحه کامل منو روی تلویزیون
+      </a>
+    </div>
+  </div>
+
+  <!-- Floating Save Button -->
+  <button class="floating-save-pill" onclick="saveAllToServer()">
+    💾 ذخیره و همگام‌سازی با تلویزیون
+  </button>
+
+  <!-- Bottom Navigation Bar -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('tabPricing', this)">
+      <span class="nav-icon">☕</span>
+      <span>قیمت‌ها</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('tabCategories', this)">
+      <span class="nav-icon">🏷️</span>
+      <span>دسته‌بندی</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('tabThemes', this)">
+      <span class="nav-icon">🎨</span>
+      <span>تم و نور</span>
+    </button>
+    <button class="nav-item" onclick="switchTab('tabSettings', this)">
+      <span class="nav-icon">⚙️</span>
+      <span>تنظیمات</span>
+    </button>
+  </nav>
+
+  <!-- Toast Box -->
+  <div class="toast-box" id="toastBox">✓ تغییرات با موفقیت روی تلویزیون اعمال شد</div>
+
+  <script>
+    // State Store
+    let appState = {
+      theme: 'monochrome',
+      mode: 'dark',
+      schedule: { lightStart: '08:00', darkStart: '18:00' },
+      fontFamily: 'Vazirmatn',
+      prices: {},
+      headerLinks: [
+        { id: 'instagram', title: 'اینستاگرام', handle: '@nadimi.coffee', url: 'https://instagram.com/nadimi.coffee', iconType: 'instagram', active: true },
+        { id: 'telegram', title: 'تلگرام', handle: '@nadimicoffee', url: 'https://t.me/nadimicoffee', iconType: 'telegram', active: true }
+      ],
+      customCategories: [],
+      customItems: []
+    };
+
+    let selectedColor = '#38bdf8';
+    let activeFilterCat = 'all';
+
+    // Menu Schema Base
+    const menuSchema = [
+      {
+        id: 'espresso', title: 'اسپرسو', category: 'espresso',
+        prices: [
+          { key: 'esp_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'esp_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'esp_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'esp_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'esp_mark_s', label: 'مارک (تک)' }, { key: 'esp_mark_d', label: 'مارک (دوبل)' },
+          { key: 'esp_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'esp_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'americano', title: 'آمریکانو', category: 'espresso',
+        prices: [
+          { key: 'ame_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'ame_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'ame_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'ame_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'ame_mark_s', label: 'مارک (تک)' }, { key: 'ame_mark_d', label: 'مارک (دوبل)' },
+          { key: 'ame_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'ame_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'latte', title: 'لته کلاسیک', category: 'hot',
+        prices: [
+          { key: 'latte_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'latte_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'latte_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'latte_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'latte_mark_s', label: 'مارک (تک)' }, { key: 'latte_mark_d', label: 'مارک (دوبل)' },
+          { key: 'latte_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'latte_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'cappuccino', title: 'کاپوچینو', category: 'hot',
+        prices: [
+          { key: 'cap_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'cap_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'cap_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'cap_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'cap_mark_s', label: 'مارک (تک)' }, { key: 'cap_mark_d', label: 'مارک (دوبل)' },
+          { key: 'cap_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'cap_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'latte_caramel', title: 'لته کارامل', category: 'hot',
+        prices: [
+          { key: 'caramel_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'caramel_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'caramel_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'caramel_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'caramel_mark_s', label: 'مارک (تک)' }, { key: 'caramel_mark_d', label: 'مارک (دوبل)' },
+          { key: 'caramel_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'caramel_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'latte_hazelnut', title: 'لته فندق', category: 'hot',
+        prices: [
+          { key: 'hazel_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'hazel_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'hazel_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'hazel_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'hazel_mark_s', label: 'مارک (تک)' }, { key: 'hazel_mark_d', label: 'مارک (دوبل)' },
+          { key: 'hazel_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'hazel_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'coconut_macchiato', title: 'کوکونات ماکیاتو ★', category: 'hot',
+        prices: [
+          { key: 'coco_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'coco_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'coco_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'coco_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'coco_mark_s', label: 'مارک (تک)' }, { key: 'coco_mark_d', label: 'مارک (دوبل)' },
+          { key: 'coco_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'coco_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'toffee_spice', title: 'تافی اسپایس ★', category: 'hot',
+        prices: [
+          { key: 'toffee_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'toffee_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'toffee_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'toffee_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'toffee_mark_s', label: 'مارک (تک)' }, { key: 'toffee_mark_d', label: 'مارک (دوبل)' },
+          { key: 'toffee_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'toffee_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'mocha', title: 'موکا', category: 'hot',
+        prices: [
+          { key: 'mocha_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'mocha_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'mocha_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'mocha_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'mocha_mark_s', label: 'مارک (تک)' }, { key: 'mocha_mark_d', label: 'مارک (دوبل)' },
+          { key: 'mocha_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'mocha_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'spanish_latte', title: 'اسپانیش لته ★', category: 'hot',
+        prices: [
+          { key: 'spanish_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'spanish_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'spanish_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'spanish_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'spanish_mark_s', label: 'مارک (تک)' }, { key: 'spanish_mark_d', label: 'مارک (دوبل)' },
+          { key: 'spanish_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'spanish_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      { id: 'taro_latte', title: 'تارو لته', category: 'hot', prices: [{ key: 'taro_latte', label: 'قیمت هر سرو' }] },
+      { id: 'hot_chocolate', title: 'هات چاکلت', category: 'hot', prices: [{ key: 'hot_chocolate', label: 'قیمت هر سرو' }] },
+
+      // Cold
+      {
+        id: 'ice_americano', title: 'آیس آمریکانو', category: 'cold',
+        prices: [
+          { key: 'ice_ame_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'ice_ame_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'ice_ame_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'ice_ame_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'ice_ame_mark_s', label: 'مارک (تک)' }, { key: 'ice_ame_mark_d', label: 'مارک (دوبل)' },
+          { key: 'ice_ame_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'ice_ame_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'ice_latte', title: 'آیس لته کلاسیک', category: 'cold',
+        prices: [
+          { key: 'ice_latte_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'ice_latte_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'ice_latte_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'ice_latte_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'ice_latte_mark_s', label: 'مارک (تک)' }, { key: 'ice_latte_mark_d', label: 'مارک (دوبل)' },
+          { key: 'ice_latte_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'ice_latte_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'ice_mocha', title: 'آیس موکا', category: 'cold',
+        prices: [
+          { key: 'ice_mocha_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'ice_mocha_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'ice_mocha_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'ice_mocha_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'ice_mocha_mark_s', label: 'مارک (تک)' }, { key: 'ice_mocha_mark_d', label: 'مارک (دوبل)' },
+          { key: 'ice_mocha_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'ice_mocha_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'ice_caramel', title: 'آیس لته کارامل', category: 'cold',
+        prices: [
+          { key: 'ice_caramel_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'ice_caramel_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'ice_caramel_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'ice_caramel_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'ice_caramel_mark_s', label: 'مارک (تک)' }, { key: 'ice_caramel_mark_d', label: 'مارک (دوبل)' },
+          { key: 'ice_caramel_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'ice_caramel_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+      {
+        id: 'ice_hazelnut', title: 'آیس لته فندق', category: 'cold',
+        prices: [
+          { key: 'ice_hazel_robusta100_s', label: '۱۰۰٪ روبوستا (تک)' }, { key: 'ice_hazel_robusta100_d', label: '۱۰۰٪ روبوستا (دوبل)' },
+          { key: 'ice_hazel_robusta7030_s', label: '۷۰/۳۰ روبوستا (تک)' }, { key: 'ice_hazel_robusta7030_d', label: '۷۰/۳۰ روبوستا (دوبل)' },
+          { key: 'ice_hazel_mark_s', label: 'مارک (تک)' }, { key: 'ice_hazel_mark_d', label: 'مارک (دوبل)' },
+          { key: 'ice_hazel_arabica100_s', label: '۱۰۰٪ عربیکا (تک)' }, { key: 'ice_hazel_arabica100_d', label: '۱۰۰٪ عربیکا (دوبل)' }
+        ]
+      },
+
+      // Matcha & Specialty
+      { id: 'matcha_mango', title: 'آیس ماچا انبه', category: 'matcha', prices: [{ key: 'matcha_mango', label: 'قیمت هر سرو' }] },
+      { id: 'matcha_strawberry', title: 'آیس ماچا توت‌فرنگی', category: 'matcha', prices: [{ key: 'matcha_strawberry', label: 'قیمت هر سرو' }] },
+      { id: 'matcha_coconut', title: 'آیس ماچا نارگیل', category: 'matcha', prices: [{ key: 'matcha_coconut', label: 'قیمت هر سرو' }] },
+      { id: 'ginger_ice', title: 'جینجر (آیس) 🍋', category: 'matcha', prices: [{ key: 'ginger_ice', label: 'قیمت هر سرو' }] },
+
+      // Teas & Herbal
+      { id: 'tea_masala', title: 'چای ماسالا', category: 'tea', prices: [{ key: 'tea_masala', label: 'قیمت هر سرو' }] },
+      { id: 'tea_karak', title: 'چای کرک', category: 'tea', prices: [{ key: 'tea_karak', label: 'قیمت هر سرو' }] },
+      { id: 'damnoosh_energy', title: 'دمنوش انرژی', category: 'tea', prices: [{ key: 'damnoosh_energy', label: 'قیمت هر سرو' }] },
+      { id: 'damnoosh_aramsh', title: 'دمنوش آرامش', category: 'tea', prices: [{ key: 'damnoosh_aramsh', label: 'قیمت هر سرو' }] },
+      { id: 'damnoosh_laghari', title: 'دمنوش لاغری', category: 'tea', prices: [{ key: 'damnoosh_laghari', label: 'قیمت هر سرو' }] },
+      { id: 'damnoosh_avishan', title: 'دمنوش آویشن', category: 'tea', prices: [{ key: 'damnoosh_avishan', label: 'قیمت هر سرو' }] },
+      { id: 'damnoosh_gavzaban', title: 'دمنوش گل‌گاوزبان', category: 'tea', prices: [{ key: 'damnoosh_gavzaban', label: 'قیمت هر سرو' }] },
+      { id: 'damnoosh_behlimo', title: 'دمنوش به‌لیمو', category: 'tea', prices: [{ key: 'damnoosh_behlimo', label: 'قیمت هر سرو' }] }
+    ];
+
+    // Check Standalone Mode (If installed, hide install button automatically!)
+    function checkStandaloneMode() {
+      const isStandalone = window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+      const el = document.getElementById('installActions');
+      if (el) {
+        el.style.display = isStandalone ? 'none' : 'flex';
+      }
+    }
+    checkStandaloneMode();
+
+    // Check Online/Offline Status
+    function updateNetworkStatus() {
+      const banner = document.getElementById('offlineBanner');
+      if (!navigator.onLine) {
+        banner.style.display = 'block';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+    window.addEventListener('online', updateNetworkStatus);
+    window.addEventListener('offline', updateNetworkStatus);
+    updateNetworkStatus();
+
+    // Tab Switching
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Render Pricing Items
+    function renderItems() {
+      const container = document.getElementById('itemsList');
+      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      container.innerHTML = '';
+
+      // Merge base schema + custom items
+      const combined = [...menuSchema];
+      (appState.customItems || []).forEach(ci => {
+        combined.push({
+          id: ci.id,
+          title: ci.title,
+          category: ci.category,
+          prices: [{ key: ci.id, label: 'قیمت هر سرو' }]
+        });
+      });
+
+      combined.forEach(item => {
+        if (activeFilterCat !== 'all' && item.category !== activeFilterCat) return;
+        if (q && !item.title.toLowerCase().includes(q)) return;
+
+        const card = document.createElement('div');
+        card.className = 'compact-card';
+
+        let rows = '';
+        item.prices.forEach(p => {
+          const val = appState.prices[p.key] !== undefined ? appState.prices[p.key] : 100;
+          rows += `
+            <div class="price-line">
+              <span class="price-line-title">${p.label}</span>
+              <div class="price-control-box">
+                <button class="step-btn" onclick="stepPrice('${p.key}', -5)">−</button>
+                <input type="number" class="num-input" id="inp_${p.key}" value="${val}" onchange="appState.prices['${p.key}'] = +this.value">
+                <button class="step-btn" onclick="stepPrice('${p.key}', 5)">+</button>
+              </div>
+            </div>
+          `;
+        });
+
+        card.innerHTML = `
+          <div class="card-header-row">
+            <span class="card-item-title">${item.title}</span>
+            <span class="card-item-cat">${item.category}</span>
+          </div>
+          <div class="price-rows-box">${rows}</div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function stepPrice(key, delta) {
+      const el = document.getElementById('inp_' + key);
+      if (el) {
+        let val = parseInt(el.value, 10) || 0;
+        val = Math.max(0, val + delta);
+        el.value = val;
+        appState.prices[key] = val;
+        if (navigator.vibrate) navigator.vibrate(15);
+      }
+    }
+
+    function setFilterCat(cat, btn) {
+      activeFilterCat = cat;
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderItems();
+    }
+
+    // Percentage Slider Logic
+    function onSliderMove(val) {
+      const v = parseInt(val, 10);
+      document.getElementById('percBadge').textContent = (v > 0 ? '+' : '') + v + '٪';
+    }
+
+    function setSliderVal(v) {
+      document.getElementById('percSlider').value = v;
+      onSliderMove(v);
+    }
+
+    function applyPercentageToPrices() {
+      const perc = parseInt(document.getElementById('percSlider').value, 10) || 0;
+      if (perc === 0) return;
+      const scope = document.getElementById('percScope').value;
+
+      menuSchema.forEach(item => {
+        if (scope !== 'all' && item.category !== scope) return;
+        item.prices.forEach(p => {
+          let current = appState.prices[p.key] !== undefined ? appState.prices[p.key] : 100;
+          let updated = Math.round(current * (1 + perc / 100));
+          appState.prices[p.key] = updated;
+        });
+      });
+
+      renderItems();
+      showToast(`✓ محاسبه ${perc > 0 ? '+' : ''}${perc}٪ روی قیمت‌ها انجام شد`);
+    }
+
+    // Theme & Mode Setting (Syncs app theme too!)
+    function setAppTheme(theme) {
+      appState.theme = theme;
+      document.body.className = 'theme-' + theme; // Change admin app theme immediately!
+      document.querySelectorAll('.theme-card-choice').forEach(c => {
+        c.classList.toggle('active', c.getAttribute('data-t') === theme);
+      });
+      showToast('🎨 تم ' + theme + ' اعمال شد');
+    }
+
+    function setAppMode(mode) {
+      appState.mode = mode;
+      document.getElementById('btnModeDark').classList.toggle('active', mode === 'dark');
+      document.getElementById('btnModeLight').classList.toggle('active', mode === 'light');
+      document.getElementById('btnModeSchedule').classList.toggle('active', mode === 'schedule');
+      document.getElementById('scheduleBox').style.display = (mode === 'schedule') ? 'flex' : 'none';
+    }
+
+    // Categories Management
+    function pickColor(col, el) {
+      selectedColor = col;
+      document.querySelectorAll('.color-choice').forEach(s => s.classList.remove('selected'));
+      if (el) el.classList.add('selected');
+    }
+
+    function quickAddCat(title, color) {
+      document.getElementById('newCatTitle').value = title;
+      pickColor(color, null);
+      addNewCategory();
+    }
+
+    function addNewCategory() {
+      const title = document.getElementById('newCatTitle').value.trim();
+      if (!title) return;
+      const id = 'cat_' + Date.now();
+      appState.customCategories.push({ id, title, color: selectedColor, active: true });
+      document.getElementById('newCatTitle').value = '';
+      renderCategoriesList();
+      showToast('✓ دسته‌بندی «' + title + '» اضافه شد');
+    }
+
+    function renderCategoriesList() {
+      const list = document.getElementById('categoriesList');
+      list.innerHTML = '';
+      (appState.customCategories || []).forEach(cat => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex; justify-content:space-between; align-items:center; background:rgba(0,0,0,0.2); padding:6px 10px; border-radius:8px;';
+        row.innerHTML = `
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="width:12px; height:12px; border-radius:50%; background:${cat.color};"></span>
+            <span style="font-size:12px; font-weight:800;">${cat.title}</span>
+          </div>
+          <button style="background:#ef4444; border:none; color:#fff; border-radius:4px; padding:2px 8px; font-size:10px; cursor:pointer;" onclick="deleteCat('${cat.id}')">حذف</button>
+        `;
+        list.appendChild(row);
+      });
+    }
+
+    function deleteCat(id) {
+      appState.customCategories = appState.customCategories.filter(c => c.id !== id);
+      renderCategoriesList();
+    }
+
+    // Header Links Management
+    function renderLinksManager() {
+      const box = document.getElementById('linksManagerList');
+      box.innerHTML = '';
+      appState.headerLinks.forEach((link, idx) => {
+        const row = document.createElement('div');
+        row.className = 'link-edit-row';
+        row.innerHTML = `
+          <select style="background:#000; color:#fff; border:1px solid #333; border-radius:6px; font-size:11px;" onchange="appState.headerLinks[${idx}].iconType = this.value">
+            <option value="instagram" ${link.iconType === 'instagram' ? 'selected' : ''}>اینستاگرام</option>
+            <option value="telegram" ${link.iconType === 'telegram' ? 'selected' : ''}>تلگرام</option>
+            <option value="whatsapp" ${link.iconType === 'whatsapp' ? 'selected' : ''}>واتساپ</option>
+            <option value="website" ${link.iconType === 'website' ? 'selected' : ''}>وبسایت</option>
+          </select>
+          <input type="text" style="width:85px;" value="${link.handle || ''}" placeholder="آیدی یا نام" oninput="appState.headerLinks[${idx}].handle = this.value">
+          <input type="text" style="flex:1;" value="${link.url || ''}" placeholder="لینک مستقیم" oninput="appState.headerLinks[${idx}].url = this.value">
+          <button class="link-del-btn" onclick="removeHeaderLink(${idx})">×</button>
+        `;
+        box.appendChild(row);
+      });
+    }
+
+    function addNewHeaderLink() {
+      appState.headerLinks.push({
+        id: 'link_' + Date.now(),
+        title: 'لینک جدید',
+        handle: '@link',
+        url: 'https://',
+        iconType: 'website',
+        active: true
+      });
+      renderLinksManager();
+    }
+
+    function removeHeaderLink(idx) {
+      appState.headerLinks.splice(idx, 1);
+      renderLinksManager();
+    }
+
+    function setFontChoice(font, el) {
+      appState.fontFamily = font;
+      document.querySelectorAll('.font-chip').forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      showToast('🔤 فونت «' + font + '» انتخاب شد');
+    }
+
+    // Modal Add Item
+    function openAddItemModal() {
+      const title = prompt('نام آیتم جدید:');
+      if (!title) return;
+      const price = parseInt(prompt('قیمت (به هزار تومان):') || '100', 10);
+      const cat = prompt('دسته‌بندی (espresso, hot, cold, matcha, tea):') || 'hot';
+
+      const newItem = { id: 'custom_' + Date.now(), title, price, category: cat };
+      appState.customItems.push(newItem);
+      appState.prices[newItem.id] = price;
+      renderItems();
+      showToast('✓ آیتم «' + title + '» با موفقیت افزوده شد');
+    }
+
+    // Save All to Server
+    async function saveAllToServer() {
+      if (!navigator.onLine) {
+        alert('شما در حالت آفلاین هستید! اتصال به اینترنت برقرار نیست.');
+        return;
+      }
+
+      // Collect inputs
+      document.querySelectorAll('.num-input').forEach(inp => {
+        const key = inp.id.replace('inp_', '');
+        appState.prices[key] = parseInt(inp.value, 10) || 0;
+      });
+
+      appState.schedule.lightStart = document.getElementById('inpLightStart').value || '08:00';
+      appState.schedule.darkStart = document.getElementById('inpDarkStart').value || '18:00';
+
+      try {
+        await fetch('/api/prices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(appState)
+        });
+
+        showToast('✓ تمام تغییرات، تم و قیمت‌ها روی تلویزیون لایو شدند!');
+        if (navigator.vibrate) navigator.vibrate([20, 50, 20]);
+      } catch (err) {
+        alert('خطا در اتصال به سرور ورسل');
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toastBox');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    // Init from Remote Server
+    async function initApp() {
+      try {
+        const res = await fetch('/api/prices?t=' + Date.now());
+        if (res.ok) {
+          const json = await res.json();
+          const d = json.data;
+          if (d) {
+            appState = { ...appState, ...d };
+            if (d.theme) setAppTheme(d.theme);
+            if (d.mode) setAppMode(d.mode);
+            if (d.schedule) {
+              document.getElementById('inpLightStart').value = d.schedule.lightStart || '08:00';
+              document.getElementById('inpDarkStart').value = d.schedule.darkStart || '18:00';
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Init fetch:', e);
+      }
+      renderItems();
+      renderCategoriesList();
+      renderLinksManager();
+    }
+
+    initApp();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {});
+    }
+  </script>
+</body>
+</html>

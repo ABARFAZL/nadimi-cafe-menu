@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>کافه ندیمی - منوی دیجیتال تلویزیون</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0f172a">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Lalezar&family=Sahel:wght@400;700;900&family=Shabnam:wght@400;700;900&display=swap');
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ================= 10 THEMES WITH DUAL DARK / LIGHT MODES ================= */
+  
+  /* 1. Monochrome Slate */
+  body.theme-monochrome.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #292d35 0%, #1a1c22 45%, #0f1013 80%, #08090a 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(22, 25, 31, 0.96);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --badge-bg: rgba(255, 255, 255, 0.08);
+    --price-color: #ffffff;
+    --table-header-bg: #1e293b;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.5));
+    --pill-bg: #1e293b;
+    --pill-text: #ffffff;
+  }
+  body.theme-monochrome.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #cbd5e1 0%, #94a3b8 45%, #64748b 80%, #475569 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.12) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(248, 250, 252, 0.96);
+    --card-border: rgba(0, 0, 0, 0.14);
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --accent: #0f172a;
+    --badge-bg: rgba(0, 0, 0, 0.06);
+    --price-color: #000000;
+    --table-header-bg: #0f172a;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #0f172a;
+    --pill-text: #ffffff;
+  }
+
+  /* 2. Espresso Dark */
+  body.theme-espresso.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #382419 0%, #20130d 45%, #130a06 80%, #070302 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(212, 163, 115, 0.25) 0%, rgba(212, 163, 115, 0.05) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(24, 16, 12, 0.96);
+    --card-border: rgba(212, 163, 115, 0.25);
+    --text-main: #faedcd;
+    --text-muted: #d4a373;
+    --accent: #d4a373;
+    --badge-bg: rgba(212, 163, 115, 0.12);
+    --price-color: #ffffff;
+    --table-header-bg: #321c12;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+    --pill-bg: #20130d;
+    --pill-text: #faedcd;
+  }
+  body.theme-espresso.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #faedcd 0%, #e9d8a6 45%, #d4a373 80%, #bc6c25 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(255, 253, 250, 0.97);
+    --card-border: rgba(188, 108, 37, 0.25);
+    --text-main: #281404;
+    --text-muted: #7f4f24;
+    --accent: #936639;
+    --badge-bg: rgba(188, 108, 37, 0.08);
+    --price-color: #281404;
+    --table-header-bg: #4a2810;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #4a2810;
+    --pill-text: #faedcd;
+  }
+
+  /* 3. Mocha Caramel */
+  body.theme-caramel.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #4a2e1b 0%, #2e1a0d 45%, #1a0e06 80%, #0c0602 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(230, 204, 178, 0.22) 0%, rgba(230, 204, 178, 0.05) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(26, 17, 11, 0.96);
+    --card-border: rgba(176, 137, 104, 0.25);
+    --text-main: #f7ede2;
+    --text-muted: #ddb892;
+    --accent: #ddb892;
+    --badge-bg: rgba(176, 137, 104, 0.12);
+    --price-color: #f7ede2;
+    --table-header-bg: #3f2413;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+    --pill-bg: #2e1a0d;
+    --pill-text: #f7ede2;
+  }
+  body.theme-caramel.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #ede0d4 0%, #ddb892 45%, #b08968 80%, #7f5539 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(255, 252, 248, 0.97);
+    --card-border: rgba(127, 85, 57, 0.22);
+    --text-main: #3b1d06;
+    --text-muted: #9c6644;
+    --accent: #7f5539;
+    --badge-bg: rgba(127, 85, 57, 0.1);
+    --price-color: #2b1403;
+    --table-header-bg: #5a3821;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #7f5539;
+    --pill-text: #ffffff;
+  }
+
+  /* 4. Matcha Zen */
+  body.theme-matcha.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #23381a 0%, #152210 45%, #0d160a 80%, #060a04 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(153, 184, 152, 0.22) 0%, rgba(153, 184, 152, 0.05) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(17, 26, 14, 0.96);
+    --card-border: rgba(100, 138, 60, 0.28);
+    --text-main: #f0fdf4;
+    --text-muted: #86efac;
+    --accent: #4ade80;
+    --badge-bg: rgba(74, 222, 128, 0.12);
+    --price-color: #f0fdf4;
+    --table-header-bg: #1d3314;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+    --pill-bg: #152210;
+    --pill-text: #f0fdf4;
+  }
+  body.theme-matcha.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #bbf7d0 0%, #86efac 45%, #4ade80 80%, #16a34a 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(252, 254, 250, 0.97);
+    --card-border: rgba(46, 77, 30, 0.22);
+    --text-main: #14280d;
+    --text-muted: #2d6a4f;
+    --accent: #1e3a13;
+    --badge-bg: rgba(46, 77, 30, 0.08);
+    --price-color: #0b1a06;
+    --table-header-bg: #1b4332;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #1b4332;
+    --pill-text: #ffffff;
+  }
+
+  /* 5. Royal Gold */
+  body.theme-gold.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #2c251a 0%, #1a160f 45%, #0f0d09 80%, #060503 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(245, 197, 24, 0.22) 0%, rgba(245, 197, 24, 0.05) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(24, 20, 15, 0.96);
+    --card-border: rgba(212, 175, 55, 0.35);
+    --text-main: #fefce8;
+    --text-muted: #fef08a;
+    --accent: #f5c518;
+    --badge-bg: rgba(245, 197, 24, 0.12);
+    --price-color: #ffd700;
+    --table-header-bg: #2e2413;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+    --pill-bg: #1a160f;
+    --pill-text: #ffd700;
+  }
+  body.theme-gold.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #fef9c3 0%, #fef08a 45%, #fde047 80%, #eab308 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(255, 254, 245, 0.97);
+    --card-border: rgba(202, 138, 4, 0.28);
+    --text-main: #2b2005;
+    --text-muted: #713f12;
+    --accent: #854d0e;
+    --badge-bg: rgba(234, 179, 8, 0.12);
+    --price-color: #2b2005;
+    --table-header-bg: #422006;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #422006;
+    --pill-text: #fef08a;
+  }
+
+  /* 6. Graphite */
+  body.theme-graphite.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #2a2e38 0%, #1a1c23 45%, #101115 80%, #08080a 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.04) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(22, 25, 32, 0.96);
+    --card-border: rgba(99, 107, 122, 0.35);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --badge-bg: rgba(255, 255, 255, 0.08);
+    --price-color: #38bdf8;
+    --table-header-bg: #1c202a;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+    --pill-bg: #101115;
+    --pill-text: #38bdf8;
+  }
+  body.theme-graphite.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #e2e8f0 0%, #cbd5e1 45%, #94a3b8 80%, #64748b 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0.12) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(255, 255, 255, 0.97);
+    --card-border: rgba(100, 116, 139, 0.25);
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --accent: #0f172a;
+    --badge-bg: rgba(15, 23, 42, 0.06);
+    --price-color: #0f172a;
+    --table-header-bg: #1e293b;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #1e293b;
+    --pill-text: #ffffff;
+  }
+
+  /* 7. Nordic */
+  body.theme-nordic.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #1e3a5f 0%, #10243e 45%, #0a1728 80%, #040910 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(186, 230, 253, 0.25) 0%, rgba(186, 230, 253, 0.05) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(12, 25, 42, 0.96);
+    --card-border: rgba(125, 177, 224, 0.28);
+    --text-main: #f0f9ff;
+    --text-muted: #bae6fd;
+    --accent: #38bdf8;
+    --badge-bg: rgba(56, 189, 248, 0.12);
+    --price-color: #e0f2fe;
+    --table-header-bg: #122b48;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+    --pill-bg: #0a1728;
+    --pill-text: #e0f2fe;
+  }
+  body.theme-nordic.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #e0f2fe 0%, #bae6fd 45%, #7dd3fc 80%, #38bdf8 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(250, 253, 255, 0.97);
+    --card-border: rgba(2, 132, 199, 0.22);
+    --text-main: #082f49;
+    --text-muted: #0369a1;
+    --accent: #0284c7;
+    --badge-bg: rgba(2, 132, 199, 0.08);
+    --price-color: #082f49;
+    --table-header-bg: #0c4a6e;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #0c4a6e;
+    --pill-text: #ffffff;
+  }
+
+  /* 8. Velvet Rose */
+  body.theme-rose.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #481d29 0%, #2b0f17 45%, #1a080d 80%, #0b0205 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(251, 182, 206, 0.22) 0%, rgba(251, 182, 206, 0.05) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(28, 12, 17, 0.96);
+    --card-border: rgba(244, 114, 182, 0.28);
+    --text-main: #fff1f2;
+    --text-muted: #fbcfe8;
+    --accent: #f472b6;
+    --badge-bg: rgba(244, 114, 182, 0.12);
+    --price-color: #fbcfe8;
+    --table-header-bg: #371420;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+    --pill-bg: #1a080d;
+    --pill-text: #fbcfe8;
+  }
+  body.theme-rose.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #ffe4e6 0%, #fecdd3 45%, #fda4af 80%, #fb7185 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(255, 250, 251, 0.97);
+    --card-border: rgba(225, 29, 72, 0.22);
+    --text-main: #4c0519;
+    --text-muted: #9f1239;
+    --accent: #be123c;
+    --badge-bg: rgba(225, 29, 72, 0.08);
+    --price-color: #4c0519;
+    --table-header-bg: #881337;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #881337;
+    --pill-text: #ffffff;
+  }
+
+  /* 9. Amber Roast */
+  body.theme-amber.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #4e2105 0%, #301302 45%, #1c0a01 80%, #0a0300 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(251, 191, 36, 0.22) 0%, rgba(251, 191, 36, 0.05) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(28, 12, 3, 0.96);
+    --card-border: rgba(245, 158, 11, 0.3);
+    --text-main: #fffbeb;
+    --text-muted: #fde68a;
+    --accent: #f59e0b;
+    --badge-bg: rgba(245, 158, 11, 0.12);
+    --price-color: #fef08a;
+    --table-header-bg: #3d1803;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+    --pill-bg: #1c0a01;
+    --pill-text: #fef08a;
+  }
+  body.theme-amber.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #fef3c7 0%, #fde68a 45%, #fcd34d 80%, #f59e0b 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.45) 0%, rgba(255,255,255,0.1) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(255, 253, 245, 0.97);
+    --card-border: rgba(217, 119, 6, 0.25);
+    --text-main: #451a03;
+    --text-muted: #92400e;
+    --accent: #b45309;
+    --badge-bg: rgba(245, 158, 11, 0.1);
+    --price-color: #451a03;
+    --table-header-bg: #78350f;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #78350f;
+    --pill-text: #ffffff;
+  }
+
+  /* 10. Studio Silver */
+  body.theme-silver.mode-dark {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #334155 0%, #1e293b 45%, #0f172a 80%, #020617 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.04) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(15, 23, 42, 0.96);
+    --card-border: rgba(148, 163, 184, 0.3);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --accent: #38bdf8;
+    --badge-bg: rgba(255, 255, 255, 0.08);
+    --price-color: #ffffff;
+    --table-header-bg: #1e293b;
+    --logo-filter: invert(1) brightness(1.2) drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+    --pill-bg: #0f172a;
+    --pill-text: #ffffff;
+  }
+  body.theme-silver.mode-light {
+    --bg-gradient: radial-gradient(ellipse at 50% 25%, #f8fafc 0%, #e2e8f0 45%, #cbd5e1 80%, #94a3b8 100%);
+    --header-bg: radial-gradient(ellipse at 50% 50%, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.15) 48%, rgba(0,0,0,0) 75%);
+    --card-bg: rgba(255, 255, 255, 0.98);
+    --card-border: rgba(148, 163, 184, 0.35);
+    --text-main: #020617;
+    --text-muted: #475569;
+    --accent: #0f172a;
+    --badge-bg: rgba(15, 23, 42, 0.06);
+    --price-color: #000000;
+    --table-header-bg: #0f172a;
+    --logo-filter: drop-shadow(0 6px 16px rgba(0,0,0,0.22));
+    --pill-bg: #0f172a;
+    --pill-text: #ffffff;
+  }
+
+  /* ================= 100% ZERO-SCROLL TV FIT ================= */
+  html, body {
+    width: 100vw;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden; /* STRICT ZERO SCROLL */
+    background: var(--bg-gradient);
+    color: var(--text-main);
+    font-family: 'Vazirmatn', -apple-system, sans-serif;
+    transition: background 0.4s ease, color 0.4s ease;
+  }
+
+  body {
+    padding: 1.4vh 2.2vw 1.2vh 2.2vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Header */
+  .header {
+    height: 9.8vh;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: var(--header-bg);
+    border-radius: 16px;
+    padding: 0 1.2vw;
+  }
+
+  /* Dynamic Header Links & QR Code */
+  .header-left-socials {
+    position: absolute;
+    left: 1vw;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 0.5vh 1vw;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    direction: ltr;
+  }
+
+  .qr-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+  }
+
+  .qr-img {
+    width: 5.2vh;
+    height: 5.2vh;
+    border-radius: 6px;
+    border: 1px solid var(--text-main);
+    background: #ffffff;
+    padding: 2px;
+  }
+
+  .qr-label {
+    font-size: 1.1vh;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .social-links-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3vh;
+    justify-content: center;
+  }
+
+  .social-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4vw;
+    font-size: 1.35vh;
+    font-weight: 800;
+    color: var(--text-main);
+    text-decoration: none;
+  }
+
+  /* Center Logo */
+  .header-center-logo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .center-logo-img {
+    height: 8.6vh;
+    object-fit: contain;
+    filter: var(--logo-filter);
+    transition: filter 0.4s ease;
+  }
+
+  /* Main Layout Columns */
+  .menu-columns {
+    display: flex;
+    gap: 1.5vw;
+    flex: 1;
+    margin-top: 0.8vh;
+    margin-bottom: 0.6vh;
+    height: 82vh;
+  }
+
+  .menu-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9vh;
+    height: 100%;
+  }
+
+  /* Cards */
+  .card-block {
+    background: var(--card-bg);
+    border-radius: 14px;
+    border: 1px solid var(--card-border);
+    padding: 0.7vh 1.1vw;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.14);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.35s ease;
+  }
+
+  .card-block.espresso-block { height: 26.5vh; }
+  .card-block.hot-block      { height: 54.5vh; }
+  .card-block.cold-block     { height: 53vh; }
+  .card-block.tea-block      { height: 28vh; }
+
+  .border-top-dark {
+    border-top: 3px solid var(--accent) !important;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.3vh;
+    margin-bottom: 0.2vh;
+    border-bottom: 1px solid rgba(150, 150, 150, 0.15);
+  }
+
+  .card-header-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5vw;
+  }
+
+  .card-header h2 {
+    font-size: 1.8vh;
+    font-weight: 900;
+    color: var(--text-main);
+  }
+
+  .header-pill {
+    font-size: 1.15vh;
+    font-weight: 800;
+    color: var(--text-muted);
+    background: var(--badge-bg);
+    padding: 0.2vh 0.7vw;
+    border-radius: 12px;
+  }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    text-align: center;
+  }
+
+  th {
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1.25vh;
+    padding: 0.35vh 0.2vw;
+    line-height: 1.15;
+  }
+
+  .th-item-title {
+    background: var(--table-header-bg);
+    color: #ffffff;
+    font-size: 1.35vh;
+    font-weight: 800;
+    width: 25%;
+    border-top-right-radius: 8px;
+  }
+
+  .th-robusta { background: #3c2415; border-left: 1px solid rgba(255,255,255,0.15); }
+  .th-7030    { background: #5a3821; border-left: 1px solid rgba(255,255,255,0.15); }
+  .th-mark    { background: #7c4f30; border-left: 1px solid rgba(255,255,255,0.15); }
+  .th-arabica { background: #a46f45; border-top-left-radius: 8px; }
+
+  .th-sub-shot {
+    background: rgba(0, 0, 0, 0.28);
+    color: #ffffff;
+    font-size: 1.1vh;
+    font-weight: 800;
+    padding: 0.15vh 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    border-left: 1px solid rgba(255,255,255,0.06);
+  }
+
+  td {
+    padding: 0.3vh 0.2vw;
+    border-bottom: 1px solid rgba(150, 150, 150, 0.1);
+    font-size: 1.3vh;
+    color: var(--text-main);
+    line-height: 1.2;
+  }
+
+  tr:nth-child(even) td {
+    background: rgba(150, 150, 150, 0.04);
+  }
+
+  .td-name-box {
+    text-align: right;
+    padding-right: 0.5vw;
+    border-right: 3px solid var(--accent);
+  }
+
+  .td-title {
+    font-weight: 800;
+    color: var(--text-main);
+    display: block;
+    font-size: 1.38vh;
+    line-height: 1.15;
+  }
+
+  .td-recipe {
+    font-size: 1vh;
+    color: var(--text-muted);
+    font-weight: 500;
+    display: block;
+  }
+
+  .price-cell {
+    font-weight: 900;
+    font-size: 1.52vh;
+    color: var(--price-color) !important;
+    border-left: 1px solid rgba(150, 150, 150, 0.08);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .price-cell.updated-flash {
+    animation: flashGreen 1.2s ease;
+  }
+
+  @keyframes flashGreen {
+    0% { background: rgba(16, 185, 129, 0.45); }
+    100% { background: transparent; }
+  }
+
+  .fixed-price-banner {
+    background: rgba(150, 150, 150, 0.08);
+    font-weight: 900;
+    font-size: 1.5vh;
+    color: var(--price-color);
+  }
+
+  /* Matcha bar */
+  .matcha-header-row th {
+    background: #1b4332 !important;
+    color: #ffffff;
+    font-size: 1.25vh;
+    font-weight: 800;
+    padding: 0.3vh 0;
+    border-radius: 5px;
+  }
+
+  .matcha-name {
+    color: #2d6a4f !important;
+    font-weight: 800;
+  }
+
+  /* Teas & Herbal Cards */
+  .tea-featured-row {
+    display: flex;
+    gap: 0.9vw;
+    margin-bottom: 0.4vh;
+  }
+
+  .tea-featured-card {
+    flex: 1;
+    background: rgba(150, 150, 150, 0.06);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 0.5vh 0.8vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .tea-featured-card.karak-border { border-right: 4px solid #d97706; }
+  .tea-featured-card.masala-border { border-right: 4px solid #b45309; }
+
+  .tea-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .tea-card-title {
+    font-size: 1.45vh;
+    font-weight: 900;
+    color: var(--text-main);
+  }
+
+  .tea-card-recipe {
+    font-size: 1.05vh;
+    color: var(--text-muted);
+  }
+
+  .tea-card-price {
+    font-size: 1.7vh;
+    font-weight: 900;
+    color: var(--price-color);
+    background: var(--badge-bg);
+    padding: 0.2vh 0.9vw;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+  }
+
+  /* Herbal 6-Grid */
+  .herbal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4vh 0.9vw;
+  }
+
+  .herbal-item {
+    background: rgba(150, 150, 150, 0.05);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 0.4vh 0.7vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .herbal-name {
+    font-size: 1.32vh;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+
+  .herbal-desc {
+    font-size: 0.95vh;
+    color: var(--text-muted);
+  }
+
+  .herbal-price {
+    font-size: 1.5vh;
+    font-weight: 900;
+    color: var(--price-color);
+    background: var(--badge-bg);
+    padding: 0.1vh 0.7vw;
+    border-radius: 6px;
+  }
+
+  /* Custom Categories Container */
+  .custom-items-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3vh;
+    margin-top: 0.4vh;
+  }
+
+  /* Footer Note */
+  .menu-footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3vh;
+  }
+
+  .footer-pill {
+    background: var(--pill-bg);
+    color: var(--pill-text);
+    padding: 0.35vh 1.8vw;
+    border-radius: 18px;
+    font-size: 1.25vh;
+    font-weight: 700;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+    border: 1px solid var(--card-border);
+  }
+</style>
+</head>
+<body class="theme-monochrome mode-dark">
+
+  <!-- Header -->
+  <div class="header">
+    
+    <!-- Dynamic Header Links & QR (Visual Left) -->
+    <div class="header-left-socials" id="headerSocialsContainer">
+      <div class="qr-box">
+        <img class="qr-img" src="/instagram_qr.png" alt="QR Code" id="headerQrImg">
+        <span class="qr-label">اسکن سفارش / اینستاگرام</span>
+      </div>
+      
+      <div class="social-links-box" id="socialLinksBox">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- Center: Prominent Vector HD Logo -->
+    <div class="header-center-logo">
+      <img class="center-logo-img" src="/nadimi_logo_vector_hd.png" alt="NADIMI COFFEE">
+    </div>
+
+  </div>
+
+  <!-- Main Content Columns -->
+  <div class="menu-columns">
+
+    <!-- RIGHT COLUMN: ESPRESSO BAR + HOT DRINKS -->
+    <div class="menu-col">
+      
+      <!-- 1. ESPRESSO BAR -->
+      <div class="card-block espresso-block border-top-dark">
+        <div class="card-header">
+          <div class="card-header-title">
+            <span style="font-size:1.6vh;">☕</span>
+            <h2>اسپرسو بار</h2>
+          </div>
+          <span class="header-pill">عصاره‌گیری تخصصی</span>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2" class="th-item-title">نام آیتم و رسپی</th>
+              <th colspan="2" class="th-robusta">۱۰۰٪ روبوستا</th>
+              <th colspan="2" class="th-7030">۷۰/۳۰ روبوستا</th>
+              <th colspan="2" class="th-mark">مارک</th>
+              <th colspan="2" class="th-arabica">۱۰۰٪ عربیکا</th>
+            </tr>
+            <tr>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-name-box"><span class="td-title">اسپرسو</span><span class="td-recipe">عصاره خالص دانه قهوه</span></td>
+              <td class="price-cell" data-p="esp_robusta100_s">80</td><td class="price-cell" data-p="esp_robusta100_d">120</td>
+              <td class="price-cell" data-p="esp_robusta7030_s">90</td><td class="price-cell" data-p="esp_robusta7030_d">130</td>
+              <td class="price-cell" data-p="esp_mark_s">160</td><td class="price-cell" data-p="esp_mark_d">230</td>
+              <td class="price-cell" data-p="esp_arabica100_s">180</td><td class="price-cell" data-p="esp_arabica100_d">250</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">آمریکانو</span><span class="td-recipe">اسپرسو + آب جوش</span></td>
+              <td class="price-cell" data-p="ame_robusta100_s">80</td><td class="price-cell" data-p="ame_robusta100_d">120</td>
+              <td class="price-cell" data-p="ame_robusta7030_s">90</td><td class="price-cell" data-p="ame_robusta7030_d">130</td>
+              <td class="price-cell" data-p="ame_mark_s">160</td><td class="price-cell" data-p="ame_mark_d">230</td>
+              <td class="price-cell" data-p="ame_arabica100_s">180</td><td class="price-cell" data-p="ame_arabica100_d">250</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 2. HOT DRINKS -->
+      <div class="card-block hot-block">
+        <div class="card-header">
+          <div class="card-header-title">
+            <span style="font-size:1.6vh;">🔥</span>
+            <h2>نوشیدنی‌های گرم</h2>
+          </div>
+          <span class="header-pill">سرو گرم در ماگ استاندارد</span>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2" class="th-item-title">نام آیتم و رسپی</th>
+              <th colspan="2" class="th-robusta">۱۰۰٪ روبوستا</th>
+              <th colspan="2" class="th-7030">۷۰/۳۰ روبوستا</th>
+              <th colspan="2" class="th-mark">مارک</th>
+              <th colspan="2" class="th-arabica">۱۰۰٪ عربیکا</th>
+            </tr>
+            <tr>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-name-box"><span class="td-title">لته کلاسیک</span><span class="td-recipe">اسپرسو + شیر بخار دیده + فوم شیر</span></td>
+              <td class="price-cell" data-p="latte_robusta100_s">160</td><td class="price-cell" data-p="latte_robusta100_d">200</td>
+              <td class="price-cell" data-p="latte_robusta7030_s">170</td><td class="price-cell" data-p="latte_robusta7030_d">210</td>
+              <td class="price-cell" data-p="latte_mark_s">220</td><td class="price-cell" data-p="latte_mark_d">310</td>
+              <td class="price-cell" data-p="latte_arabica100_s">260</td><td class="price-cell" data-p="latte_arabica100_d">320</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">کاپوچینو</span><span class="td-recipe">اسپرسو + شیر فوم‌دار غلیظ + پودر شکلات</span></td>
+              <td class="price-cell" data-p="cap_robusta100_s">160</td><td class="price-cell" data-p="cap_robusta100_d">200</td>
+              <td class="price-cell" data-p="cap_robusta7030_s">170</td><td class="price-cell" data-p="cap_robusta7030_d">210</td>
+              <td class="price-cell" data-p="cap_mark_s">220</td><td class="price-cell" data-p="cap_mark_d">310</td>
+              <td class="price-cell" data-p="cap_arabica100_s">260</td><td class="price-cell" data-p="cap_arabica100_d">320</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">لته کارامل</span><span class="td-recipe">اسپرسو + سیروپ کارامل + شیر</span></td>
+              <td class="price-cell" data-p="caramel_robusta100_s">210</td><td class="price-cell" data-p="caramel_robusta100_d">250</td>
+              <td class="price-cell" data-p="caramel_robusta7030_s">220</td><td class="price-cell" data-p="caramel_robusta7030_d">260</td>
+              <td class="price-cell" data-p="caramel_mark_s">290</td><td class="price-cell" data-p="caramel_mark_d">360</td>
+              <td class="price-cell" data-p="caramel_arabica100_s">310</td><td class="price-cell" data-p="caramel_arabica100_d">380</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">لته فندق</span><span class="td-recipe">اسپرسو + سیروپ فندق برشته + شیر</span></td>
+              <td class="price-cell" data-p="hazel_robusta100_s">210</td><td class="price-cell" data-p="hazel_robusta100_d">250</td>
+              <td class="price-cell" data-p="hazel_robusta7030_s">220</td><td class="price-cell" data-p="hazel_robusta7030_d">260</td>
+              <td class="price-cell" data-p="hazel_mark_s">290</td><td class="price-cell" data-p="hazel_mark_d">360</td>
+              <td class="price-cell" data-p="hazel_arabica100_s">310</td><td class="price-cell" data-p="hazel_arabica100_d">380</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">کوکونات ماکیاتو ★</span><span class="td-recipe">اسپرسو + سیروپ نارگیل + شیر + فوم</span></td>
+              <td class="price-cell" data-p="coco_robusta100_s">210</td><td class="price-cell" data-p="coco_robusta100_d">250</td>
+              <td class="price-cell" data-p="coco_robusta7030_s">220</td><td class="price-cell" data-p="coco_robusta7030_d">260</td>
+              <td class="price-cell" data-p="coco_mark_s">290</td><td class="price-cell" data-p="coco_mark_d">360</td>
+              <td class="price-cell" data-p="coco_arabica100_s">310</td><td class="price-cell" data-p="coco_arabica100_d">380</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">تافی اسپایس ★</span><span class="td-recipe">اسپرسو + سیروپ تافی و ادویه + شیر</span></td>
+              <td class="price-cell" data-p="toffee_robusta100_s">210</td><td class="price-cell" data-p="toffee_robusta100_d">250</td>
+              <td class="price-cell" data-p="toffee_robusta7030_s">220</td><td class="price-cell" data-p="toffee_robusta7030_d">260</td>
+              <td class="price-cell" data-p="toffee_mark_s">290</td><td class="price-cell" data-p="toffee_mark_d">360</td>
+              <td class="price-cell" data-p="toffee_arabica100_s">310</td><td class="price-cell" data-p="toffee_arabica100_d">380</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">موکا</span><span class="td-recipe">اسپرسو + سس شکلات تلخ + شیر + فوم</span></td>
+              <td class="price-cell" data-p="mocha_robusta100_s">210</td><td class="price-cell" data-p="mocha_robusta100_d">250</td>
+              <td class="price-cell" data-p="mocha_robusta7030_s">220</td><td class="price-cell" data-p="mocha_robusta7030_d">260</td>
+              <td class="price-cell" data-p="mocha_mark_s">290</td><td class="price-cell" data-p="mocha_mark_d">360</td>
+              <td class="price-cell" data-p="mocha_arabica100_s">310</td><td class="price-cell" data-p="mocha_arabica100_d">380</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">اسپانیش لته ★</span><span class="td-recipe">اسپرسو + شیر عسلی + شیر</span></td>
+              <td class="price-cell" data-p="spanish_robusta100_s">210</td><td class="price-cell" data-p="spanish_robusta100_d">250</td>
+              <td class="price-cell" data-p="spanish_robusta7030_s">220</td><td class="price-cell" data-p="spanish_robusta7030_d">260</td>
+              <td class="price-cell" data-p="spanish_mark_s">290</td><td class="price-cell" data-p="spanish_mark_d">360</td>
+              <td class="price-cell" data-p="spanish_arabica100_s">310</td><td class="price-cell" data-p="spanish_arabica100_d">380</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">تارو لته</span><span class="td-recipe">پودر ارگانیک تارو بنفش + شیر داغ + فوم</span></td>
+              <td colspan="8" class="fixed-price-banner price-cell" data-p="taro_latte">240</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">هات چاکلت</span><span class="td-recipe">پودر شکلات داغ بلژیکی + شیر پرچرب + فوم</span></td>
+              <td colspan="8" class="fixed-price-banner price-cell" data-p="hot_chocolate">195</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- LEFT COLUMN: COLD DRINKS + MATCHA + TEAS -->
+    <div class="menu-col">
+      
+      <!-- 3. COLD DRINKS & MATCHA BAR -->
+      <div class="card-block cold-block border-top-dark">
+        <div class="card-header">
+          <div class="card-header-title">
+            <span style="font-size:1.6vh;">❄️</span>
+            <h2>نوشیدنی‌های سرد</h2>
+          </div>
+          <span class="header-pill">سرو همراه با یخ در لیوان مخصوص</span>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th rowspan="2" class="th-item-title">نام آیتم و رسپی</th>
+              <th colspan="2" class="th-robusta">۱۰۰٪ روبوستا</th>
+              <th colspan="2" class="th-7030">۷۰/۳۰ روبوستا</th>
+              <th colspan="2" class="th-mark">مارک</th>
+              <th colspan="2" class="th-arabica">۱۰۰٪ عربیکا</th>
+            </tr>
+            <tr>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+              <th class="th-sub-shot">تک</th><th class="th-sub-shot">دوبل</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="td-name-box"><span class="td-title">آیس آمریکانو</span><span class="td-recipe">اسپرسو + آب سرد + تکه‌های یخ</span></td>
+              <td class="price-cell" data-p="ice_ame_robusta100_s">95</td><td class="price-cell" data-p="ice_ame_robusta100_d">125</td>
+              <td class="price-cell" data-p="ice_ame_robusta7030_s">105</td><td class="price-cell" data-p="ice_ame_robusta7030_d">135</td>
+              <td class="price-cell" data-p="ice_ame_mark_s">175</td><td class="price-cell" data-p="ice_ame_mark_d">235</td>
+              <td class="price-cell" data-p="ice_ame_arabica100_s">195</td><td class="price-cell" data-p="ice_ame_arabica100_d">265</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">آیس لته کلاسیک</span><span class="td-recipe">اسپرسو + شیر سرد + یخ</span></td>
+              <td class="price-cell" data-p="ice_latte_robusta100_s">175</td><td class="price-cell" data-p="ice_latte_robusta100_d">215</td>
+              <td class="price-cell" data-p="ice_latte_robusta7030_s">185</td><td class="price-cell" data-p="ice_latte_robusta7030_d">225</td>
+              <td class="price-cell" data-p="ice_latte_mark_s">225</td><td class="price-cell" data-p="ice_latte_mark_d">325</td>
+              <td class="price-cell" data-p="ice_latte_arabica100_s">275</td><td class="price-cell" data-p="ice_latte_arabica100_d">335</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">آیس موکا</span><span class="td-recipe">اسپرسو + سس شکلات + شیر سرد + یخ</span></td>
+              <td class="price-cell" data-p="ice_mocha_robusta100_s">225</td><td class="price-cell" data-p="ice_mocha_robusta100_d">265</td>
+              <td class="price-cell" data-p="ice_mocha_robusta7030_s">225</td><td class="price-cell" data-p="ice_mocha_robusta7030_d">275</td>
+              <td class="price-cell" data-p="ice_mocha_mark_s">235</td><td class="price-cell" data-p="ice_mocha_mark_d">275</td>
+              <td class="price-cell" data-p="ice_mocha_arabica100_s">225</td><td class="price-cell" data-p="ice_mocha_arabica100_d">295</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">آیس لته کارامل</span><span class="td-recipe">اسپرسو + سیروپ کارامل + شیر سرد + یخ</span></td>
+              <td class="price-cell" data-p="ice_caramel_robusta100_s">225</td><td class="price-cell" data-p="ice_caramel_robusta100_d">265</td>
+              <td class="price-cell" data-p="ice_caramel_robusta7030_s">225</td><td class="price-cell" data-p="ice_caramel_robusta7030_d">275</td>
+              <td class="price-cell" data-p="ice_caramel_mark_s">205</td><td class="price-cell" data-p="ice_caramel_mark_d">275</td>
+              <td class="price-cell" data-p="ice_caramel_arabica100_s">225</td><td class="price-cell" data-p="ice_caramel_arabica100_d">295</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title">آیس لته فندق</span><span class="td-recipe">اسپرسو + سیروپ فندق + شیر سرد + یخ</span></td>
+              <td class="price-cell" data-p="ice_hazel_robusta100_s">225</td><td class="price-cell" data-p="ice_hazel_robusta100_d">265</td>
+              <td class="price-cell" data-p="ice_hazel_robusta7030_s">225</td><td class="price-cell" data-p="ice_hazel_robusta7030_d">275</td>
+              <td class="price-cell" data-p="ice_hazel_mark_s">205</td><td class="price-cell" data-p="ice_hazel_mark_d">275</td>
+              <td class="price-cell" data-p="ice_hazel_arabica100_s">225</td><td class="price-cell" data-p="ice_hazel_arabica100_d">295</td>
+            </tr>
+
+            <!-- MATCHA SUB-CATEGORY -->
+            <tr class="matcha-header-row">
+              <th colspan="9">🍵 بار ماچا ژاپنی (سرو سرد همراه با یخ)</th>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title matcha-name">آیس ماچا انبه</span><span class="td-recipe">چای ماچا ارگانیک + پوره طبیعی انبه + شیر سرد + یخ</span></td>
+              <td colspan="8" class="fixed-price-banner price-cell" data-p="matcha_mango">300</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title matcha-name">آیس ماچا توت‌فرنگی</span><span class="td-recipe">چای ماچا + پوره توت‌فرنگی تازه + شیر سرد + یخ</span></td>
+              <td colspan="8" class="fixed-price-banner price-cell" data-p="matcha_strawberry">280</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title matcha-name">آیس ماچا نارگیل</span><span class="td-recipe">چای ماچا + سیروپ شیر نارگیل + شیر سرد + یخ</span></td>
+              <td colspan="8" class="fixed-price-banner price-cell" data-p="matcha_coconut">315</td>
+            </tr>
+            <tr>
+              <td class="td-name-box"><span class="td-title" style="color:#d97706;">جینجر (آیس) 🍋</span><span class="td-recipe">عصاره طبیعی زنجبیل تازه + سودا گازدار + تکه‌های لیمو و یخ</span></td>
+              <td colspan="8" class="fixed-price-banner price-cell" data-p="ginger_ice">80</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 4. TEAS & HERBAL DRINKS -->
+      <div class="card-block tea-block">
+        <div class="card-header">
+          <div class="card-header-title">
+            <span style="font-size:1.6vh;">🌿</span>
+            <h2>بار چای‌های اصیل و دمنوش‌های گیاهی</h2>
+          </div>
+          <span class="header-pill">سرو گرم و سنتی</span>
+        </div>
+
+        <!-- Featured Teas: Karak & Masala -->
+        <div class="tea-featured-row">
+          <div class="tea-featured-card masala-border">
+            <div class="tea-card-info">
+              <span class="tea-card-title">☕ چای ماسالا</span>
+              <span class="tea-card-recipe">چای سیاه + شیر داغ + ترکیب ادویه‌های معطر دارچین، زنجبیل، هل و میخک</span>
+            </div>
+            <div class="tea-card-price price-cell" data-p="tea_masala">200</div>
+          </div>
+
+          <div class="tea-featured-card karak-border">
+            <div class="tea-card-info">
+              <span class="tea-card-title">✨ چای کرک</span>
+              <span class="tea-card-recipe">چای سنتی خلیجی + شیر غلیظ کاراملی + هل</span>
+            </div>
+            <div class="tea-card-price price-cell" data-p="tea_karak">200</div>
+          </div>
+        </div>
+
+        <div style="font-size: 1.1vh; font-weight: 800; color: var(--text-muted); margin-bottom: 0.3vh; text-align: center;">
+          دمنوش‌های طبیعی و آرامش‌بخش (سرو گرم در فرنچ‌پرس):
+        </div>
+
+        <!-- 6 Herbal Grid -->
+        <div class="herbal-grid">
+          <div class="herbal-item">
+            <div class="herbal-item-text">
+              <span class="herbal-name">دمنوش انرژی</span>
+              <span class="herbal-desc">ترکیب گیاهی نشاط‌آور و تقویت تمرکز</span>
+            </div>
+            <span class="herbal-price price-cell" data-p="damnoosh_energy">60</span>
+          </div>
+
+          <div class="herbal-item">
+            <div class="herbal-item-text">
+              <span class="herbal-name">دمنوش آرامش</span>
+              <span class="herbal-desc">بابونه، به‌لیمو و اسطوخودوس</span>
+            </div>
+            <span class="herbal-price price-cell" data-p="damnoosh_aramsh">60</span>
+          </div>
+
+          <div class="herbal-item">
+            <div class="herbal-item-text">
+              <span class="herbal-name">دمنوش لاغری</span>
+              <span class="herbal-desc">چای سبز، زیره و لیمو خشک</span>
+            </div>
+            <span class="herbal-price price-cell" data-p="damnoosh_laghari">60</span>
+          </div>
+
+          <div class="herbal-item">
+            <div class="herbal-item-text">
+              <span class="herbal-name">دمنوش آویشن</span>
+              <span class="herbal-desc">آویشن کوهی شیرازی معطر</span>
+            </div>
+            <span class="herbal-price price-cell" data-p="damnoosh_avishan">60</span>
+          </div>
+
+          <div class="herbal-item">
+            <div class="herbal-item-text">
+              <span class="herbal-name">دمنوش گل‌گاوزبان</span>
+              <span class="herbal-desc">گل‌گاوزبان اعلا + لیمو عمانی</span>
+            </div>
+            <span class="herbal-price price-cell" data-p="damnoosh_gavzaban">60</span>
+          </div>
+
+          <div class="herbal-item">
+            <div class="herbal-item-text">
+              <span class="herbal-name">دمنوش به‌لیمو</span>
+              <span class="herbal-desc">برگ خالص به‌لیمو تازه و آرام‌بخش</span>
+            </div>
+            <span class="herbal-price price-cell" data-p="damnoosh_behlimo">60</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Footer Info -->
+  <div class="menu-footer">
+    <div class="footer-pill">
+      تمامی قیمت‌ها به هزار تومان — ( تک‌شات / دوبل‌شات )
+    </div>
+  </div>
+
+  <script>
+    const farsiDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+    function toFarsi(n) {
+      return String(n).replace(/[0-9]/g, function (w) {
+        return farsiDigits[+w];
+      });
+    }
+
+    // Initial render of farsi numbers
+    document.querySelectorAll('[data-p]').forEach(el => {
+      el.textContent = toFarsi(el.textContent.trim());
+    });
+
+    let currentPrices = {};
+    let currentTheme = 'monochrome';
+    let currentMode = 'dark';
+    let scheduleConfig = { lightStart: '08:00', darkStart: '18:00' };
+
+    function computeActiveMode(mode, schedule) {
+      if (mode === 'light') return 'mode-light';
+      if (mode === 'dark') return 'mode-dark';
+
+      const now = new Date();
+      const curMins = now.getHours() * 60 + now.getMinutes();
+
+      const parseTime = (str) => {
+        const parts = (str || '08:00').split(':');
+        return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
+      };
+
+      const startLight = parseTime(schedule?.lightStart || '08:00');
+      const startDark = parseTime(schedule?.darkStart || '18:00');
+
+      if (startLight < startDark) {
+        return (curMins >= startLight && curMins < startDark) ? 'mode-light' : 'mode-dark';
+      } else {
+        return (curMins >= startLight || curMins < startDark) ? 'mode-light' : 'mode-dark';
+      }
+    }
+
+    function applyThemeAndMode(theme, mode, schedule, font) {
+      currentTheme = theme || currentTheme;
+      currentMode = mode || currentMode;
+      scheduleConfig = schedule || scheduleConfig;
+
+      const activeModeClass = computeActiveMode(currentMode, scheduleConfig);
+      document.body.className = 'theme-' + currentTheme + ' ' + activeModeClass;
+
+      if (font) {
+        document.body.style.fontFamily = `"${font}", -apple-system, sans-serif`;
+      }
+    }
+
+    // Render Dynamic Header Links
+    function renderHeaderLinks(links) {
+      if (!links || !Array.isArray(links)) return;
+      const box = document.getElementById('socialLinksBox');
+      box.innerHTML = '';
+
+      links.filter(l => l.active !== false).forEach(item => {
+        const a = document.createElement('a');
+        a.className = 'social-item';
+        a.href = item.url || '#';
+        a.target = '_blank';
+
+        let iconSvg = '';
+        if (item.iconType === 'instagram') {
+          iconSvg = `
+            <svg viewBox="0 0 24 24" style="width: 2.1vh; height: 2.1vh;">
+              <defs>
+                <radialGradient id="instaGrad" r="150%" cx="30%" cy="107%">
+                  <stop stop-color="#fdf497" offset="0%" />
+                  <stop stop-color="#fd5949" offset="45%" />
+                  <stop stop-color="#d6249f" offset="60%" />
+                  <stop stop-color="#285AEB" offset="90%" />
+                </radialGradient>
+              </defs>
+              <path fill="url(#instaGrad)" d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>`;
+        } else if (item.iconType === 'telegram') {
+          iconSvg = `
+            <svg viewBox="0 0 24 24" style="width: 2.1vh; height: 2.1vh;">
+              <circle cx="12" cy="12" r="12" fill="#229ED9"/>
+              <path fill="#ffffff" d="M17.5 7.5L5.5 12.1c-.8.3-.8.8-.1 1l3.1 1 7.2-4.5c.3-.2.7-.1.4.2l-5.8 5.2-.2 3.3c.3 0 .5-.1.7-.3l1.7-1.6 3.5 2.6c.6.4 1.1.2 1.3-.6l2.3-10.8c.2-.9-.3-1.4-1.6-.7z"/>
+            </svg>`;
+        } else if (item.iconType === 'whatsapp') {
+          iconSvg = `
+            <svg viewBox="0 0 24 24" style="width: 2.1vh; height: 2.1vh;">
+              <circle cx="12" cy="12" r="12" fill="#25D366"/>
+              <path fill="#ffffff" d="M16.5 14.3c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.5.1-.2.2-.6.7-.7.9-.1.2-.3.2-.5.1s-.9-.3-1.7-1c-.6-.5-1-1.2-1.1-1.4-.1-.2 0-.4.1-.5.1-.1.2-.3.3-.4.1-.1.1-.2.2-.4 0-.1 0-.3-.1-.4-.1-.1-.5-1.2-.7-1.7-.2-.4-.4-.4-.5-.4h-.4c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.3c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.4.5.6.2 1.1.2 1.6.1.5-.1 1.3-.5 1.5-1.1.2-.5.2-1 .1-1.1-.1-.1-.3-.2-.5-.3z"/>
+            </svg>`;
+        } else {
+          iconSvg = `<span style="font-size: 1.8vh;">🌐</span>`;
+        }
+
+        a.innerHTML = `${iconSvg} <span>${item.handle || item.title}</span>`;
+        box.appendChild(a);
+      });
+    }
+
+    // Realtime Sync Engine (Live Polling every 2s)
+    async function syncMenuState() {
+      try {
+        const res = await fetch('/api/prices?t=' + Date.now(), { cache: 'no-store' });
+        if (res.ok) {
+          const json = await res.json();
+          const remote = json.data;
+          if (remote) {
+            applyThemeAndMode(remote.theme, remote.mode, remote.schedule, remote.fontFamily);
+
+            if (remote.headerLinks) {
+              renderHeaderLinks(remote.headerLinks);
+            }
+
+            const prices = remote.prices;
+            if (prices) {
+              document.querySelectorAll('[data-p]').forEach(el => {
+                const key = el.getAttribute('data-p');
+                if (prices[key] !== undefined) {
+                  const newVal = String(prices[key]);
+                  const oldVal = currentPrices[key];
+                  if (oldVal !== undefined && oldVal !== newVal) {
+                    el.classList.add('updated-flash');
+                    setTimeout(() => el.classList.remove('updated-flash'), 1200);
+                  }
+                  currentPrices[key] = newVal;
+                  el.textContent = toFarsi(newVal);
+                }
+              });
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Sync attempt:', err);
+      }
+    }
+
+    syncMenuState();
+    setInterval(syncMenuState, 2000);
+    setInterval(() => applyThemeAndMode(currentTheme, currentMode, scheduleConfig), 30000);
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
