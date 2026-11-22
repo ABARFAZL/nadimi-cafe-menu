@@ -154,10 +154,10 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // Ensure first-run state is loaded
+  // Ensure initial store is populated
   await ensureStoreInitialized();
 
-  // GET: Instantly return from memory cache (Zero network latency!)
+  // GET: Instantly return from memory cache
   if (req.method === 'GET') {
     return res.status(200).json({
       success: true,
@@ -165,33 +165,34 @@ export default async function handler(req, res) {
     });
   }
 
-  // POST: Instantly update memory and persist asynchronously
+  // POST: Partial or Full update
   if (req.method === 'POST') {
     try {
       const incoming = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
 
-      if (incoming.prices) {
+      // Update ONLY fields that are explicitly provided
+      if (incoming.prices && typeof incoming.prices === 'object') {
         memoryStore.prices = { ...memoryStore.prices, ...incoming.prices };
       }
-      if (incoming.theme !== undefined) {
-        memoryStore.theme = incoming.theme;
+      if (incoming.theme !== undefined && incoming.theme !== null) {
+        memoryStore.theme = String(incoming.theme);
       }
-      if (incoming.mode !== undefined) {
-        memoryStore.mode = incoming.mode;
+      if (incoming.mode !== undefined && incoming.mode !== null) {
+        memoryStore.mode = String(incoming.mode);
       }
-      if (incoming.schedule !== undefined) {
+      if (incoming.schedule !== undefined && incoming.schedule !== null) {
         memoryStore.schedule = { ...memoryStore.schedule, ...incoming.schedule };
       }
-      if (incoming.fontFamily !== undefined) {
-        memoryStore.fontFamily = incoming.fontFamily;
+      if (incoming.fontFamily !== undefined && incoming.fontFamily !== null) {
+        memoryStore.fontFamily = String(incoming.fontFamily);
       }
-      if (incoming.fontSizeScale !== undefined) {
+      if (incoming.fontSizeScale !== undefined && incoming.fontSizeScale !== null) {
         memoryStore.fontSizeScale = parseInt(incoming.fontSizeScale, 10) || 100;
       }
-      if (incoming.itemNameScale !== undefined) {
+      if (incoming.itemNameScale !== undefined && incoming.itemNameScale !== null) {
         memoryStore.itemNameScale = parseInt(incoming.itemNameScale, 10) || 100;
       }
-      if (incoming.priceNumScale !== undefined) {
+      if (incoming.priceNumScale !== undefined && incoming.priceNumScale !== null) {
         memoryStore.priceNumScale = parseInt(incoming.priceNumScale, 10) || 100;
       }
       if (incoming.fullscreenToggleId !== undefined) {
@@ -208,19 +209,23 @@ export default async function handler(req, res) {
       }
       memoryStore.lastUpdated = new Date().toISOString();
 
-      // Persist to permanent storage without blocking immediate response
-      const persistPromise = put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
-        access: 'public',
-        addRandomSuffix: false,
-        allowOverwrite: true
-      }).catch(err => {
-        console.error('Background Blob persist error:', err.message);
-      });
+      // Persist to permanent storage with race timeout so process does not get frozen mid-write
+      try {
+        await Promise.race([
+          put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
+            access: 'public',
+            addRandomSuffix: false,
+            allowOverwrite: true
+          }),
+          new Promise(r => setTimeout(r, 600))
+        ]);
+      } catch (persistErr) {
+        console.warn('Persist warning:', persistErr.message);
+      }
 
-      // Immediate 200 response to caller (<15ms!)
       return res.status(200).json({
         success: true,
-        message: 'تغییرات درجا اعمال و همگام شد',
+        message: 'همگام‌سازی انجام شد',
         data: memoryStore
       });
     } catch (err) {

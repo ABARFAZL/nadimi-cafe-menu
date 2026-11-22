@@ -1886,7 +1886,7 @@
       const parsed = parseInt(val, 10);
       if (!isNaN(parsed) && parsed >= 0) {
         appState.prices[key] = parsed;
-        triggerAutoSaveDebounced(50);
+        sendPartialUpdate({ prices: { [key]: parsed } }, 40);
       }
     }
 
@@ -1905,7 +1905,7 @@
       if (inp) inp.value = val;
 
       if (navigator.vibrate) navigator.vibrate(10);
-      triggerAutoSaveDebounced(40);
+      sendPartialUpdate({ prices: { [key]: val } }, 30);
     }
 
     function setFilterCat(cat, btn) {
@@ -1920,12 +1920,12 @@
     // Theme & Mode Setting (Syncs app theme too + Auto-saves instantly!)
     function setAppTheme(theme) {
       appState.theme = theme;
-      document.body.className = 'theme-' + theme; // Change admin app theme immediately!
       document.querySelectorAll('.theme-card-choice').forEach(c => {
         c.classList.toggle('active', c.getAttribute('data-t') === theme);
       });
-      showToast('🎨 تم ' + theme + ' اعمال شد');
-      saveAllToServerSilent();
+      showToast('🎨 تم منو به «' + theme + '» تغییر یافت');
+      // Send ONLY theme update - Instant & No Loop!
+      sendPartialUpdate({ theme: theme }, 0);
     }
 
     function setAppMode(mode) {
@@ -2025,11 +2025,11 @@
       appState.fontFamily = font;
       document.querySelectorAll('.font-chip').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
-      showToast('🔤 فونت «' + font + '» انتخاب شد');
-      saveAllToServerSilent();
+      showToast('🔤 قلم تلویزیون: «' + font + '»');
+      sendPartialUpdate({ fontFamily: font }, 0);
     }
 
-    // Separate Scaling Functions: Item Names vs Price Numbers
+    // Separate Scaling Functions: Item Names vs Price Numbers (Zero Side Effects on Theme)
     function onItemNameScaleChange(val) {
       const v = parseInt(val, 10);
       appState.itemNameScale = v;
@@ -2042,7 +2042,8 @@
       const badge = document.getElementById('itemNameScaleBadge');
       if (badge) badge.innerText = `${v}٪ (${label})`;
 
-      triggerAutoSaveDebounced(50);
+      // Send ONLY itemNameScale - 100% Isolated!
+      sendPartialUpdate({ itemNameScale: v }, 30);
     }
 
     function setItemNamePreset(v, btn) {
@@ -2076,7 +2077,8 @@
       const badge = document.getElementById('priceNumScaleBadge');
       if (badge) badge.innerText = `${v}٪ (${label})`;
 
-      triggerAutoSaveDebounced(50);
+      // Send ONLY priceNumScale - 100% Isolated!
+      sendPartialUpdate({ priceNumScale: v }, 30);
     }
 
     function setPriceNumPreset(v, btn) {
@@ -2126,52 +2128,54 @@
       showToast('✓ آیتم «' + title + '» با موفقیت افزوده شد');
     }
 
-    // Auto-Save Engine for Instant TV Updates
-    function showSyncPulse() {
-      const dot = document.getElementById('syncPulseDot');
-      if (dot) {
-        dot.classList.add('pulsing');
-        setTimeout(() => dot.classList.remove('pulsing'), 350);
-      }
-    }
+    // Targeted Partial Auto-Save Engine (100% Isolated Updates - Never Interfere with Theme)
+    let partialUpdateTimer = null;
+    let pendingUpdates = {};
 
-    let autoSaveTimer = null;
-    function triggerAutoSaveDebounced(delay = 50) {
-      clearTimeout(autoSaveTimer);
-      autoSaveTimer = setTimeout(() => {
-        saveAllToServerSilent();
+    function sendPartialUpdate(patch, delay = 40) {
+      if (!patch || typeof patch !== 'object') return;
+      
+      // Merge updates
+      if (patch.prices) {
+        pendingUpdates.prices = { ...(pendingUpdates.prices || {}), ...patch.prices };
+      }
+      for (const [k, v] of Object.entries(patch)) {
+        if (k !== 'prices') pendingUpdates[k] = v;
+      }
+
+      clearTimeout(partialUpdateTimer);
+      partialUpdateTimer = setTimeout(async () => {
+        const payload = { ...pendingUpdates };
+        pendingUpdates = {};
+
+        try {
+          const res = await fetch('/api/prices', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (res.ok) {
+            showSyncPulse();
+            const banner = document.getElementById('offlineBanner');
+            if (banner) banner.style.display = 'none';
+          }
+        } catch (e) {
+          console.warn('Network sync warning:', e);
+        }
       }, delay);
     }
 
+    // Full Save on explicit demand
     async function saveAllToServerSilent() {
-      document.querySelectorAll('.liquid-num-input, .num-input').forEach(inp => {
-        const key = inp.id.replace('inp_', '');
-        const v = parseInt(inp.value, 10);
-        if (!isNaN(v)) appState.prices[key] = v;
-      });
-      const itemRange = document.getElementById('itemNameScaleRange');
-      if (itemRange) appState.itemNameScale = parseInt(itemRange.value, 10) || appState.itemNameScale || 100;
-      const priceRange = document.getElementById('priceNumScaleRange');
-      if (priceRange) appState.priceNumScale = parseInt(priceRange.value, 10) || appState.priceNumScale || 100;
-      const lightEl = document.getElementById('inpLightStart');
-      const darkEl = document.getElementById('inpDarkStart');
-      if (lightEl) appState.schedule.lightStart = lightEl.value || '08:00';
-      if (darkEl) appState.schedule.darkStart = darkEl.value || '18:00';
-
-      try {
-        const res = await fetch('/api/prices', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(appState)
-        });
-        if (res.ok) {
-          showSyncPulse();
-          const banner = document.getElementById('offlineBanner');
-          if (banner) banner.style.display = 'none';
-        }
-      } catch (e) {
-        console.warn('Silent sync error:', e);
-      }
+      sendPartialUpdate({
+        prices: appState.prices,
+        theme: appState.theme,
+        mode: appState.mode,
+        fontFamily: appState.fontFamily,
+        itemNameScale: appState.itemNameScale,
+        priceNumScale: appState.priceNumScale,
+        schedule: appState.schedule
+      }, 0);
     }
 
     // Save All to Server
@@ -2234,7 +2238,7 @@
       setTimeout(() => t.classList.remove('show'), 2400);
     }
 
-    // Init from Remote Server
+    // Init from Remote Server (Pure Read - Never Emits Write Requests!)
     async function initApp() {
       try {
         const res = await fetch('/api/prices?t=' + Date.now());
@@ -2243,34 +2247,43 @@
           const d = json.data;
           if (d) {
             appState = { ...appState, ...d };
-            if (d.theme) setAppTheme(d.theme);
-            if (d.mode) setAppMode(d.mode);
+            if (d.theme) {
+              appState.theme = d.theme;
+              document.querySelectorAll('.theme-card-choice').forEach(c => {
+                c.classList.toggle('active', c.getAttribute('data-t') === d.theme);
+              });
+            }
+            if (d.mode) {
+              appState.mode = d.mode;
+              document.getElementById('btnModeDark').classList.toggle('active', d.mode === 'dark');
+              document.getElementById('btnModeLight').classList.toggle('active', d.mode === 'light');
+              document.getElementById('btnModeSchedule').classList.toggle('active', d.mode === 'schedule');
+              document.getElementById('scheduleBox').style.display = (d.mode === 'schedule') ? 'flex' : 'none';
+            }
+            if (d.fontFamily) {
+              document.querySelectorAll('.font-chip').forEach(c => {
+                c.classList.toggle('active', c.textContent.includes(d.fontFamily) || c.style.fontFamily.includes(d.fontFamily));
+              });
+            }
             if (d.itemNameScale) {
               appState.itemNameScale = d.itemNameScale;
               const rangeEl = document.getElementById('itemNameScaleRange');
               if (rangeEl) rangeEl.value = d.itemNameScale;
               const badge = document.getElementById('itemNameScaleBadge');
               if (badge) badge.innerText = `${d.itemNameScale}٪`;
-            } else if (d.fontSizeScale) {
-              appState.itemNameScale = d.fontSizeScale;
-              const rangeEl = document.getElementById('itemNameScaleRange');
-              if (rangeEl) rangeEl.value = d.fontSizeScale;
             }
-
             if (d.priceNumScale) {
               appState.priceNumScale = d.priceNumScale;
               const rangeEl = document.getElementById('priceNumScaleRange');
               if (rangeEl) rangeEl.value = d.priceNumScale;
               const badge = document.getElementById('priceNumScaleBadge');
               if (badge) badge.innerText = `${d.priceNumScale}٪`;
-            } else if (d.fontSizeScale) {
-              appState.priceNumScale = d.fontSizeScale;
-              const rangeEl = document.getElementById('priceNumScaleRange');
-              if (rangeEl) rangeEl.value = d.fontSizeScale;
             }
             if (d.schedule) {
-              document.getElementById('inpLightStart').value = d.schedule.lightStart || '08:00';
-              document.getElementById('inpDarkStart').value = d.schedule.darkStart || '18:00';
+              const lEl = document.getElementById('inpLightStart');
+              const dEl = document.getElementById('inpDarkStart');
+              if (lEl) lEl.value = d.schedule.lightStart || '08:00';
+              if (dEl) dEl.value = d.schedule.darkStart || '18:00';
             }
           }
         }
