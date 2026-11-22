@@ -10,6 +10,8 @@ const DEFAULT_STATE = {
   },
   fontFamily: 'Vazirmatn',
   fontSizeScale: 100, // 75 to 140 percent
+  itemNameScale: 100, // 70 to 160 percent (Item Titles & Descriptions)
+  priceNumScale: 100, // 70 to 180 percent (Price Numbers)
   headerLinks: [
     { id: 'instagram', title: 'اینستاگرام', handle: '@nadimi.coffee', url: 'https://instagram.com/nadimi.coffee', iconType: 'instagram', active: true },
     { id: 'telegram', title: 'تلگرام', handle: '@nadimicoffee', url: 'https://t.me/nadimicoffee', iconType: 'telegram', active: true }
@@ -185,6 +187,12 @@ export default async function handler(req, res) {
       }
       if (incoming.fontSizeScale !== undefined) {
         memoryStore.fontSizeScale = parseInt(incoming.fontSizeScale, 10) || 100;
+      }
+      if (incoming.itemNameScale !== undefined) {
+        memoryStore.itemNameScale = parseInt(incoming.itemNameScale, 10) || 100;
+      }
+      if (incoming.priceNumScale !== undefined) {
+        memoryStore.priceNumScale = parseInt(incoming.priceNumScale, 10) || 100;
       }
       if (incoming.fullscreenToggleId !== undefined) {
         memoryStore.fullscreenToggleId = incoming.fullscreenToggleId;

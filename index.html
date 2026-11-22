@@ -382,10 +382,14 @@
   }
 
   body {
-    padding: 1.4vh 2.2vw 1.2vh 2.2vw;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    padding: 1.2vh 1.6vw !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: stretch !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
   }
 
   /* Header */
@@ -476,14 +480,13 @@
 
   /* Main Layout Columns */
   .menu-columns {
-    display: flex;
-    gap: 1.5vw;
-    flex: 1;
-    min-height: 0;
-    margin-top: 0.5vh;
-    margin-bottom: 0.4vh;
-    height: calc(100vh - 17vh);
-    max-height: calc(100vh - 17vh);
+    display: flex !important;
+    gap: 1.6vw !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    margin: 0 !important;
   }
 
   .menu-col {
@@ -500,7 +503,7 @@
     background: var(--card-bg);
     border-radius: 14px;
     border: 1px solid var(--card-border);
-    padding: 0.6vh 1.1vw;
+    padding: 0.8vh 1.2vw;
     box-shadow: 0 6px 20px rgba(0,0,0,0.14);
     display: flex;
     flex-direction: column;
@@ -590,7 +593,7 @@
   }
 
   td {
-    padding: 0.3vh 0.2vw;
+    padding: 0.45vh 0.2vw;
     border-bottom: 1px solid rgba(150, 150, 150, 0.1);
     font-size: 1.3vh;
     color: var(--text-main);
@@ -934,29 +937,7 @@
     </div>
   </div>
 
-  <!-- Header -->
-  <div class="header">
-    
-    <!-- Dynamic Header Links & QR (Visual Left) -->
-    <div class="header-left-socials" id="headerSocialsContainer">
-      <div class="qr-box">
-        <img class="qr-img" src="/instagram_qr.png" alt="QR Code" id="headerQrImg">
-        <span class="qr-label">اسکن سفارش / اینستاگرام</span>
-      </div>
-      
-      <div class="social-links-box" id="socialLinksBox">
-        <!-- Rendered dynamically -->
-      </div>
-    </div>
-
-    <!-- Center: Prominent Vector HD Logo -->
-    <div class="header-center-logo">
-      <img class="center-logo-img" src="/nadimi_logo_vector_hd.png" alt="NADIMI COFFEE">
-    </div>
-
-  </div>
-
-  <!-- Main Content Columns -->
+  <!-- Main Content Columns (100% Fullscreen Dedicated Menu Space) -->
   <div class="menu-columns">
 
     <!-- RIGHT COLUMN: ESPRESSO BAR + HOT DRINKS -->
@@ -1284,11 +1265,7 @@
 
   </div>
 
-  <!-- Footer Info -->
-  <div class="menu-footer">
-    <div class="footer-pill">
-      تمامی قیمت‌ها به هزار تومان — ( تک‌شات / دوبل‌شات )
-    </div>
+  <!-- Footer removed to dedicate 100% screen space to menus -->
   </div>
 
   <script>
@@ -1502,6 +1479,7 @@
     function renderHeaderLinks(links) {
       if (!links || !Array.isArray(links)) return;
       const box = document.getElementById('socialLinksBox');
+      if (!box) return;
       box.innerHTML = '';
 
       links.filter(l => l.active !== false).forEach(item => {

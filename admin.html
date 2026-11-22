@@ -1460,25 +1460,49 @@
       </div>
     </div>
 
-    <!-- Font Size & Scaling Controller -->
+    <!-- 1. ITEM NAMES & TEXTS FONT SIZE CONTROLLER -->
     <div class="section-box">
       <div class="font-size-header-row">
-        <span class="form-label">🔍 اندازه و درشتی نوشته‌های منوی تلویزیون:</span>
-        <span class="font-size-badge" id="fontSizeBadge">۱۰۰٪ (استاندارد)</span>
+        <span class="form-label">🏷️ اندازه نام آیتم‌ها، عناوین و توضیحات منو:</span>
+        <span class="font-size-badge" id="itemNameScaleBadge">۱۰۰٪ (استاندارد)</span>
       </div>
 
-      <input type="range" min="75" max="140" step="5" value="100" class="font-scale-slider" id="fontScaleRange" oninput="onFontScaleChange(this.value)">
+      <input type="range" min="70" max="160" step="5" value="100" class="font-scale-slider" id="itemNameScaleRange" oninput="onItemNameScaleChange(this.value)">
 
       <div class="font-step-controls">
-        <button class="font-step-btn" onclick="stepFontSize(-5)">➖ ۵٪ کوچک‌تر</button>
-        <button class="font-step-btn" onclick="stepFontSize(5)">➕ ۵٪ بزرگ‌تر</button>
+        <button class="font-step-btn" onclick="stepItemNameSize(-5)">➖ ۵٪ کوچک‌تر</button>
+        <button class="font-step-btn" onclick="stepItemNameSize(5)">➕ ۵٪ بزرگ‌تر</button>
       </div>
 
       <div class="font-presets-row">
-        <button class="font-preset-btn" onclick="setFontPreset(85, this)">ریز (۸۵٪)</button>
-        <button class="font-preset-btn active" onclick="setFontPreset(100, this)">استاندارد (۱۰۰٪)</button>
-        <button class="font-preset-btn" onclick="setFontPreset(115, this)">بزرگ (۱۱۵٪)</button>
-        <button class="font-preset-btn" onclick="setFontPreset(130, this)">خیلی درشت (۱۳۰٪)</button>
+        <button class="font-preset-btn" onclick="setItemNamePreset(85, this)">ریز (۸۵٪)</button>
+        <button class="font-preset-btn active" onclick="setItemNamePreset(100, this)">استاندارد (۱۰۰٪)</button>
+        <button class="font-preset-btn" onclick="setItemNamePreset(115, this)">بزرگ (۱۱۵٪)</button>
+        <button class="font-preset-btn" onclick="setItemNamePreset(130, this)">خیلی درشت (۱۳۰٪)</button>
+        <button class="font-preset-btn" onclick="setItemNamePreset(145, this)">ماکسیمم (۱۴۵٪)</button>
+      </div>
+    </div>
+
+    <!-- 2. PRICE NUMBERS FONT SIZE CONTROLLER -->
+    <div class="section-box">
+      <div class="font-size-header-row">
+        <span class="form-label">💰 اندازه و درشتی اعداد و ارقام قیمت‌ها:</span>
+        <span class="font-size-badge" id="priceNumScaleBadge" style="color:#10b981; border-color:rgba(16,185,129,0.3);">۱۰۰٪ (استاندارد)</span>
+      </div>
+
+      <input type="range" min="70" max="180" step="5" value="100" class="font-scale-slider" id="priceNumScaleRange" oninput="onPriceNumScaleChange(this.value)">
+
+      <div class="font-step-controls">
+        <button class="font-step-btn" onclick="stepPriceNumSize(-5)">➖ ۵٪ کوچک‌تر</button>
+        <button class="font-step-btn" onclick="stepPriceNumSize(5)">➕ ۵٪ بزرگ‌تر</button>
+      </div>
+
+      <div class="font-presets-row">
+        <button class="font-preset-btn" onclick="setPriceNumPreset(85, this)">ریز (۸۵٪)</button>
+        <button class="font-preset-btn active" onclick="setPriceNumPreset(100, this)">استاندارد (۱۰۰٪)</button>
+        <button class="font-preset-btn" onclick="setPriceNumPreset(120, this)">درشت (۱۲۰٪)</button>
+        <button class="font-preset-btn" onclick="setPriceNumPreset(140, this)">خیلی درشت (۱۴۰٪)</button>
+        <button class="font-preset-btn" onclick="setPriceNumPreset(160, this)">فوق برجسته (۱۶۰٪)</button>
       </div>
 
       <div style="margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--card-border); display: flex; justify-content: space-between; align-items: center;">
@@ -1535,6 +1559,8 @@
       schedule: { lightStart: '08:00', darkStart: '18:00' },
       fontFamily: 'Vazirmatn',
       fontSizeScale: 100,
+      itemNameScale: 100,
+      priceNumScale: 100,
       prices: {},
       headerLinks: [
         { id: 'instagram', title: 'اینستاگرام', handle: '@nadimi.coffee', url: 'https://instagram.com/nadimi.coffee', iconType: 'instagram', active: true },
@@ -2003,34 +2029,79 @@
       saveAllToServerSilent();
     }
 
-    // Font Size Scaling Functions
-    function onFontScaleChange(val) {
+    // Separate Scaling Functions: Item Names vs Price Numbers
+    function onItemNameScaleChange(val) {
       const v = parseInt(val, 10);
-      appState.fontSizeScale = v;
+      appState.itemNameScale = v;
       let label = 'استاندارد';
       if (v < 90) label = 'ریز';
-      else if (v === 100) label = 'استاندارد';
-      else if (v <= 115) label = 'بزرگ';
-      else label = 'خیلی درشت';
+      else if (v >= 115 && v < 130) label = 'بزرگ';
+      else if (v >= 130 && v < 145) label = 'خیلی درشت';
+      else if (v >= 145) label = 'فوق‌العاده درشت';
 
-      const badge = document.getElementById('fontSizeBadge');
-      if (badge) badge.textContent = `${v}٪ (${label})`;
-      triggerAutoSaveDebounced(400);
+      const badge = document.getElementById('itemNameScaleBadge');
+      if (badge) badge.innerText = `${v}٪ (${label})`;
+
+      triggerAutoSaveDebounced(50);
     }
 
-    function setFontPreset(v, btn) {
-      document.getElementById('fontScaleRange').value = v;
-      onFontScaleChange(v);
-      document.querySelectorAll('.font-preset-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
+    function setItemNamePreset(v, btn) {
+      const el = document.getElementById('itemNameScaleRange');
+      if (el) el.value = v;
+      onItemNameScaleChange(v);
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll('.font-preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
     }
 
-    function stepFontSize(delta) {
-      const el = document.getElementById('fontScaleRange');
+    function stepItemNameSize(delta) {
+      const el = document.getElementById('itemNameScaleRange');
+      if (!el) return;
       let cur = parseInt(el.value, 10) || 100;
-      let next = Math.min(140, Math.max(75, cur + delta));
+      let next = Math.min(160, Math.max(70, cur + delta));
       el.value = next;
-      onFontScaleChange(next);
+      onItemNameScaleChange(next);
+    }
+
+    function onPriceNumScaleChange(val) {
+      const v = parseInt(val, 10);
+      appState.priceNumScale = v;
+      let label = 'استاندارد';
+      if (v < 90) label = 'ریز';
+      else if (v >= 115 && v < 135) label = 'درشت';
+      else if (v >= 135 && v < 155) label = 'خیلی درشت';
+      else if (v >= 155) label = 'فوق برجسته و بولد';
+
+      const badge = document.getElementById('priceNumScaleBadge');
+      if (badge) badge.innerText = `${v}٪ (${label})`;
+
+      triggerAutoSaveDebounced(50);
+    }
+
+    function setPriceNumPreset(v, btn) {
+      const el = document.getElementById('priceNumScaleRange');
+      if (el) el.value = v;
+      onPriceNumScaleChange(v);
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll('.font-preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+    }
+
+    function stepPriceNumSize(delta) {
+      const el = document.getElementById('priceNumScaleRange');
+      if (!el) return;
+      let cur = parseInt(el.value, 10) || 100;
+      let next = Math.min(180, Math.max(70, cur + delta));
+      el.value = next;
+      onPriceNumScaleChange(next);
+    }
+
+    // Backward compatibility helper
+    function onFontScaleChange(val) {
+      onItemNameScaleChange(val);
+      onPriceNumScaleChange(val);
     }
 
     function setAdminFontSize(size) {
@@ -2170,13 +2241,28 @@
             appState = { ...appState, ...d };
             if (d.theme) setAppTheme(d.theme);
             if (d.mode) setAppMode(d.mode);
-            if (d.fontSizeScale) {
-              appState.fontSizeScale = d.fontSizeScale;
-              const rangeEl = document.getElementById('fontScaleRange');
-              if (rangeEl) {
-                rangeEl.value = d.fontSizeScale;
-                onFontScaleChange(d.fontSizeScale);
-              }
+            if (d.itemNameScale) {
+              appState.itemNameScale = d.itemNameScale;
+              const rangeEl = document.getElementById('itemNameScaleRange');
+              if (rangeEl) rangeEl.value = d.itemNameScale;
+              const badge = document.getElementById('itemNameScaleBadge');
+              if (badge) badge.innerText = `${d.itemNameScale}٪`;
+            } else if (d.fontSizeScale) {
+              appState.itemNameScale = d.fontSizeScale;
+              const rangeEl = document.getElementById('itemNameScaleRange');
+              if (rangeEl) rangeEl.value = d.fontSizeScale;
+            }
+
+            if (d.priceNumScale) {
+              appState.priceNumScale = d.priceNumScale;
+              const rangeEl = document.getElementById('priceNumScaleRange');
+              if (rangeEl) rangeEl.value = d.priceNumScale;
+              const badge = document.getElementById('priceNumScaleBadge');
+              if (badge) badge.innerText = `${d.priceNumScale}٪`;
+            } else if (d.fontSizeScale) {
+              appState.priceNumScale = d.fontSizeScale;
+              const rangeEl = document.getElementById('priceNumScaleRange');
+              if (rangeEl) rangeEl.value = d.fontSizeScale;
             }
             if (d.schedule) {
               document.getElementById('inpLightStart').value = d.schedule.lightStart || '08:00';
