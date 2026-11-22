@@ -1,8 +1,9 @@
 {
-  "name": "ABARAPP",
+  "name": "ABARAPP - کافه ندیمی",
   "short_name": "ABARAPP",
   "description": "سیستم مدیریت زنده منوی کافه ندیمی",
   "start_url": "/admin",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#090d16",
   "theme_color": "#090d16",
@@ -11,8 +12,20 @@
   "lang": "fa",
   "icons": [
     {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "/icons/icon-192.png",
       "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
     },
@@ -21,6 +34,11 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }

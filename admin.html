@@ -10,6 +10,12 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ABARAPP">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+<link rel="shortcut icon" href="/apple-touch-icon.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Lalezar&family=Sahel:wght@400;700;900&family=Shabnam:wght@400;700;900&display=swap');
 
@@ -703,42 +709,7 @@
     cursor: pointer;
   }
 
-  /* ================= BOTTOM NAVIGATION BAR (iPhone 15 Pro & Pro Max Ergonomics) ================= */
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--nav-bg);
-    backdrop-filter: blur(16px);
-    border-top: 1px solid var(--card-border);
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 8px 6px calc(14px + env(safe-area-inset-bottom, 0px)) 6px;
-    z-index: 2000;
-  }
-
-  .nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    color: var(--text-secondary);
-    font-size: 11px;
-    font-weight: 700;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    flex: 1;
-    padding: 5px 0;
-    transition: color 0.2s;
-  }
-
-  .nav-item.active {
-    color: var(--accent);
-    font-weight: 900;
-  }
+  /* Obsolete bottom nav removed */
 
   .nav-icon {
     font-size: 18px;
@@ -872,33 +843,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
   }
 
-  /* Liquid Glass Floating Navigation Bar */
-  .bottom-nav {
-    position: fixed !important;
-    bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
-    left: 14px !important;
-    right: 14px !important;
-    background: rgba(22, 28, 42, 0.78) !important;
-    backdrop-filter: blur(32px) saturate(210%) !important;
-    -webkit-backdrop-filter: blur(32px) saturate(210%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.18) !important;
-    border-radius: 28px !important;
-    display: flex !important;
-    justify-content: space-around !important;
-    align-items: center !important;
-    padding: 8px 12px !important;
-    z-index: 2000 !important;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.28) !important;
-  }
-
-  .nav-item {
-    transition: transform 0.2s, color 0.2s;
-  }
-  .nav-item:active { transform: scale(0.92); }
-  .nav-item.active .nav-icon {
-    filter: drop-shadow(0 0 8px var(--accent));
-    transform: translateY(-2px);
-  }
+  /* Obsolete liquid glass nav removed */
 
   /* Liquid Glass Compact Card */
   .compact-card {
@@ -1071,59 +1016,7 @@
   }
 
 
-  /* Micro-Capsule Liquid Glass Navigation (Compact & Icon-Only) */
-  .bottom-nav {
-    position: fixed !important;
-    bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: auto !important;
-    min-width: 250px !important;
-    max-width: 300px !important;
-    height: 48px !important;
-    background: rgba(20, 26, 40, 0.85) !important;
-    backdrop-filter: blur(32px) saturate(210%) !important;
-    -webkit-backdrop-filter: blur(32px) saturate(210%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.22) !important;
-    border-radius: 30px !important;
-    display: flex !important;
-    justify-content: space-evenly !important;
-    align-items: center !important;
-    padding: 0 14px !important;
-    z-index: 2000 !important;
-    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
-  }
-
-  .nav-item {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: transparent !important;
-    border: none !important;
-    cursor: pointer !important;
-    width: 44px !important;
-    height: 38px !important;
-    border-radius: 20px !important;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    padding: 0 !important;
-    color: var(--text-secondary) !important;
-  }
-
-  .nav-item.active {
-    background: rgba(255, 255, 255, 0.12) !important;
-    color: var(--accent) !important;
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 2px 10px rgba(0, 0, 0, 0.2) !important;
-  }
-
-  .nav-item .nav-icon {
-    font-size: 21px !important;
-    transition: transform 0.2s, filter 0.2s !important;
-  }
-
-  .nav-item.active .nav-icon {
-    transform: scale(1.15) !important;
-    filter: drop-shadow(0 0 10px var(--accent)) !important;
-  }
+  /* Obsolete micro capsule nav removed */
 
   /* Clear & Modern Liquid Glass Price Rows */
   .price-line {
@@ -1202,6 +1095,172 @@
     margin-left: 2px !important;
   }
 
+
+  /* Center-Locked Bottom Navigation Dock (100% Perfectly Centered on Mobile RTL) */
+  .bottom-nav-dock {
+    position: fixed !important;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    pointer-events: none !important;
+    z-index: 2500 !important;
+    padding: 0 16px !important;
+  }
+
+  .bottom-nav {
+    pointer-events: auto !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 0 auto !important;
+    width: auto !important;
+    min-width: 210px !important;
+    max-width: 270px !important;
+    height: 48px !important;
+    background: rgba(20, 26, 40, 0.88) !important;
+    backdrop-filter: blur(32px) saturate(210%) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(210%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border-radius: 30px !important;
+    display: flex !important;
+    justify-content: space-evenly !important;
+    align-items: center !important;
+    padding: 0 10px !important;
+    gap: 12px !important;
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .nav-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    width: 44px !important;
+    height: 38px !important;
+    border-radius: 20px !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    padding: 0 !important;
+    color: var(--text-secondary) !important;
+  }
+
+  .nav-item:active {
+    transform: scale(0.92) !important;
+  }
+
+  .nav-item.active {
+    background: rgba(255, 255, 255, 0.14) !important;
+    color: var(--accent) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 2px 10px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .nav-item .nav-icon {
+    font-size: 21px !important;
+    line-height: 1 !important;
+    transition: transform 0.2s, filter 0.2s !important;
+  }
+
+  .nav-item.active .nav-icon {
+    transform: scale(1.15) !important;
+    filter: drop-shadow(0 0 10px var(--accent)) !important;
+  }
+
+  /* Compact Accordion Card & Toolbar */
+  .accordion-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 6px 8px 6px;
+    margin-top: 4px;
+  }
+  .toolbar-hint {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+  .accordion-tool-btn {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--text-primary);
+    padding: 4px 9px;
+    border-radius: 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .accordion-tool-btn:active {
+    background: rgba(255, 255, 255, 0.18);
+    transform: scale(0.96);
+  }
+
+  .accordion-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .accordion-card.open {
+    border-color: rgba(255, 255, 255, 0.25);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  }
+  .card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    background: transparent;
+    transition: background 0.15s;
+  }
+  .card-header-row:active {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .accordion-chevron {
+    font-size: 13px;
+    color: var(--accent);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-block;
+  }
+  .item-variants-summary {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.06);
+    padding: 2px 7px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .accordion-card.open .item-variants-summary {
+    color: var(--accent);
+    border-color: rgba(245, 158, 11, 0.35);
+  }
+  .price-rows-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: rgba(0, 0, 0, 0.24);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 8px 10px 10px 10px;
+    animation: accordionFadeDown 0.18s ease-out;
+  }
+  @keyframes accordionFadeDown {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
 </style>
 </head>
 <body class="theme-classic_grey">
@@ -1252,6 +1311,14 @@
       <button class="cat-btn" onclick="setFilterCat('cold', this)">❄️ سرد</button>
       <button class="cat-btn" onclick="setFilterCat('matcha', this)">🍵 ماچا</button>
       <button class="cat-btn" onclick="setFilterCat('tea', this)">🌿 چای و دمنوش</button>
+    </div>
+
+    <div class="accordion-toolbar">
+      <span class="toolbar-hint" id="itemsCountBadge">منوی کشویی نوشیدنی‌ها (لمس برای باز/بست)</span>
+      <div style="display:flex; gap:6px;">
+        <button class="accordion-tool-btn" onclick="expandAllItems(true)" title="باز کردن تمام آیتم‌ها">باز کردن همه ▾</button>
+        <button class="accordion-tool-btn" onclick="expandAllItems(false)" title="بستن تمام آیتم‌ها">بستن همه ▴</button>
+      </div>
     </div>
 
     <!-- Items List -->
@@ -1310,8 +1377,9 @@
     </div>
   </div>
 
-  <!-- ================= TAB 3: THEMES & LIGHT/DARK ================= -->
-  <div class="tab-content" id="tabThemes">
+  <!-- ================= TAB 3: APPEARANCE & SETTINGS (UNIFIED) ================= -->
+  <div class="tab-content" id="tabSettings">
+
     <div class="section-box">
       <span class="form-label">🎨 انتخاب تم رنگی (تغییر همزمان تلویزیون و این اپلیکیشن):</span>
       <div class="theme-grid">
@@ -1381,10 +1449,7 @@
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- ================= TAB 4: HEADER & LINKS & FONTS ================= -->
-  <div class="tab-content" id="tabSettings">
+  
     <div class="section-box">
       <span class="form-label">🔤 فونت متن‌های منوی تلویزیون:</span>
       <div class="font-select-grid">
@@ -1444,21 +1509,20 @@
     </div>
   </div>
 
-  <!-- Bottom Navigation Bar -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('tabPricing', this)" title="قیمت‌ها و منو">
-      <span class="nav-icon">☕</span>
-    </button>
-    <button class="nav-item" onclick="switchTab('tabCategories', this)" title="دسته‌بندی‌ها">
-      <span class="nav-icon">🏷️</span>
-    </button>
-    <button class="nav-item" onclick="switchTab('tabThemes', this)" title="تم و نور">
-      <span class="nav-icon">🎨</span>
-    </button>
-    <button class="nav-item" onclick="switchTab('tabSettings', this)" title="تنظیمات">
-      <span class="nav-icon">⚙️</span>
-    </button>
-  </nav>
+  <!-- Bottom Navigation Dock Container (100% Perfectly Centered on Mobile RTL) -->
+  <div class="bottom-nav-dock">
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="switchTab('tabPricing', this)" title="قیمت‌ها و منو">
+        <span class="nav-icon">☕</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('tabCategories', this)" title="دسته‌بندی‌ها">
+        <span class="nav-icon">🏷️</span>
+      </button>
+      <button class="nav-item" onclick="switchTab('tabSettings', this)" title="ظاهر و تنظیمات">
+        <span class="nav-icon">🎨</span>
+      </button>
+    </nav>
+  </div>
 
   <!-- Toast Box -->
   <div class="toast-box" id="toastBox">✓ تغییرات با موفقیت روی تلویزیون اعمال شد</div>
@@ -1674,7 +1738,51 @@
       btn.classList.add('active');
     }
 
-    // Render Pricing Items
+    // Accordion Control State
+    const expandedItemIds = new Set();
+
+    function toggleAccordion(itemId) {
+      if (expandedItemIds.has(itemId)) {
+        expandedItemIds.delete(itemId);
+      } else {
+        expandedItemIds.add(itemId);
+      }
+      updateAccordionCard(itemId);
+    }
+
+    function updateAccordionCard(itemId) {
+      const card = document.getElementById('card_' + itemId);
+      const body = document.getElementById('body_' + itemId);
+      const chev = document.getElementById('chev_' + itemId);
+      if (!card || !body) return;
+      
+      const isOpen = expandedItemIds.has(itemId);
+      if (isOpen) {
+        card.classList.add('open');
+        body.style.display = 'flex';
+        if (chev) chev.style.transform = 'rotate(180deg)';
+      } else {
+        card.classList.remove('open');
+        body.style.display = 'none';
+        if (chev) chev.style.transform = 'rotate(0deg)';
+      }
+    }
+
+    function expandAllItems(expand) {
+      const cards = document.querySelectorAll('.accordion-card');
+      cards.forEach(card => {
+        const id = card.dataset.itemId;
+        if (!id) return;
+        if (expand) {
+          expandedItemIds.add(id);
+        } else {
+          expandedItemIds.delete(id);
+        }
+        updateAccordionCard(id);
+      });
+    }
+
+    // Render Pricing Items (Accordion Dropdowns)
     function renderItems() {
       const container = document.getElementById('itemsList');
       if (!container) return;
@@ -1691,12 +1799,17 @@
         });
       });
 
+      let visibleCount = 0;
       combined.forEach(item => {
         if (activeFilterCat !== 'all' && item.category !== activeFilterCat) return;
         if (q && !item.title.toLowerCase().includes(q)) return;
+        visibleCount++;
 
+        const isOpen = (q.length > 0) || expandedItemIds.has(item.id);
         const card = document.createElement('div');
-        card.className = 'compact-card';
+        card.className = 'compact-card accordion-card' + (isOpen ? ' open' : '');
+        card.id = 'card_' + item.id;
+        card.dataset.itemId = item.id;
 
         let rows = '';
         item.prices.forEach(p => {
@@ -1722,14 +1835,25 @@
         });
 
         card.innerHTML = `
-          <div class="card-header-row">
-            <span class="card-item-title">${item.title}</span>
-            <span class="card-item-cat">${item.category}</span>
+          <div class="card-header-row" onclick="toggleAccordion('${item.id}')">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span class="accordion-chevron" id="chev_${item.id}" style="${isOpen ? 'transform:rotate(180deg);' : ''}">▾</span>
+              <span class="card-item-title">${item.title}</span>
+              <span class="card-item-cat">${item.category}</span>
+            </div>
+            <span class="item-variants-summary">${item.prices.length} قیمت</span>
           </div>
-          <div class="price-rows-box">${rows}</div>
+          <div class="price-rows-box" id="body_${item.id}" style="${isOpen ? 'display:flex;' : 'display:none;'}">
+            ${rows}
+          </div>
         `;
         container.appendChild(card);
       });
+
+      const countBadge = document.getElementById('itemsCountBadge');
+      if (countBadge) {
+        countBadge.innerText = `منوی کشویی (${visibleCount} آیتم)`;
+      }
     }
 
     function onDirectPriceInput(key, val) {
