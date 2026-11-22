@@ -234,70 +234,7 @@
   }
 
   /* ================= TAB 1: PRICING & SLIDER ================= */
-  .percentage-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 10px 12px;
-    margin-bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .perc-title-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 12px;
-    font-weight: 800;
-    color: var(--text-secondary);
-  }
-
-  .perc-badge {
-    font-size: 14px;
-    font-weight: 900;
-    color: var(--accent);
-  }
-
-  .slider-range {
-    width: 100%;
-    accent-color: var(--accent);
-    height: 6px;
-    border-radius: 3px;
-    outline: none;
-  }
-
-  .quick-perc-row {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .quick-perc-row::-webkit-scrollbar { display: none; }
-
-  .perc-btn {
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid var(--card-border);
-    color: var(--text-primary);
-    padding: 4px 8px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 800;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .apply-perc-btn {
-    background: var(--accent);
-    color: #0f172a;
-    border: none;
-    padding: 7px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 900;
-    cursor: pointer;
-  }
+  /* Percentage styles completely removed */
 
   /* Search & Category Filter */
   .search-wrap {
@@ -1133,6 +1070,138 @@
     padding-bottom: calc(95px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
+
+  /* Micro-Capsule Liquid Glass Navigation (Compact & Icon-Only) */
+  .bottom-nav {
+    position: fixed !important;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: auto !important;
+    min-width: 250px !important;
+    max-width: 300px !important;
+    height: 48px !important;
+    background: rgba(20, 26, 40, 0.85) !important;
+    backdrop-filter: blur(32px) saturate(210%) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(210%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    border-radius: 30px !important;
+    display: flex !important;
+    justify-content: space-evenly !important;
+    align-items: center !important;
+    padding: 0 14px !important;
+    z-index: 2000 !important;
+    box-shadow: 0 14px 38px rgba(0, 0, 0, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  }
+
+  .nav-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: transparent !important;
+    border: none !important;
+    cursor: pointer !important;
+    width: 44px !important;
+    height: 38px !important;
+    border-radius: 20px !important;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    padding: 0 !important;
+    color: var(--text-secondary) !important;
+  }
+
+  .nav-item.active {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: var(--accent) !important;
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 2px 10px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .nav-item .nav-icon {
+    font-size: 21px !important;
+    transition: transform 0.2s, filter 0.2s !important;
+  }
+
+  .nav-item.active .nav-icon {
+    transform: scale(1.15) !important;
+    filter: drop-shadow(0 0 10px var(--accent)) !important;
+  }
+
+  /* Clear & Modern Liquid Glass Price Rows */
+  .price-line {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 7px 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  }
+  .price-line:last-child { border-bottom: none !important; }
+
+  .price-line-title {
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: var(--text-primary) !important;
+    flex: 1 !important;
+    text-align: right !important;
+  }
+
+  .liquid-price-controller {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    border-radius: 12px !important;
+    padding: 3px 5px !important;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.4) !important;
+  }
+
+  .liquid-btn-step {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #ffffff !important;
+    font-size: 16px !important;
+    font-weight: 900 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: background 0.15s, transform 0.1s !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+  }
+  .liquid-btn-step:active {
+    background: rgba(255, 255, 255, 0.22) !important;
+    transform: scale(0.92) !important;
+  }
+
+  .liquid-num-input {
+    width: 58px !important;
+    height: 28px !important;
+    background: transparent !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-family: inherit !important;
+    font-size: 15px !important;
+    font-weight: 900 !important;
+    text-align: center !important;
+    outline: none !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+  .liquid-num-input:focus {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 6px !important;
+  }
+
+  .price-unit-tag {
+    font-size: 10px !important;
+    color: var(--text-secondary) !important;
+    margin-left: 2px !important;
+  }
+
 </style>
 </head>
 <body class="theme-classic_grey">
@@ -1172,38 +1241,6 @@
   <!-- ================= TAB 1: PRICING & SLIDER ================= -->
   <div class="tab-content active" id="tabPricing">
     
-    <!-- Percentage Change Card (Slider / Quick Buttons) -->
-    <div class="percentage-card">
-      <div class="perc-title-row">
-        <span>⚡ تغییر درصدی قیمت‌ها:</span>
-        <span class="perc-badge" id="percBadge">+۰٪</span>
-      </div>
-      <input type="range" class="slider-range" id="percSlider" min="-50" max="100" value="0" step="5" oninput="onSliderMove(this.value)">
-      
-      <div class="quick-perc-row">
-        <button class="perc-btn" onclick="setSliderVal(-10)">−۱۰٪</button>
-        <button class="perc-btn" onclick="setSliderVal(-5)">−۵٪</button>
-        <button class="perc-btn" onclick="setSliderVal(0)">۰٪ (ریست)</button>
-        <button class="perc-btn" onclick="setSliderVal(5)">+۵٪</button>
-        <button class="perc-btn" onclick="setSliderVal(10)">+۱۰٪</button>
-        <button class="perc-btn" onclick="setSliderVal(15)">+۱۵٪</button>
-        <button class="perc-btn" onclick="setSliderVal(20)">+۲۰٪</button>
-      </div>
-
-      <div style="display:flex; gap:6px; align-items:center;">
-        <select id="percScope" class="text-input" style="flex:1; padding:5px; font-size:11px;">
-          <option value="all">اعمال روی تمام منو</option>
-          <option value="espresso">فقط اسپرسو بار</option>
-          <option value="hot">فقط نوشیدنی‌های گرم</option>
-          <option value="cold">فقط نوشیدنی‌های سرد</option>
-          <option value="matcha">فقط ماچا و خاص</option>
-          <option value="tea">فقط چای و دمنوش‌ها</option>
-        </select>
-        <button class="apply-perc-btn" onclick="applyPercentageToPrices()">محاسبه و اعمال</button>
-      </div>
-    </div>
-
-    <!-- Search & Category Filters -->
     <div class="search-wrap">
       <input type="text" id="searchInput" class="search-input" placeholder="🔍 جستجوی سریع نوشیدنی..." oninput="renderItems()">
     </div>
@@ -1409,21 +1446,17 @@
 
   <!-- Bottom Navigation Bar -->
   <nav class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('tabPricing', this)">
+    <button class="nav-item active" onclick="switchTab('tabPricing', this)" title="قیمت‌ها و منو">
       <span class="nav-icon">☕</span>
-      <span>قیمت‌ها</span>
     </button>
-    <button class="nav-item" onclick="switchTab('tabCategories', this)">
+    <button class="nav-item" onclick="switchTab('tabCategories', this)" title="دسته‌بندی‌ها">
       <span class="nav-icon">🏷️</span>
-      <span>دسته‌بندی</span>
     </button>
-    <button class="nav-item" onclick="switchTab('tabThemes', this)">
+    <button class="nav-item" onclick="switchTab('tabThemes', this)" title="تم و نور">
       <span class="nav-icon">🎨</span>
-      <span>تم و نور</span>
     </button>
-    <button class="nav-item" onclick="switchTab('tabSettings', this)">
+    <button class="nav-item" onclick="switchTab('tabSettings', this)" title="تنظیمات">
       <span class="nav-icon">⚙️</span>
-      <span>تنظیمات</span>
     </button>
   </nav>
 
@@ -1644,7 +1677,8 @@
     // Render Pricing Items
     function renderItems() {
       const container = document.getElementById('itemsList');
-      const q = document.getElementById('searchInput').value.trim().toLowerCase();
+      if (!container) return;
+      const q = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
       container.innerHTML = '';
 
       const combined = [...menuSchema];
@@ -1669,27 +1703,19 @@
           const val = appState.prices[p.key] !== undefined ? appState.prices[p.key] : 100;
           rows += `
             <div class="price-line">
-              <div class="price-meta-row">
-                <span class="price-line-title">${p.label}</span>
-                <div class="price-pill-indicator" onclick="promptPriceInput('${p.key}')" title="برای تایپ دستی ضربه بزنید">
-                  <span class="price-val-display" id="disp_${p.key}">${toFarsi(val)}</span>
-                  <span class="price-val-unit">هزار تومان</span>
-                </div>
-              </div>
-              <div class="scroll-dial-wrapper" id="dial_wrap_${p.key}" data-key="${p.key}" onwheel="onDialMouseWheel(event, '${p.key}')">
-                <div class="dial-center-marker"></div>
-                <span class="dial-hint-label left-label">− اسکرول</span>
-                <div class="dial-roller-content" id="roller_${p.key}">
-                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
-                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
-                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
-                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
-                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
-                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
-                  <span class="dial-tick"></span><span class="dial-tick"></span><span class="dial-tick major"></span>
-                </div>
-                <span class="dial-hint-label right-label">+ اسکرول</span>
-                <input type="number" class="num-input num-input-hidden" id="inp_${p.key}" value="${val}">
+              <span class="price-line-title">${p.label}</span>
+              <div class="liquid-price-controller">
+                <button class="liquid-btn-step" onclick="stepPrice('${p.key}', -5)" title="کاهش قیمت">−</button>
+                <input type="number" 
+                       class="liquid-num-input" 
+                       id="inp_${p.key}" 
+                       value="${val}" 
+                       oninput="onDirectPriceInput('${p.key}', this.value)" 
+                       onchange="onDirectPriceInput('${p.key}', this.value)" 
+                       onwheel="onWheelPrice(event, '${p.key}')" 
+                       title="برای ویرایش تایپ کنید یا با اسکرول ماوس تغییر دهید">
+                <button class="liquid-btn-step" onclick="stepPrice('${p.key}', 5)" title="افزایش قیمت">+</button>
+                <span class="price-unit-tag">هزار ت</span>
               </div>
             </div>
           `;
@@ -1704,65 +1730,20 @@
         `;
         container.appendChild(card);
       });
-
-      attachDialListeners();
     }
 
-    function attachDialListeners() {
-      document.querySelectorAll('.scroll-dial-wrapper').forEach(wrap => {
-        const key = wrap.getAttribute('data-key');
-        let startX = 0;
-        let currentX = 0;
-        let accumulatedDelta = 0;
-        let isDragging = false;
-        const roller = wrap.querySelector('.dial-roller-content');
-
-        const onStart = (clientX) => {
-          isDragging = true;
-          startX = clientX;
-          accumulatedDelta = 0;
-        };
-
-        const onMove = (clientX) => {
-          if (!isDragging) return;
-          const dx = clientX - startX;
-          startX = clientX;
-          accumulatedDelta += dx;
-
-          if (roller) {
-            currentX = (currentX + dx) % 40;
-            roller.style.transform = `translateX(${currentX}px)`;
-          }
-
-          if (Math.abs(accumulatedDelta) >= 16) {
-            const step = accumulatedDelta > 0 ? 5 : -5;
-            accumulatedDelta = 0;
-            stepPrice(key, step);
-          }
-        };
-
-        const onEnd = () => {
-          isDragging = false;
-        };
-
-        wrap.ontouchstart = (e) => onStart(e.touches[0].clientX);
-        wrap.ontouchmove = (e) => {
-          onMove(e.touches[0].clientX);
-          e.preventDefault();
-        };
-        wrap.ontouchend = onEnd;
-        wrap.ontouchcancel = onEnd;
-
-        wrap.onmousedown = (e) => onStart(e.clientX);
-        window.addEventListener('mousemove', (e) => { if (isDragging) onMove(e.clientX); });
-        window.addEventListener('mouseup', () => { if (isDragging) onEnd(); });
-      });
+    function onDirectPriceInput(key, val) {
+      const parsed = parseInt(val, 10);
+      if (!isNaN(parsed) && parsed >= 0) {
+        appState.prices[key] = parsed;
+        triggerAutoSaveDebounced(50);
+      }
     }
 
-    function onDialMouseWheel(e, key) {
+    function onWheelPrice(e, key) {
       e.preventDefault();
-      const step = e.deltaY < 0 ? 5 : -5;
-      stepPrice(key, step);
+      const delta = e.deltaY < 0 ? 5 : -5;
+      stepPrice(key, delta);
     }
 
     function stepPrice(key, delta) {
@@ -1770,25 +1751,11 @@
       val = Math.max(0, val + delta);
       appState.prices[key] = val;
 
-      const dispEl = document.getElementById('disp_' + key);
-      if (dispEl) dispEl.textContent = toFarsi(val);
-
-      const inpEl = document.getElementById('inp_' + key);
-      if (inpEl) inpEl.value = val;
+      const inp = document.getElementById('inp_' + key);
+      if (inp) inp.value = val;
 
       if (navigator.vibrate) navigator.vibrate(10);
       triggerAutoSaveDebounced(40);
-    }
-
-    function promptPriceInput(key) {
-      const current = appState.prices[key] !== undefined ? appState.prices[key] : 100;
-      const userVal = prompt('قیمت جدید را به هزار تومان وارد کنید:', current);
-      if (userVal !== null) {
-        const parsed = parseInt(userVal, 10);
-        if (!isNaN(parsed) && parsed >= 0) {
-          stepPrice(key, parsed - current);
-        }
-      }
     }
 
     function setFilterCat(cat, btn) {
