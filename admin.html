@@ -2144,11 +2144,15 @@
     }
 
     async function saveAllToServerSilent() {
-      document.querySelectorAll('.num-input').forEach(inp => {
+      document.querySelectorAll('.liquid-num-input, .num-input').forEach(inp => {
         const key = inp.id.replace('inp_', '');
         const v = parseInt(inp.value, 10);
         if (!isNaN(v)) appState.prices[key] = v;
       });
+      const itemRange = document.getElementById('itemNameScaleRange');
+      if (itemRange) appState.itemNameScale = parseInt(itemRange.value, 10) || appState.itemNameScale || 100;
+      const priceRange = document.getElementById('priceNumScaleRange');
+      if (priceRange) appState.priceNumScale = parseInt(priceRange.value, 10) || appState.priceNumScale || 100;
       const lightEl = document.getElementById('inpLightStart');
       const darkEl = document.getElementById('inpDarkStart');
       if (lightEl) appState.schedule.lightStart = lightEl.value || '08:00';
