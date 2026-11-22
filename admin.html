@@ -2128,14 +2128,23 @@
       showToast('✓ آیتم «' + title + '» با موفقیت افزوده شد');
     }
 
-    // Targeted Partial Auto-Save Engine (100% Isolated Updates - Never Interfere with Theme)
-    let partialUpdateTimer = null;
+    // Targeted Partial Auto-Save Engine (100% Isolated Updates - High-Performance Coalescing Queue)
+    let sendTimer = null;
     let pendingUpdates = {};
+    let isRequestFlying = false;
 
-    function sendPartialUpdate(patch, delay = 40) {
+    function sendPartialUpdate(patch, delay = 25) {
       if (!patch || typeof patch !== 'object') return;
-      
-      // Merge updates
+
+      // 1. Instant Local BroadcastChannel for zero-latency sync across same-device tabs/PWA
+      try {
+        if (window.BroadcastChannel) {
+          if (!window._nadimiLiveBC) window._nadimiLiveBC = new BroadcastChannel('nadimi_live_sync');
+          window._nadimiLiveBC.postMessage({ type: 'PARTIAL_UPDATE', patch, timestamp: Date.now() });
+        }
+      } catch (e) {}
+
+      // 2. Accumulate into pendingUpdates (Atomic Deep Merge)
       if (patch.prices) {
         pendingUpdates.prices = { ...(pendingUpdates.prices || {}), ...patch.prices };
       }
@@ -2143,26 +2152,49 @@
         if (k !== 'prices') pendingUpdates[k] = v;
       }
 
-      clearTimeout(partialUpdateTimer);
-      partialUpdateTimer = setTimeout(async () => {
-        const payload = { ...pendingUpdates };
-        pendingUpdates = {};
+      // 3. Debounce & Flush
+      clearTimeout(sendTimer);
+      sendTimer = setTimeout(flushPendingUpdatesToServer, delay);
+    }
 
-        try {
-          const res = await fetch('/api/prices', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (res.ok) {
-            showSyncPulse();
-            const banner = document.getElementById('offlineBanner');
-            if (banner) banner.style.display = 'none';
-          }
-        } catch (e) {
-          console.warn('Network sync warning:', e);
+    async function flushPendingUpdatesToServer() {
+      // If a network request is currently active, wait until it finishes
+      if (isRequestFlying) {
+        return;
+      }
+
+      const keys = Object.keys(pendingUpdates);
+      if (keys.length === 0) return;
+
+      const payload = { ...pendingUpdates, clientTime: Date.now() };
+      pendingUpdates = {}; // Clear queue atomically
+      isRequestFlying = true;
+
+      try {
+        const res = await fetch('/api/prices', {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+          showSyncPulse();
+          const banner = document.getElementById('offlineBanner');
+          if (banner) banner.style.display = 'none';
         }
-      }, delay);
+      } catch (e) {
+        console.warn('Network sync warning:', e);
+      } finally {
+        isRequestFlying = false;
+        // If more changes arrived while the request was in-flight, send them immediately!
+        if (Object.keys(pendingUpdates).length > 0) {
+          flushPendingUpdatesToServer();
+        }
+      }
     }
 
     // Full Save on explicit demand

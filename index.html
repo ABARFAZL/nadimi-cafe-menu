@@ -1420,68 +1420,119 @@
       });
     }
 
-    // Realtime Sync Engine (Live Polling every 500ms)
-    async function syncMenuState() {
-      try {
-        const res = await fetch('/api/prices?t=' + Date.now(), { cache: 'no-store' });
-        if (res.ok) {
-          const json = await res.json();
-          const remote = json.data;
-          if (remote) {
-            // 1. Live Theme, Mode, Schedule & Font Family
-            applyThemeAndMode(remote.theme, remote.mode, remote.schedule, remote.fontFamily);
+    // Apply Incoming State from Server or Broadcast Channel
+    function applyIncomingMenuState(remote) {
+      if (!remote || typeof remote !== 'object') return;
 
-            // 2. Live Separate Scaling for Item Names & Price Numbers
-            const itemS = remote.itemNameScale !== undefined ? remote.itemNameScale : (remote.fontSizeScale !== undefined ? remote.fontSizeScale : 100);
-            const priceS = remote.priceNumScale !== undefined ? remote.priceNumScale : (remote.fontSizeScale !== undefined ? remote.fontSizeScale : 100);
-            
-            if (itemS !== currentItemScale || priceS !== currentPriceScale) {
-              applyDynamicFontScales(itemS, priceS);
-            }
+      // 1. Live Theme, Mode, Schedule & Font Family
+      if (remote.theme || remote.mode || remote.schedule || remote.fontFamily) {
+        applyThemeAndMode(remote.theme, remote.mode, remote.schedule, remote.fontFamily);
+      }
 
-            if (remote.headerLinks) {
-              renderHeaderLinks(remote.headerLinks);
-            }
+      // 2. Live Separate Scaling for Item Names & Price Numbers
+      const itemS = remote.itemNameScale !== undefined ? remote.itemNameScale : (remote.fontSizeScale !== undefined ? remote.fontSizeScale : currentItemScale);
+      const priceS = remote.priceNumScale !== undefined ? remote.priceNumScale : (remote.fontSizeScale !== undefined ? remote.fontSizeScale : currentPriceScale);
+      
+      if (itemS !== currentItemScale || priceS !== currentPriceScale) {
+        applyDynamicFontScales(itemS, priceS);
+      }
 
-            if (remote.customItems) {
-              renderCustomItems(remote.customItems, remote.prices);
-            }
+      if (remote.headerLinks) {
+        renderHeaderLinks(remote.headerLinks);
+      }
 
-            if (remote.fullscreenToggleId && remote.fullscreenToggleId > lastFullscreenActionId) {
-              if (lastFullscreenActionId !== 0) {
-                toggleFullScreen();
-              }
-              lastFullscreenActionId = remote.fullscreenToggleId;
-            }
+      if (remote.customItems) {
+        renderCustomItems(remote.customItems, remote.prices);
+      }
 
-            const prices = remote.prices;
-            if (prices) {
-              document.querySelectorAll('[data-p]').forEach(el => {
-                const key = el.getAttribute('data-p');
-                if (prices[key] !== undefined) {
-                  const newVal = String(prices[key]);
-                  const oldVal = currentPrices[key];
-                  if (oldVal !== undefined && oldVal !== newVal) {
-                    const isIncrease = (+newVal) > (+oldVal);
-                    const flashClass = isIncrease ? 'updated-flash-up' : 'updated-flash-down';
-                    el.classList.add(flashClass);
-                    setTimeout(() => el.classList.remove(flashClass), 1500);
-                  }
-                  currentPrices[key] = newVal;
-                  el.textContent = toFarsi(newVal);
-                }
-              });
-            }
-          }
+      if (remote.fullscreenToggleId && remote.fullscreenToggleId > lastFullscreenActionId) {
+        if (lastFullscreenActionId !== 0) {
+          toggleFullScreen();
         }
-      } catch (err) {
-        console.warn('Sync attempt:', err);
+        lastFullscreenActionId = remote.fullscreenToggleId;
+      }
+
+      const prices = remote.prices;
+      if (prices && typeof prices === 'object') {
+        document.querySelectorAll('[data-p]').forEach(el => {
+          const key = el.getAttribute('data-p');
+          if (prices[key] !== undefined) {
+            const newVal = String(prices[key]);
+            const oldVal = currentPrices[key];
+            if (oldVal !== undefined && oldVal !== newVal) {
+              const isIncrease = (+newVal) > (+oldVal);
+              const flashClass = isIncrease ? 'updated-flash-up' : 'updated-flash-down';
+              el.classList.add(flashClass);
+              setTimeout(() => el.classList.remove(flashClass), 1500);
+            }
+            currentPrices[key] = newVal;
+            el.textContent = toFarsi(newVal);
+          }
+        });
       }
     }
 
-    syncMenuState();
-    setInterval(syncMenuState, 500);
-    // 30s loop removed to prevent theme loops
+    // 1. Instant Same-Device / PWA Sync via BroadcastChannel (0ms latency)
+    try {
+      if (window.BroadcastChannel) {
+        const liveChannel = new BroadcastChannel('nadimi_live_sync');
+        liveChannel.onmessage = (event) => {
+          if (event.data && event.data.patch) {
+            applyIncomingMenuState(event.data.patch);
+          }
+        };
+      }
+    } catch (e) {}
+
+    // 2. High-Speed Sequential Non-Blocking Polling Engine
+    // Never uses setInterval: guarantees zero connection queueing & instant responsiveness!
+    let isSyncing = false;
+    let syncFailCount = 0;
+
+    async function syncMenuState() {
+      if (isSyncing) return;
+      isSyncing = true;
+
+      const abortCtrl = new AbortController();
+      const abortTimer = setTimeout(() => abortCtrl.abort(), 3500);
+
+      try {
+        const res = await fetch('/api/prices?t=' + Date.now(), {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache'
+          },
+          signal: abortCtrl.signal
+        });
+        clearTimeout(abortTimer);
+
+        if (res.ok) {
+          syncFailCount = 0;
+          const json = await res.json();
+          if (json && json.data) {
+            applyIncomingMenuState(json.data);
+          }
+        }
+      } catch (err) {
+        clearTimeout(abortTimer);
+        syncFailCount++;
+      } finally {
+        isSyncing = false;
+      }
+    }
+
+    async function runContinuousSync() {
+      await syncMenuState();
+      while (true) {
+        // Fast cadence: 300ms when healthy, 1000ms if network hiccup
+        const nextDelay = syncFailCount > 2 ? 1000 : 300;
+        await new Promise(r => setTimeout(r, nextDelay));
+        await syncMenuState();
+      }
+    }
+
+    runContinuousSync();
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

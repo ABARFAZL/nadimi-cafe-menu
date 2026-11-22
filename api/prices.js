@@ -19,6 +19,7 @@ const DEFAULT_STATE = {
   fullscreenToggleId: 0,
   customCategories: [],
   customItems: [],
+  version: 1,
   lastUpdated: new Date().toISOString(),
   prices: {
     // Espresso Bar
@@ -122,31 +123,50 @@ const DEFAULT_STATE = {
 
 const PERMANENT_BLOB_URL = 'https://fy19ibzbxkaeufs2.public.blob.vercel-storage.com/nadimi-menu-prices.json';
 let memoryStore = { ...DEFAULT_STATE };
-let isStoreInitialized = false;
+let lastSyncCheckTime = 0;
 
-async function ensureStoreInitialized() {
-  if (isStoreInitialized) return;
+// High-speed sync: Reads latest state from Blob if not checked recently
+async function syncLatestStore() {
+  const now = Date.now();
+  // Throttle external fetch: check at most once every 1000ms per container
+  if (now - lastSyncCheckTime < 1000 && memoryStore.lastUpdated) {
+    return;
+  }
+  
   try {
-    const fetchResp = await fetch(PERMANENT_BLOB_URL + '?t=' + Date.now(), { cache: 'no-store' });
+    const fetchResp = await fetch(PERMANENT_BLOB_URL + '?t=' + now, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache'
+      }
+    });
     if (fetchResp.ok) {
       const blobData = await fetchResp.json();
       if (blobData && blobData.prices) {
-        memoryStore = { ...DEFAULT_STATE, ...blobData };
-        isStoreInitialized = true;
-        return;
+        const blobTime = new Date(blobData.lastUpdated || 0).getTime();
+        const memTime = new Date(memoryStore.lastUpdated || 0).getTime();
+        // Keep the newer one
+        if (blobTime >= memTime) {
+          memoryStore = { ...DEFAULT_STATE, ...blobData };
+        }
+        lastSyncCheckTime = now;
       }
     }
   } catch (e) {
-    console.warn('Initial Blob fetch error:', e.message);
+    console.warn('Sync fetch warning:', e.message);
   }
-  isStoreInitialized = true;
+  lastSyncCheckTime = now;
 }
 
 export default async function handler(req, res) {
+  // Ultra-strict No-Cache headers so browsers and CDNs never deliver stale data
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Cache-Control, Pragma');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   res.setHeader('CDN-Cache-Control', 'no-store');
   res.setHeader('Vercel-CDN-Cache-Control', 'no-store');
 
@@ -154,18 +174,16 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // Ensure initial store is populated
-  await ensureStoreInitialized();
-
-  // GET: Instantly return from memory cache
+  // GET: Ensure up-to-date and return instantly
   if (req.method === 'GET') {
+    await syncLatestStore();
     return res.status(200).json({
       success: true,
       data: memoryStore
     });
   }
 
-  // POST: Partial or Full update
+  // POST: Partial or Full update with atomic persistence
   if (req.method === 'POST') {
     try {
       const incoming = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
@@ -207,20 +225,20 @@ export default async function handler(req, res) {
       if (incoming.customItems !== undefined) {
         memoryStore.customItems = incoming.customItems;
       }
+      
+      memoryStore.version = (memoryStore.version || 0) + 1;
       memoryStore.lastUpdated = new Date().toISOString();
+      lastSyncCheckTime = Date.now();
 
-      // Persist to permanent storage with race timeout so process does not get frozen mid-write
+      // Reliable, complete persistence to Vercel Blob (no cut-off timeouts)
       try {
-        await Promise.race([
-          put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
-            access: 'public',
-            addRandomSuffix: false,
-            allowOverwrite: true
-          }),
-          new Promise(r => setTimeout(r, 600))
-        ]);
+        await put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
+          access: 'public',
+          addRandomSuffix: false,
+          allowOverwrite: true
+        });
       } catch (persistErr) {
-        console.warn('Persist warning:', persistErr.message);
+        console.warn('Blob put warning:', persistErr.message);
       }
 
       return res.status(200).json({
