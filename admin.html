@@ -1506,6 +1506,29 @@
         <button class="font-preset-btn" onclick="setPriceNumPreset(140, this)">خیلی درشت (۱۴۰٪)</button>
         <button class="font-preset-btn" onclick="setPriceNumPreset(160, this)">فوق برجسته (۱۶۰٪)</button>
       </div>
+    </div>
+
+    <!-- 3. CATEGORY TITLES & HEADINGS FONT SIZE CONTROLLER -->
+    <div class="section-box">
+      <div class="font-size-header-row">
+        <span class="form-label">🎯 اندازه عناوین و هدرهای دسته‌ها:</span>
+        <span class="font-size-badge" id="catTitleScaleBadge" style="color:#f59e0b; border-color:rgba(245,158,11,0.3);">۱۰۰٪ (استاندارد)</span>
+      </div>
+
+      <input type="range" min="70" max="180" step="5" value="100" class="font-scale-slider" id="catTitleScaleRange" oninput="onCatTitleScaleChange(this.value)">
+
+      <div class="font-step-controls">
+        <button class="font-step-btn" onclick="stepCatTitleSize(-5)">➖ ۵٪ کوچک‌تر</button>
+        <button class="font-step-btn" onclick="stepCatTitleSize(5)">➕ ۵٪ بزرگ‌تر</button>
+      </div>
+
+      <div class="font-presets-row">
+        <button class="font-preset-btn" onclick="setCatTitlePreset(85, this)">ریز (۸۵٪)</button>
+        <button class="font-preset-btn active" onclick="setCatTitlePreset(100, this)">استاندارد (۱۰۰٪)</button>
+        <button class="font-preset-btn" onclick="setCatTitlePreset(115, this)">بزرگ (۱۱۵٪)</button>
+        <button class="font-preset-btn" onclick="setCatTitlePreset(130, this)">خیلی درشت (۱۳۰٪)</button>
+        <button class="font-preset-btn" onclick="setCatTitlePreset(150, this)">برجسته (۱۵۰٪)</button>
+      </div>
 
       <div style="margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--card-border); display: flex; justify-content: space-between; align-items: center;">
         <span style="font-size: 11px; color: var(--text-secondary); font-weight: 700;">📱 اندازه متن‌های همین پنل موبایل:</span>
@@ -1563,6 +1586,7 @@
       fontSizeScale: 100,
       itemNameScale: 100,
       priceNumScale: 100,
+      catTitleScale: 100,
       prices: {},
       headerLinks: [
         { id: 'instagram', title: 'اینستاگرام', handle: '@nadimi.coffee', url: 'https://instagram.com/nadimi.coffee', iconType: 'instagram', active: true },
@@ -2102,6 +2126,41 @@
       onPriceNumScaleChange(next);
     }
 
+    function onCatTitleScaleChange(val) {
+      const v = parseInt(val, 10);
+      appState.catTitleScale = v;
+      let label = 'استاندارد';
+      if (v < 90) label = 'ریز';
+      else if (v >= 115 && v < 130) label = 'بزرگ';
+      else if (v >= 130 && v < 150) label = 'خیلی درشت';
+      else if (v >= 150) label = 'برجسته و بولد';
+
+      const badge = document.getElementById('catTitleScaleBadge');
+      if (badge) badge.innerText = `${v}٪ (${label})`;
+
+      // Send ONLY catTitleScale - 100% Isolated!
+      sendPartialUpdate({ catTitleScale: v }, 30);
+    }
+
+    function setCatTitlePreset(v, btn) {
+      const el = document.getElementById('catTitleScaleRange');
+      if (el) el.value = v;
+      onCatTitleScaleChange(v);
+      if (btn && btn.parentElement) {
+        btn.parentElement.querySelectorAll('.font-preset-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+    }
+
+    function stepCatTitleSize(delta) {
+      const el = document.getElementById('catTitleScaleRange');
+      if (!el) return;
+      let cur = parseInt(el.value, 10) || 100;
+      let next = Math.min(180, Math.max(70, cur + delta));
+      el.value = next;
+      onCatTitleScaleChange(next);
+    }
+
     // Backward compatibility helper
     function onFontScaleChange(val) {
       onItemNameScaleChange(val);
@@ -2216,6 +2275,7 @@
         fontFamily: appState.fontFamily,
         itemNameScale: appState.itemNameScale,
         priceNumScale: appState.priceNumScale,
+        catTitleScale: appState.catTitleScale,
         schedule: appState.schedule
       }, 0);
     }
@@ -2257,20 +2317,9 @@
     async function remoteToggleTvFullscreen() {
       if (navigator.vibrate) navigator.vibrate([30, 40]);
       showToast('📡 ارسال فرمان تمام‌صفحه به تلویزیون...');
-      try {
-        const res = await fetch('/api/prices', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fullscreenToggleId: Date.now() })
-        });
-        if (res.ok) {
-          showToast('⛶ فرمان تمام‌صفحه با موفقیت به تلویزیون ارسال شد');
-        } else {
-          showToast('⚠️ خطا در ارسال فرمان به تلویزیون');
-        }
-      } catch (e) {
-        showToast('⚠️ خطا در اتصال شبکه');
-      }
+      const fsId = Date.now();
+      sendPartialUpdate({ fullscreenToggleId: fsId }, 0);
+      showToast('⛶ فرمان تمام‌صفحه با موفقیت به تلویزیون ارسال شد');
     }
 
     function showToast(msg) {
@@ -2321,6 +2370,13 @@
               if (rangeEl) rangeEl.value = d.priceNumScale;
               const badge = document.getElementById('priceNumScaleBadge');
               if (badge) badge.innerText = `${d.priceNumScale}٪`;
+            }
+            if (d.catTitleScale) {
+              appState.catTitleScale = d.catTitleScale;
+              const rangeEl = document.getElementById('catTitleScaleRange');
+              if (rangeEl) rangeEl.value = d.catTitleScale;
+              const badge = document.getElementById('catTitleScaleBadge');
+              if (badge) badge.innerText = `${d.catTitleScale}٪`;
             }
             if (d.schedule) {
               const lEl = document.getElementById('inpLightStart');
