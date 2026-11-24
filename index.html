@@ -1349,6 +1349,49 @@
       `;
     }
 
+    function computeActiveMode(mode, schedule) {
+      if (mode === 'light') return 'mode-light';
+      if (mode === 'dark') return 'mode-dark';
+      if (mode === 'schedule') {
+        const now = new Date();
+        const currentMins = now.getHours() * 60 + now.getMinutes();
+        const parseTime = (t) => {
+          if (!t) return 0;
+          const [h, m] = t.split(':').map(Number);
+          return (h || 0) * 60 + (m || 0);
+        };
+        const lightMins = parseTime(schedule ? schedule.lightStart : '08:00');
+        const darkMins = parseTime(schedule ? schedule.darkStart : '18:00');
+        if (darkMins > lightMins) {
+          return (currentMins >= lightMins && currentMins < darkMins) ? 'mode-light' : 'mode-dark';
+        } else {
+          return (currentMins >= lightMins || currentMins < darkMins) ? 'mode-light' : 'mode-dark';
+        }
+      }
+      return 'mode-light';
+    }
+
+    function toggleFullScreen() {
+      const doc = window.document;
+      const docEl = doc.documentElement;
+      const requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+      const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+      if (!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+        if (requestFullScreen) {
+          try {
+            requestFullScreen.call(docEl).catch(() => {});
+          } catch(e) {}
+        }
+      } else {
+        if (cancelFullScreen) {
+          try {
+            cancelFullScreen.call(doc).catch(() => {});
+          } catch(e) {}
+        }
+      }
+    }
+
     function applyThemeAndMode(theme, mode, schedule, font) {
       const targetTheme = theme || currentTheme || 'classic_grey';
       const targetMode = mode || currentMode || 'light';
@@ -1564,16 +1607,37 @@
     }
 
     async function runContinuousSync() {
-      await syncMenuState();
+      try {
+        await syncMenuState();
+      } catch (e) {}
+
       while (true) {
         // Fast cadence: 300ms when healthy, 1000ms if network hiccup
         const nextDelay = syncFailCount > 2 ? 1000 : 300;
         await new Promise(r => setTimeout(r, nextDelay));
-        await syncMenuState();
+        try {
+          await syncMenuState();
+        } catch (e) {
+          console.warn('Sync step error, retrying:', e);
+        }
       }
     }
 
     runContinuousSync();
+
+    // Wake up sync immediately whenever screen / tab becomes visible
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        syncMenuState();
+      }
+    });
+
+    // Backup watchdog: Ensure sync runs even if browser throttles background timers
+    setInterval(() => {
+      if (!isSyncing) {
+        syncMenuState();
+      }
+    }, 4000);
 
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

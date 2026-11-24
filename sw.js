@@ -1,5 +1,5 @@
 // Service Worker for Nadimi Coffee PWA & TV Menu
-const CACHE_NAME = 'nadimi-cafe-v3';
+const CACHE_NAME = 'nadimi-cafe-v5';
 const STATIC_ASSETS = [
   '/nadimi_logo_vector_hd.png',
   '/instagram_qr.png',

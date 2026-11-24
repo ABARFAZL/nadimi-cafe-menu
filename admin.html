@@ -2223,7 +2223,7 @@
     // Save All to Server
     async function saveAllToServer() {
       // Collect inputs
-      document.querySelectorAll('.num-input').forEach(inp => {
+      document.querySelectorAll('.liquid-num-input, .num-input').forEach(inp => {
         const key = inp.id.replace('inp_', '');
         appState.prices[key] = parseInt(inp.value, 10) || 0;
       });

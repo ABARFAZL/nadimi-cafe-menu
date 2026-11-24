@@ -129,8 +129,8 @@ let lastSyncCheckTime = 0;
 // High-speed sync: Reads latest state from Blob if not checked recently
 async function syncLatestStore() {
   const now = Date.now();
-  // Throttle external fetch: check at most once every 1000ms per container
-  if (now - lastSyncCheckTime < 1000 && memoryStore.lastUpdated) {
+  // Check Blob at most once every 800ms per container to ensure rapid global sync
+  if (now - lastSyncCheckTime < 800 && memoryStore.lastUpdated) {
     return;
   }
   
@@ -145,10 +145,10 @@ async function syncLatestStore() {
     if (fetchResp.ok) {
       const blobData = await fetchResp.json();
       if (blobData && blobData.prices) {
-        const blobTime = new Date(blobData.lastUpdated || 0).getTime();
-        const memTime = new Date(memoryStore.lastUpdated || 0).getTime();
-        // Keep the newer one
-        if (blobTime >= memTime) {
+        // Blob is the true shared persistent source across all serverless instances
+        const blobVer = blobData.version || 0;
+        const memVer = memoryStore.version || 0;
+        if (blobVer >= memVer || !memoryStore.lastUpdated) {
           memoryStore = { ...DEFAULT_STATE, ...blobData };
         }
         lastSyncCheckTime = now;
