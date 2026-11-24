@@ -6,8 +6,10 @@
 <title>کافه ندیمی - منوی دیجیتال تلویزیون</title>
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0f172a">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Lalezar&family=Sahel:wght@400;700;900&family=Shabnam:wght@400;700;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Lalezar&display=swap');
 
   * {
     box-sizing: border-box;
@@ -1305,8 +1307,47 @@
     let currentMode = '';
     let currentActiveModeClass = '';
     let currentFont = '';
+    let currentItemScale = 100;
+    let currentPriceScale = 100;
     let scheduleConfig = { lightStart: '08:00', darkStart: '18:00' };
     let lastFullscreenActionId = 0;
+
+    function applyDynamicFontScales(itemScalePercent, priceScalePercent) {
+      currentItemScale = parseInt(itemScalePercent, 10) || 100;
+      currentPriceScale = parseInt(priceScalePercent, 10) || 100;
+
+      currentItemScale = Math.min(180, Math.max(70, currentItemScale));
+      currentPriceScale = Math.min(200, Math.max(70, currentPriceScale));
+
+      const itemFactor = currentItemScale / 100;
+      const priceFactor = currentPriceScale / 100;
+
+      let styleEl = document.getElementById('dynamicFontScaleStyle');
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'dynamicFontScaleStyle';
+        document.head.appendChild(styleEl);
+      }
+
+      styleEl.textContent = `
+        .td-title, .tea-card-title, .herbal-name, .single-price-card .single-card-title {
+          font-size: calc(1.38vh * ${itemFactor}) !important;
+        }
+        .td-recipe, .tea-card-recipe, .herbal-desc {
+          font-size: calc(1vh * ${itemFactor}) !important;
+        }
+        .th-item-title {
+          font-size: calc(1.35vh * ${itemFactor}) !important;
+        }
+
+        .price-cell, .fixed-price-banner, .tea-card-price, .herbal-price, [data-p] {
+          font-size: calc(1.52vh * ${priceFactor}) !important;
+        }
+        .price-pill-box .price-num {
+          font-size: calc(1.4vh * ${priceFactor}) !important;
+        }
+      `;
+    }
 
     function applyThemeAndMode(theme, mode, schedule, font) {
       const targetTheme = theme || currentTheme || 'classic_grey';
@@ -1335,7 +1376,7 @@
           document.head.appendChild(fontStyleEl);
         }
         fontStyleEl.textContent = `
-          *, body, table, th, td, h2, span, div {
+          *, body, table, th, td, h2, span, div, .td-title, .td-recipe, .price-cell, [data-p] {
             font-family: "${targetFont}", -apple-system, sans-serif !important;
           }
         `;

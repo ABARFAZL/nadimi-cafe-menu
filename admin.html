@@ -16,8 +16,10 @@
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
 <link rel="shortcut icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Lalezar&family=Sahel:wght@400;700;900&family=Shabnam:wght@400;700;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&family=Lalezar&display=swap');
 
   * {
     box-sizing: border-box;
@@ -1453,10 +1455,10 @@
     <div class="section-box">
       <span class="form-label">🔤 فونت متن‌های منوی تلویزیون:</span>
       <div class="font-select-grid">
-        <div class="font-chip active" style="font-family:'Vazirmatn';" onclick="setFontChoice('Vazirmatn', this)">وزیرمتن (پیش‌فرض)</div>
-        <div class="font-chip" style="font-family:'Sahel';" onclick="setFontChoice('Sahel', this)">ساحل</div>
-        <div class="font-chip" style="font-family:'Shabnam';" onclick="setFontChoice('Shabnam', this)">شبنم</div>
-        <div class="font-chip" style="font-family:'Lalezar';" onclick="setFontChoice('Lalezar', this)">لاله‌زار</div>
+        <div class="font-chip active" data-font="Vazirmatn" style="font-family:'Vazirmatn';" onclick="setFontChoice('Vazirmatn', this)">وزیرمتن (پیش‌فرض)</div>
+        <div class="font-chip" data-font="Sahel" style="font-family:'Sahel';" onclick="setFontChoice('Sahel', this)">ساحل</div>
+        <div class="font-chip" data-font="Shabnam" style="font-family:'Shabnam';" onclick="setFontChoice('Shabnam', this)">شبنم</div>
+        <div class="font-chip" data-font="Lalezar" style="font-family:'Lalezar';" onclick="setFontChoice('Lalezar', this)">لاله‌زار</div>
       </div>
     </div>
 
@@ -2158,8 +2160,10 @@
     }
 
     async function flushPendingUpdatesToServer() {
-      // If a network request is currently active, wait until it finishes
+      // If a network request is currently active, retry shortly and never drop pending updates!
       if (isRequestFlying) {
+        clearTimeout(sendTimer);
+        sendTimer = setTimeout(flushPendingUpdatesToServer, 80);
         return;
       }
 
@@ -2170,16 +2174,21 @@
       pendingUpdates = {}; // Clear queue atomically
       isRequestFlying = true;
 
+      const abortCtrl = new AbortController();
+      const abortTimer = setTimeout(() => abortCtrl.abort(), 4000);
+
       try {
         const res = await fetch('/api/prices', {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
-            'Cache-Control': 'no-cache',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
             'Pragma': 'no-cache'
           },
-          body: JSON.stringify(payload)
+          body: JSON.stringify(payload),
+          signal: abortCtrl.signal
         });
+        clearTimeout(abortTimer);
 
         if (res.ok) {
           showSyncPulse();
@@ -2187,7 +2196,8 @@
           if (banner) banner.style.display = 'none';
         }
       } catch (e) {
-        console.warn('Network sync warning:', e);
+        clearTimeout(abortTimer);
+        console.warn('Network sync notice:', e);
       } finally {
         isRequestFlying = false;
         // If more changes arrived while the request was in-flight, send them immediately!
@@ -2293,8 +2303,9 @@
               document.getElementById('scheduleBox').style.display = (d.mode === 'schedule') ? 'flex' : 'none';
             }
             if (d.fontFamily) {
+              appState.fontFamily = d.fontFamily;
               document.querySelectorAll('.font-chip').forEach(c => {
-                c.classList.toggle('active', c.textContent.includes(d.fontFamily) || c.style.fontFamily.includes(d.fontFamily));
+                c.classList.toggle('active', c.getAttribute('data-font') === d.fontFamily);
               });
             }
             if (d.itemNameScale) {

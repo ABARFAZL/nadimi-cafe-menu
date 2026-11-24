@@ -1,5 +1,6 @@
 // Vercel Serverless Function: Lightning-Fast Realtime Nadimi Menu API
 import { put } from '@vercel/blob';
+import { waitUntil } from '@vercel/functions';
 
 const DEFAULT_STATE = {
   theme: 'classic_grey',
@@ -230,16 +231,14 @@ export default async function handler(req, res) {
       memoryStore.lastUpdated = new Date().toISOString();
       lastSyncCheckTime = Date.now();
 
-      // Reliable, complete persistence to Vercel Blob (no cut-off timeouts)
-      try {
-        await put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
+      // Background non-blocking persistence with waitUntil (Instant response in ~20ms!)
+      waitUntil(
+        put('nadimi-menu-prices.json', JSON.stringify(memoryStore), {
           access: 'public',
           addRandomSuffix: false,
           allowOverwrite: true
-        });
-      } catch (persistErr) {
-        console.warn('Blob put warning:', persistErr.message);
-      }
+        }).catch(err => console.warn('Background put error:', err.message))
+      );
 
       return res.status(200).json({
         success: true,
