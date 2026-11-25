@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>ABARAPP - مدیریت منوی ندیمی</title>
-<link rel="manifest" href="/manifest.json">
+<title>کافه ندیمی - مدیریت منو</title>
+<link rel="manifest" href="/manifest.json?v=2">
 <meta name="theme-color" content="#090d16">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ABARAPP">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png">
-<link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png">
-<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
-<link rel="shortcut icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="کافه ندیمی">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2">
+<link rel="apple-touch-icon" sizes="192x192" href="/icon-192.png?v=2">
+<link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png?v=2">
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png?v=2">
+<link rel="shortcut icon" href="/apple-touch-icon.png?v=2">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/shabnam-font@v5.0.1/dist/font-face.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/sahel-font@v3.4.0/dist/font-face.css">
 <style>
@@ -1263,6 +1263,114 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
+  /* ================= DESKTOP MOBILE-APP SHELL MODE ================= */
+  @media (min-width: 500px) {
+    html {
+      background: radial-gradient(circle at 50% 20%, #111827 0%, #05080f 100%) !important;
+      display: flex !important;
+      justify-content: center !important;
+      min-height: 100vh !important;
+    }
+    body {
+      width: 100% !important;
+      max-width: 430px !important;
+      min-height: 100vh !important;
+      margin: 0 auto !important;
+      border-left: 1px solid rgba(255, 255, 255, 0.14);
+      border-right: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 0 70px rgba(0, 0, 0, 0.9), 0 0 25px rgba(56, 189, 248, 0.08);
+      position: relative;
+    }
+    .app-header {
+      max-width: 430px !important;
+      width: 100% !important;
+      margin: 0 auto !important;
+    }
+    .bottom-nav-dock {
+      max-width: 430px !important;
+      left: 50% !important;
+      right: auto !important;
+      transform: translateX(-50%) !important;
+    }
+  }
+
+  /* ================= TAB 3 SETTINGS ACCORDIONS ================= */
+  .settings-acc-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .settings-acc-card.open {
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+  }
+  .settings-acc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 14px;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: background 0.15s;
+  }
+  .settings-acc-header:active {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  .settings-acc-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--text-primary);
+  }
+  .settings-acc-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .settings-acc-summary {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--accent);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    padding: 3px 9px;
+    border-radius: 10px;
+  }
+  .settings-acc-chevron {
+    font-size: 13px;
+    color: var(--text-secondary);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: inline-block;
+  }
+  .settings-acc-card.open .settings-acc-chevron {
+    transform: rotate(180deg);
+    color: var(--accent);
+  }
+  .settings-acc-body {
+    display: none;
+    padding: 12px 14px 14px 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.18);
+    animation: accordionFadeDown 0.2s ease-out;
+  }
+  .settings-acc-card.open .settings-acc-body {
+    display: block;
+  }
+  .slider-ends-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-secondary);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
 </style>
 </head>
 <body class="theme-classic_grey">
@@ -1302,15 +1410,6 @@
   <!-- ================= TAB 1: PRICING & SLIDER ================= -->
   <div class="tab-content active" id="tabPricing">
     
-    <!-- Quick TV Display Mode Shortcut Bar -->
-    <div onclick="openTvLayoutSettings()" style="display:flex; justify-content:space-between; align-items:center; background:rgba(56, 189, 248, 0.08); border:1px solid rgba(56, 189, 248, 0.25); padding:8px 12px; border-radius:12px; margin-bottom:10px; cursor:pointer;">
-      <div style="display:flex; align-items:center; gap:6px;">
-        <span style="font-size:15px;">📺</span>
-        <span style="font-size:11.5px; font-weight:800; color:var(--text-main);">حالت پخش: <span id="quickLayoutLabel" style="color:var(--accent);">تک‌صفحه‌ای (ثابت)</span></span>
-      </div>
-      <span style="font-size:10.5px; font-weight:800; color:var(--accent); background:rgba(56,189,248,0.12); padding:3px 8px; border-radius:8px;">تنظیم تایمر / تغییر ⚙</span>
-    </div>
-
     <div class="search-wrap">
       <input type="text" id="searchInput" class="search-input" placeholder="🔍 جستجوی سریع نوشیدنی..." oninput="renderItems()">
     </div>
@@ -1388,247 +1487,253 @@
     </div>
   </div>
 
-  <!-- ================= TAB 3: APPEARANCE & SETTINGS (UNIFIED) ================= -->
+  <!-- ================= TAB 3: APPEARANCE & SETTINGS (ACCORDION CARDS) ================= -->
   <div class="tab-content" id="tabSettings">
 
-    <!-- 1. TV DISPLAY LAYOUT & 2-PAGE ROTATE CONTROLLER (TOP PRIORITY) -->
-    <div class="section-box" id="tvLayoutControlSection" style="border: 1.5px solid rgba(56, 189, 248, 0.5); background: linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%); box-shadow: 0 4px 18px rgba(56, 189, 248, 0.1);">
-      <div class="font-size-header-row">
-        <span class="form-label" style="color: var(--accent); font-size: 13.5px; font-weight: 900;">📺 حالت پخش منو روی تلویزیون:</span>
-        <span class="font-size-badge" id="displayLayoutBadge" style="color:var(--accent); border-color:var(--accent);">تک‌صفحه‌ای (ثابت)</span>
-      </div>
-
-      <!-- Mode Cards: Single Page vs Two-Page -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
-        <div class="theme-card-choice active" id="btnLayoutSingle" onclick="setDisplayLayout('single')" style="padding: 12px 8px; text-align: center; border-radius: 12px; cursor: pointer;">
-          <div style="font-size: 20px; margin-bottom: 4px;">🖥️</div>
-          <div style="font-weight: 900; font-size: 12.5px; color: var(--text-main);">تک‌صفحه‌ای</div>
-          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">کل منو همزمان در ۱ صفحه</div>
+    <!-- ACCORDION 1: TV DISPLAY LAYOUT & 2-PAGE ROTATE -->
+    <div class="settings-acc-card" id="accTvLayout">
+      <div class="settings-acc-header" onclick="toggleSettingsAccordion('accTvLayout')">
+        <div class="settings-acc-title-wrap">
+          <span>📺</span>
+          <span>حالت پخش منو روی تلویزیون</span>
         </div>
-
-        <div class="theme-card-choice" id="btnLayoutTwoPage" onclick="setDisplayLayout('two_page')" style="padding: 12px 8px; text-align: center; border-radius: 12px; cursor: pointer;">
-          <div style="font-size: 20px; margin-bottom: 4px;">🔄</div>
-          <div style="font-weight: 900; font-size: 12.5px; color: var(--text-main);">چرخشی ۲ صفحه‌ای</div>
-          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">اسلاید خودکار با تایمر و انیمیشن</div>
+        <div class="settings-acc-meta">
+          <span class="settings-acc-summary" id="displayLayoutBadge">تک‌صفحه‌ای</span>
+          <span class="settings-acc-chevron">▾</span>
         </div>
       </div>
+      <div class="settings-acc-body">
+        <!-- Mode Cards: Single Page vs Two-Page -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div class="theme-card-choice active" id="btnLayoutSingle" onclick="setDisplayLayout('single')" style="padding: 12px 8px; text-align: center; border-radius: 12px; cursor: pointer;">
+            <div style="font-size: 20px; margin-bottom: 4px;">🖥️</div>
+            <div style="font-weight: 900; font-size: 12.5px; color: var(--text-main);">تک‌صفحه‌ای</div>
+            <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">کل منو همزمان در ۱ صفحه</div>
+          </div>
 
-      <!-- Two-Page Extra Controls (Only visible when two_page is active) -->
-      <div id="twoPageOptionsBox" style="display: none; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--card-border); flex-direction: column; gap: 10px;">
-        
-        <!-- Timer Slider -->
-        <div class="font-size-header-row">
-          <span class="form-label" style="font-size: 11px;">⏱️ زمان توقف هر صفحه (تایمر تعویض):</span>
-          <span class="font-size-badge" id="pageRotateSecsBadge" style="color:#38bdf8; border-color:rgba(56,189,248,0.4);">۱۲ ثانیه</span>
-        </div>
-
-        <input type="range" min="5" max="60" step="1" value="12" class="font-scale-slider" id="pageRotateSecsRange" oninput="onPageRotateSecondsChange(this.value)">
-
-        <div class="font-presets-row">
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(7, this)">۷ ثانیه</button>
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(10, this)">۱۰ ثانیه</button>
-          <button class="font-preset-btn active" onclick="setRotateSecondsPreset(12, this)">۱۲ ثانیه</button>
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(15, this)">۱۵ ثانیه</button>
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(20, this)">۲۰ ثانیه</button>
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(30, this)">۳۰ ثانیه</button>
-        </div>
-
-        <!-- Transition Effect Selector -->
-        <div style="margin-top: 4px;">
-          <span class="form-label" style="font-size: 11px; margin-bottom: 5px; display: block;">✨ نوع انیمیشن تعویض صفحات:</span>
-          <div style="display: flex; gap: 6px;">
-            <button class="cat-btn active" id="btnAnimFade" onclick="setTransitionEffect('fade')">محو شونده نرم (Fade)</button>
-            <button class="cat-btn" id="btnAnimSlide" onclick="setTransitionEffect('slide')">ورق زدن (Slide)</button>
-            <button class="cat-btn" id="btnAnimZoom" onclick="setTransitionEffect('zoom')">زوم سینمایی (Zoom)</button>
+          <div class="theme-card-choice" id="btnLayoutTwoPage" onclick="setDisplayLayout('two_page')" style="padding: 12px 8px; text-align: center; border-radius: 12px; cursor: pointer;">
+            <div style="font-size: 20px; margin-bottom: 4px;">🔄</div>
+            <div style="font-weight: 900; font-size: 12.5px; color: var(--text-main);">چرخشی ۲ صفحه‌ای</div>
+            <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">اسلاید خودکار با تایمر</div>
           </div>
         </div>
 
-        <!-- Manual Switch Test Buttons -->
-        <div style="margin-top: 6px; padding: 8px; background: rgba(0,0,0,0.15); border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 10.5px; color: var(--text-secondary); font-weight: 700;">🎮 تست دستی صفحه روی تلویزیون:</span>
-          <div style="display: flex; gap: 5px;">
-            <button class="font-step-btn" onclick="manualTvPageSwitch(1)" style="padding: 4px 8px; font-size: 11px;">☕ صفحه ۱ (گرم)</button>
-            <button class="font-step-btn" onclick="manualTvPageSwitch(2)" style="padding: 4px 8px; font-size: 11px;">🌿 صفحه ۲ (سرد)</button>
+        <!-- Two-Page Extra Controls -->
+        <div id="twoPageOptionsBox" style="display: none; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--card-border); flex-direction: column; gap: 10px;">
+          <div class="font-size-header-row">
+            <span class="form-label" style="font-size: 11px;">⏱️ زمان توقف هر صفحه:</span>
+            <span class="font-size-badge" id="pageRotateSecsBadge" style="color:#0f172a;">۱۲ ثانیه</span>
+          </div>
+
+          <input type="range" min="5" max="60" step="1" value="12" class="font-scale-slider" id="pageRotateSecsRange" oninput="onPageRotateSecondsChange(this.value)">
+
+          <div class="font-presets-row">
+            <button class="font-preset-btn" onclick="setRotateSecondsPreset(7, this)">۷ ثانیه</button>
+            <button class="font-preset-btn" onclick="setRotateSecondsPreset(10, this)">۱۰ ثانیه</button>
+            <button class="font-preset-btn active" onclick="setRotateSecondsPreset(12, this)">۱۲ ثانیه</button>
+            <button class="font-preset-btn" onclick="setRotateSecondsPreset(15, this)">۱۵ ثانیه</button>
+            <button class="font-preset-btn" onclick="setRotateSecondsPreset(20, this)">۲۰ ثانیه</button>
+            <button class="font-preset-btn" onclick="setRotateSecondsPreset(30, this)">۳۰ ثانیه</button>
+          </div>
+
+          <div style="margin-top: 4px;">
+            <span class="form-label" style="font-size: 11px; margin-bottom: 5px; display: block;">✨ نوع انیمیشن تعویض صفحات:</span>
+            <div style="display: flex; gap: 6px;">
+              <button class="cat-btn active" id="btnAnimFade" onclick="setTransitionEffect('fade')">محو شونده نرم</button>
+              <button class="cat-btn" id="btnAnimSlide" onclick="setTransitionEffect('slide')">ورق زدن افقی</button>
+              <button class="cat-btn" id="btnAnimZoom" onclick="setTransitionEffect('zoom')">زوم سینمایی</button>
+            </div>
+          </div>
+
+          <div style="margin-top: 6px; padding: 8px; background: rgba(0,0,0,0.18); border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 10.5px; color: var(--text-secondary); font-weight: 700;">🎮 تست دستی صفحه روی تلویزیون:</span>
+            <div style="display: flex; gap: 5px;">
+              <button class="font-step-btn" onclick="manualTvPageSwitch(1)" style="padding: 4px 8px; font-size: 11px;">☕ صفحه ۱</button>
+              <button class="font-step-btn" onclick="manualTvPageSwitch(2)" style="padding: 4px 8px; font-size: 11px;">🌿 صفحه ۲</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACCORDION 2: THEME & LIGHT/DARK MODE COMBINED -->
+    <div class="settings-acc-card" id="accTheme">
+      <div class="settings-acc-header" onclick="toggleSettingsAccordion('accTheme')">
+        <div class="settings-acc-title-wrap">
+          <span>🎨</span>
+          <span>انتخاب تم رنگی و حالت نوری</span>
+        </div>
+        <div class="settings-acc-meta">
+          <span class="settings-acc-summary" id="accThemeSummary">خاکستری ندیمی • روشن</span>
+          <span class="settings-acc-chevron">▾</span>
+        </div>
+      </div>
+      <div class="settings-acc-body">
+        <span class="form-label" style="margin-bottom: 8px; display: block;">🎨 رنگ‌بندی اختصاصی منو و اپلیکیشن:</span>
+        <div class="theme-grid">
+          <div class="theme-card-choice active" data-t="classic_grey" onclick="setAppTheme('classic_grey')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #7c8390, #ffffff); border: 1px solid #cbd5e1;"></span>
+            <span class="theme-card-text">خاکستری و سفید ندیمی</span>
+          </div>
+          <div class="theme-card-choice" data-t="monochrome" onclick="setAppTheme('monochrome')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #464c58, #adb3bd);"></span>
+            <span class="theme-card-text">منوکروم دودی</span>
+          </div>
+          <div class="theme-card-choice" data-t="espresso" onclick="setAppTheme('espresso')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #281a13, #d4a373);"></span>
+            <span class="theme-card-text">اسپرسو دارک</span>
+          </div>
+          <div class="theme-card-choice" data-t="caramel" onclick="setAppTheme('caramel')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #b08968, #e6ccb2);"></span>
+            <span class="theme-card-text">موکا کارامل</span>
+          </div>
+          <div class="theme-card-choice" data-t="matcha" onclick="setAppTheme('matcha')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #2e4d1e, #99b898);"></span>
+            <span class="theme-card-text">ماچا ذن</span>
+          </div>
+          <div class="theme-card-choice" data-t="gold" onclick="setAppTheme('gold')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #1c1815, #ffd700);"></span>
+            <span class="theme-card-text">رویال گلد</span>
+          </div>
+          <div class="theme-card-choice" data-t="graphite" onclick="setAppTheme('graphite')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #16181e, #38bdf8);"></span>
+            <span class="theme-card-text">گرانیت متال</span>
+          </div>
+          <div class="theme-card-choice" data-t="nordic" onclick="setAppTheme('nordic')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #0f2133, #bae6fd);"></span>
+            <span class="theme-card-text">نوردیک آیس</span>
+          </div>
+          <div class="theme-card-choice" data-t="rose" onclick="setAppTheme('rose')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #260a14, #f472b6);"></span>
+            <span class="theme-card-text">رز لاته</span>
+          </div>
+          <div class="theme-card-choice" data-t="amber" onclick="setAppTheme('amber')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #3b1402, #f59e0b);"></span>
+            <span class="theme-card-text">آمبر کهربایی</span>
+          </div>
+          <div class="theme-card-choice" data-t="silver" onclick="setAppTheme('silver')">
+            <span class="theme-preview-dot" style="background: linear-gradient(135deg, #cbd5e1, #ffffff);"></span>
+            <span class="theme-card-text">سیلور مینیمال</span>
           </div>
         </div>
 
-      </div>
-    </div>
+        <!-- Light / Dark Mode Merged Inside Theme Card -->
+        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,0.14);">
+          <span class="form-label" style="margin-bottom: 8px; display: block;">🌓 حالت نوری تلویزیون (روز و شب):</span>
+          <div class="mode-switch-group">
+            <button class="mode-btn active" id="btnModeDark" onclick="setAppMode('dark')">🌙 همیشه تیره</button>
+            <button class="mode-btn" id="btnModeSchedule" onclick="setAppMode('schedule')">⏰ زمان‌بندی روز/شب</button>
+            <button class="mode-btn" id="btnModeLight" onclick="setAppMode('light')">☀️ همیشه روشن</button>
+          </div>
 
-    <div class="section-box">
-      <span class="form-label">🎨 انتخاب تم رنگی (تغییر همزمان تلویزیون و این اپلیکیشن):</span>
-      <div class="theme-grid">
-        <div class="theme-card-choice active" data-t="classic_grey" onclick="setAppTheme('classic_grey')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #7c8390, #ffffff); border: 1px solid #cbd5e1;"></span>
-          <span class="theme-card-text">خاکستری و سفید ندیمی</span>
-        </div>
-        <div class="theme-card-choice" data-t="monochrome" onclick="setAppTheme('monochrome')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #464c58, #adb3bd);"></span>
-          <span class="theme-card-text">منوکروم دودی</span>
-        </div>
-        <div class="theme-card-choice" data-t="espresso" onclick="setAppTheme('espresso')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #281a13, #d4a373);"></span>
-          <span class="theme-card-text">اسپرسو دارک</span>
-        </div>
-        <div class="theme-card-choice" data-t="caramel" onclick="setAppTheme('caramel')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #b08968, #e6ccb2);"></span>
-          <span class="theme-card-text">موکا کارامل</span>
-        </div>
-        <div class="theme-card-choice" data-t="matcha" onclick="setAppTheme('matcha')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #2e4d1e, #99b898);"></span>
-          <span class="theme-card-text">ماچا ذن</span>
-        </div>
-        <div class="theme-card-choice" data-t="gold" onclick="setAppTheme('gold')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #1c1815, #ffd700);"></span>
-          <span class="theme-card-text">رویال گلد</span>
-        </div>
-        <div class="theme-card-choice" data-t="graphite" onclick="setAppTheme('graphite')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #16181e, #38bdf8);"></span>
-          <span class="theme-card-text">گرانیت متال</span>
-        </div>
-        <div class="theme-card-choice" data-t="nordic" onclick="setAppTheme('nordic')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #0f2133, #bae6fd);"></span>
-          <span class="theme-card-text">نوردیک آیس</span>
-        </div>
-        <div class="theme-card-choice" data-t="rose" onclick="setAppTheme('rose')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #260a14, #f472b6);"></span>
-          <span class="theme-card-text">رز لاته</span>
-        </div>
-        <div class="theme-card-choice" data-t="amber" onclick="setAppTheme('amber')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #3b1402, #f59e0b);"></span>
-          <span class="theme-card-text">آمبر کهربایی</span>
-        </div>
-        <div class="theme-card-choice" data-t="silver" onclick="setAppTheme('silver')">
-          <span class="theme-preview-dot" style="background: linear-gradient(135deg, #cbd5e1, #ffffff);"></span>
-          <span class="theme-card-text">سیلور مینیمال</span>
+          <div class="time-picker-box" id="scheduleBox" style="display: none; margin-top: 8px;">
+            <div>
+              <span>☀️ شروع روز (روشن):</span>
+              <input type="time" id="inpLightStart" class="time-pick" value="08:00" onchange="markDirty()">
+            </div>
+            <div>
+              <span>🌙 شروع شب (تیره):</span>
+              <input type="time" id="inpDarkStart" class="time-pick" value="18:00" onchange="markDirty()">
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="section-box">
-      <span class="form-label">🌓 حالت نوری تلویزیون (دارک مود / لایت مود):</span>
-      <div class="mode-switch-group">
-        <button class="mode-btn active" id="btnModeDark" onclick="setAppMode('dark')">🌙 همیشه تیره</button>
-        <button class="mode-btn" id="btnModeSchedule" onclick="setAppMode('schedule')">⏰ زمان‌بندی روز/شب</button>
-        <button class="mode-btn" id="btnModeLight" onclick="setAppMode('light')">☀️ همیشه روشن</button>
-      </div>
-
-      <div class="time-picker-box" id="scheduleBox" style="display: none;">
-        <div>
-          <span>☀️ شروع روز (روشن):</span>
-          <input type="time" id="inpLightStart" class="time-pick" value="08:00" onchange="markDirty()">
+    <!-- ACCORDION 3: FONT SELECTION -->
+    <div class="settings-acc-card" id="accFont">
+      <div class="settings-acc-header" onclick="toggleSettingsAccordion('accFont')">
+        <div class="settings-acc-title-wrap">
+          <span>🔤</span>
+          <span>فونت متن‌های منو</span>
         </div>
-        <div>
-          <span>🌙 شروع شب (تیره):</span>
-          <input type="time" id="inpDarkStart" class="time-pick" value="18:00" onchange="markDirty()">
+        <div class="settings-acc-meta">
+          <span class="settings-acc-summary" id="accFontSummary">وزیرمتن</span>
+          <span class="settings-acc-chevron">▾</span>
         </div>
       </div>
-    </div>
-  
-    <div class="section-box">
-      <span class="form-label">🔤 فونت متن‌های منوی تلویزیون:</span>
-      <div class="font-select-grid">
-        <div class="font-chip active" data-font="Vazirmatn" style="font-family:'Vazirmatn';" onclick="setFontChoice('Vazirmatn', this)">وزیرمتن (پیش‌فرض)</div>
-        <div class="font-chip" data-font="Sahel" style="font-family:'Sahel';" onclick="setFontChoice('Sahel', this)">ساحل</div>
-        <div class="font-chip" data-font="Shabnam" style="font-family:'Shabnam';" onclick="setFontChoice('Shabnam', this)">شبنم</div>
-        <div class="font-chip" data-font="Lalezar" style="font-family:'Lalezar';" onclick="setFontChoice('Lalezar', this)">لاله‌زار</div>
-      </div>
-    </div>
+      <div class="settings-acc-body">
+        <div class="font-select-grid">
+          <div class="font-chip active" data-font="Vazirmatn" style="font-family:'Vazirmatn';" onclick="setFontChoice('Vazirmatn', this)">وزیرمتن (پیش‌فرض)</div>
+          <div class="font-chip" data-font="Sahel" style="font-family:'Sahel';" onclick="setFontChoice('Sahel', this)">ساحل</div>
+          <div class="font-chip" data-font="Shabnam" style="font-family:'Shabnam';" onclick="setFontChoice('Shabnam', this)">شبنم</div>
+          <div class="font-chip" data-font="Lalezar" style="font-family:'Lalezar';" onclick="setFontChoice('Lalezar', this)">لاله‌زار</div>
+        </div>
 
-    <!-- 1. ITEM NAMES & TEXTS FONT SIZE CONTROLLER -->
-    <div class="section-box">
-      <div class="font-size-header-row">
-        <span class="form-label">🏷️ اندازه نام آیتم‌ها، عناوین و توضیحات منو:</span>
-        <span class="font-size-badge" id="itemNameScaleBadge">۱۰۰٪ (استاندارد)</span>
-      </div>
-
-      <input type="range" min="70" max="160" step="5" value="100" class="font-scale-slider" id="itemNameScaleRange" oninput="onItemNameScaleChange(this.value)">
-
-      <div class="font-step-controls">
-        <button class="font-step-btn" onclick="stepItemNameSize(-5)">➖ ۵٪ کوچک‌تر</button>
-        <button class="font-step-btn" onclick="stepItemNameSize(5)">➕ ۵٪ بزرگ‌تر</button>
-      </div>
-
-      <div class="font-presets-row">
-        <button class="font-preset-btn" onclick="setItemNamePreset(85, this)">ریز (۸۵٪)</button>
-        <button class="font-preset-btn active" onclick="setItemNamePreset(100, this)">استاندارد (۱۰۰٪)</button>
-        <button class="font-preset-btn" onclick="setItemNamePreset(115, this)">بزرگ (۱۱۵٪)</button>
-        <button class="font-preset-btn" onclick="setItemNamePreset(130, this)">خیلی درشت (۱۳۰٪)</button>
-        <button class="font-preset-btn" onclick="setItemNamePreset(145, this)">ماکسیمم (۱۴۵٪)</button>
-      </div>
-    </div>
-
-    <!-- 2. PRICE NUMBERS FONT SIZE CONTROLLER -->
-    <div class="section-box">
-      <div class="font-size-header-row">
-        <span class="form-label">💰 اندازه و درشتی اعداد و ارقام قیمت‌ها:</span>
-        <span class="font-size-badge" id="priceNumScaleBadge" style="color:#10b981; border-color:rgba(16,185,129,0.3);">۱۰۰٪ (استاندارد)</span>
-      </div>
-
-      <input type="range" min="70" max="180" step="5" value="100" class="font-scale-slider" id="priceNumScaleRange" oninput="onPriceNumScaleChange(this.value)">
-
-      <div class="font-step-controls">
-        <button class="font-step-btn" onclick="stepPriceNumSize(-5)">➖ ۵٪ کوچک‌تر</button>
-        <button class="font-step-btn" onclick="stepPriceNumSize(5)">➕ ۵٪ بزرگ‌تر</button>
-      </div>
-
-      <div class="font-presets-row">
-        <button class="font-preset-btn" onclick="setPriceNumPreset(85, this)">ریز (۸۵٪)</button>
-        <button class="font-preset-btn active" onclick="setPriceNumPreset(100, this)">استاندارد (۱۰۰٪)</button>
-        <button class="font-preset-btn" onclick="setPriceNumPreset(120, this)">درشت (۱۲۰٪)</button>
-        <button class="font-preset-btn" onclick="setPriceNumPreset(140, this)">خیلی درشت (۱۴۰٪)</button>
-        <button class="font-preset-btn" onclick="setPriceNumPreset(160, this)">فوق برجسته (۱۶۰٪)</button>
-      </div>
-    </div>
-
-    <!-- 3. CATEGORY TITLES & HEADINGS FONT SIZE CONTROLLER -->
-    <div class="section-box">
-      <div class="font-size-header-row">
-        <span class="form-label">🎯 اندازه عناوین و هدرهای دسته‌ها:</span>
-        <span class="font-size-badge" id="catTitleScaleBadge" style="color:#f59e0b; border-color:rgba(245,158,11,0.3);">۱۰۰٪ (استاندارد)</span>
-      </div>
-
-      <input type="range" min="70" max="180" step="5" value="100" class="font-scale-slider" id="catTitleScaleRange" oninput="onCatTitleScaleChange(this.value)">
-
-      <div class="font-step-controls">
-        <button class="font-step-btn" onclick="stepCatTitleSize(-5)">➖ ۵٪ کوچک‌تر</button>
-        <button class="font-step-btn" onclick="stepCatTitleSize(5)">➕ ۵٪ بزرگ‌تر</button>
-      </div>
-
-      <div class="font-presets-row">
-        <button class="font-preset-btn" onclick="setCatTitlePreset(85, this)">ریز (۸۵٪)</button>
-        <button class="font-preset-btn active" onclick="setCatTitlePreset(100, this)">استاندارد (۱۰۰٪)</button>
-        <button class="font-preset-btn" onclick="setCatTitlePreset(115, this)">بزرگ (۱۱۵٪)</button>
-        <button class="font-preset-btn" onclick="setCatTitlePreset(130, this)">خیلی درشت (۱۳۰٪)</button>
-        <button class="font-preset-btn" onclick="setCatTitlePreset(150, this)">برجسته (۱۵۰٪)</button>
-      </div>
-
-      <div style="margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--card-border); display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-size: 11px; color: var(--text-secondary); font-weight: 700;">📱 اندازه متن‌های همین پنل موبایل:</span>
-        <div style="display: flex; gap: 4px;">
-          <button class="cat-btn" onclick="setAdminFontSize('small')">فشرده</button>
-          <button class="cat-btn active" onclick="setAdminFontSize('normal')">عادی</button>
-          <button class="cat-btn" onclick="setAdminFontSize('large')">درشت</button>
+        <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.12); display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 11px; color: var(--text-secondary); font-weight: 700;">📱 اندازه متن‌های همین پنل موبایل:</span>
+          <div style="display: flex; gap: 4px;">
+            <button class="cat-btn" onclick="setAdminFontSize('small')">فشرده</button>
+            <button class="cat-btn active" onclick="setAdminFontSize('normal')">عادی</button>
+            <button class="cat-btn" onclick="setAdminFontSize('large')">درشت</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="section-box">
-      <div style="display:flex; justify-content:space-between; align-items:center;">
-        <span class="form-label">🔗 لینک‌های بالای منو (شبکه‌های اجتماعی و تماس):</span>
-        <button class="perc-btn" onclick="addNewHeaderLink()">+ لینک جدید</button>
+    <!-- ACCORDION 4: ITEM NAMES SCALE (SLIDER ONLY) -->
+    <div class="settings-acc-card" id="accItemScale">
+      <div class="settings-acc-header" onclick="toggleSettingsAccordion('accItemScale')">
+        <div class="settings-acc-title-wrap">
+          <span>🏷️</span>
+          <span>اندازه نام آیتم‌ها و توضیحات</span>
+        </div>
+        <div class="settings-acc-meta">
+          <span class="settings-acc-summary" id="itemNameScaleBadge">۱۰۰٪</span>
+          <span class="settings-acc-chevron">▾</span>
+        </div>
       </div>
-      <div class="links-manager-list" id="linksManagerList">
-        <!-- Populated via JS -->
+      <div class="settings-acc-body">
+        <input type="range" min="70" max="160" step="5" value="100" class="font-scale-slider" id="itemNameScaleRange" oninput="onItemNameScaleChange(this.value)">
+        <div class="slider-ends-labels">
+          <span>کوچک‌تر (۷۰٪)</span>
+          <span>بزرگ‌تر (۱۶۰٪)</span>
+        </div>
       </div>
     </div>
 
-    <div class="section-box">
-      <span class="form-label">🖥️ پیش‌نمایش مستقیم تلویزیون:</span>
-      <a href="/index.html" target="_blank" class="action-btn" style="text-align:center; text-decoration:none; display:block;">
-        مشاهده صفحه کامل منو روی تلویزیون
-      </a>
+    <!-- ACCORDION 5: PRICE NUMBERS SCALE (SLIDER ONLY) -->
+    <div class="settings-acc-card" id="accPriceScale">
+      <div class="settings-acc-header" onclick="toggleSettingsAccordion('accPriceScale')">
+        <div class="settings-acc-title-wrap">
+          <span>💰</span>
+          <span>اندازه اعداد و ارقام قیمت‌ها</span>
+        </div>
+        <div class="settings-acc-meta">
+          <span class="settings-acc-summary" id="priceNumScaleBadge" style="color:#10b981; border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.1);">۱۰۰٪</span>
+          <span class="settings-acc-chevron">▾</span>
+        </div>
+      </div>
+      <div class="settings-acc-body">
+        <input type="range" min="70" max="180" step="5" value="100" class="font-scale-slider" id="priceNumScaleRange" oninput="onPriceNumScaleChange(this.value)">
+        <div class="slider-ends-labels">
+          <span>کوچک‌تر (۷۰٪)</span>
+          <span>بزرگ‌تر (۱۸۰٪)</span>
+        </div>
+      </div>
     </div>
+
+    <!-- ACCORDION 6: CATEGORY TITLES SCALE (SLIDER ONLY) -->
+    <div class="settings-acc-card" id="accCatTitleScale">
+      <div class="settings-acc-header" onclick="toggleSettingsAccordion('accCatTitleScale')">
+        <div class="settings-acc-title-wrap">
+          <span>🎯</span>
+          <span>اندازه عناوین و هدرهای دسته‌ها</span>
+        </div>
+        <div class="settings-acc-meta">
+          <span class="settings-acc-summary" id="catTitleScaleBadge" style="color:#f59e0b; border-color:rgba(245,158,11,0.3); background:rgba(245,158,11,0.1);">۱۰۰٪</span>
+          <span class="settings-acc-chevron">▾</span>
+        </div>
+      </div>
+      <div class="settings-acc-body">
+        <input type="range" min="70" max="180" step="5" value="100" class="font-scale-slider" id="catTitleScaleRange" oninput="onCatTitleScaleChange(this.value)">
+        <div class="slider-ends-labels">
+          <span>کوچک‌تر (۷۰٪)</span>
+          <span>بزرگ‌تر (۱۸۰٪)</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <!-- Bottom Navigation Dock Container (100% Perfectly Centered on Mobile RTL) -->
@@ -2019,13 +2124,37 @@
 
     // Percentage module removed as requested
 
+    const THEME_LABELS = {
+      classic_grey: 'خاکستری ندیمی', monochrome: 'منوکروم دودی', espresso: 'اسپرسو دارک',
+      caramel: 'موکا کارامل', matcha: 'ماچا ذن', gold: 'رویال گلد',
+      graphite: 'گرانیت متال', nordic: 'نوردیک آیس', rose: 'رز لاته',
+      amber: 'آمبر کهربایی', silver: 'سیلور مینیمال'
+    };
+    const FONT_LABELS = {
+      Vazirmatn: 'وزیرمتن', Sahel: 'ساحل', Shabnam: 'شبنم', Lalezar: 'لاله‌زار'
+    };
+
+    function toggleSettingsAccordion(cardId) {
+      const card = document.getElementById(cardId);
+      if (card) card.classList.toggle('open');
+    }
+
+    function updateThemeAndModeSummary() {
+      const el = document.getElementById('accThemeSummary');
+      if (!el) return;
+      const tName = THEME_LABELS[appState.theme] || appState.theme;
+      const mName = appState.mode === 'dark' ? 'تیره' : (appState.mode === 'light' ? 'روشن' : 'زمان‌بندی');
+      el.innerText = `${tName} • ${mName}`;
+    }
+
     // Theme & Mode Setting (Syncs app theme too + Auto-saves instantly!)
     function setAppTheme(theme) {
       appState.theme = theme;
-      document.querySelectorAll('.theme-card-choice').forEach(c => {
+      document.querySelectorAll('#accTheme .theme-card-choice').forEach(c => {
         c.classList.toggle('active', c.getAttribute('data-t') === theme);
       });
-      showToast('🎨 تم منو به «' + theme + '» تغییر یافت');
+      updateThemeAndModeSummary();
+      showToast('🎨 تم منو به «' + (THEME_LABELS[theme] || theme) + '» تغییر یافت');
       // Send ONLY theme update - Instant & No Loop!
       sendPartialUpdate({ theme: theme }, 0);
     }
@@ -2036,6 +2165,7 @@
       document.getElementById('btnModeLight').classList.toggle('active', mode === 'light');
       document.getElementById('btnModeSchedule').classList.toggle('active', mode === 'schedule');
       document.getElementById('scheduleBox').style.display = (mode === 'schedule') ? 'flex' : 'none';
+      updateThemeAndModeSummary();
       saveAllToServerSilent();
     }
 
@@ -2084,157 +2214,39 @@
       renderCategoriesList();
     }
 
-    // Header Links Management
-    function renderLinksManager() {
-      const box = document.getElementById('linksManagerList');
-      box.innerHTML = '';
-      appState.headerLinks.forEach((link, idx) => {
-        const row = document.createElement('div');
-        row.className = 'link-edit-row';
-        row.innerHTML = `
-          <select style="background:#000; color:#fff; border:1px solid #333; border-radius:6px; font-size:11px;" onchange="appState.headerLinks[${idx}].iconType = this.value">
-            <option value="instagram" ${link.iconType === 'instagram' ? 'selected' : ''}>اینستاگرام</option>
-            <option value="telegram" ${link.iconType === 'telegram' ? 'selected' : ''}>تلگرام</option>
-            <option value="whatsapp" ${link.iconType === 'whatsapp' ? 'selected' : ''}>واتساپ</option>
-            <option value="website" ${link.iconType === 'website' ? 'selected' : ''}>وبسایت</option>
-          </select>
-          <input type="text" style="width:85px;" value="${link.handle || ''}" placeholder="آیدی یا نام" oninput="appState.headerLinks[${idx}].handle = this.value">
-          <input type="text" style="flex:1;" value="${link.url || ''}" placeholder="لینک مستقیم" oninput="appState.headerLinks[${idx}].url = this.value">
-          <button class="link-del-btn" onclick="removeHeaderLink(${idx})">×</button>
-        `;
-        box.appendChild(row);
-      });
-    }
-
-    function addNewHeaderLink() {
-      appState.headerLinks.push({
-        id: 'link_' + Date.now(),
-        title: 'لینک جدید',
-        handle: '@link',
-        url: 'https://',
-        iconType: 'website',
-        active: true
-      });
-      renderLinksManager();
-    }
-
-    function removeHeaderLink(idx) {
-      appState.headerLinks.splice(idx, 1);
-      renderLinksManager();
-    }
-
     function setFontChoice(font, el) {
       appState.fontFamily = font;
       document.querySelectorAll('.font-chip').forEach(c => c.classList.remove('active'));
-      el.classList.add('active');
-      showToast('🔤 قلم تلویزیون: «' + font + '»');
+      if (el) el.classList.add('active');
+      const sumEl = document.getElementById('accFontSummary');
+      if (sumEl) sumEl.innerText = FONT_LABELS[font] || font;
+      showToast('🔤 قلم تلویزیون: «' + (FONT_LABELS[font] || font) + '»');
       sendPartialUpdate({ fontFamily: font }, 0);
     }
 
-    // Separate Scaling Functions: Item Names vs Price Numbers (Zero Side Effects on Theme)
+    // Separate Scaling Functions: Item Names vs Price Numbers vs Category Titles
     function onItemNameScaleChange(val) {
       const v = parseInt(val, 10);
       appState.itemNameScale = v;
-      let label = 'استاندارد';
-      if (v < 90) label = 'ریز';
-      else if (v >= 115 && v < 130) label = 'بزرگ';
-      else if (v >= 130 && v < 145) label = 'خیلی درشت';
-      else if (v >= 145) label = 'فوق‌العاده درشت';
-
       const badge = document.getElementById('itemNameScaleBadge');
-      if (badge) badge.innerText = `${v}٪ (${label})`;
-
-      // Send ONLY itemNameScale - 100% Isolated!
+      if (badge) badge.innerText = `${v}٪`;
       sendPartialUpdate({ itemNameScale: v }, 30);
-    }
-
-    function setItemNamePreset(v, btn) {
-      const el = document.getElementById('itemNameScaleRange');
-      if (el) el.value = v;
-      onItemNameScaleChange(v);
-      if (btn && btn.parentElement) {
-        btn.parentElement.querySelectorAll('.font-preset-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-    }
-
-    function stepItemNameSize(delta) {
-      const el = document.getElementById('itemNameScaleRange');
-      if (!el) return;
-      let cur = parseInt(el.value, 10) || 100;
-      let next = Math.min(160, Math.max(70, cur + delta));
-      el.value = next;
-      onItemNameScaleChange(next);
     }
 
     function onPriceNumScaleChange(val) {
       const v = parseInt(val, 10);
       appState.priceNumScale = v;
-      let label = 'استاندارد';
-      if (v < 90) label = 'ریز';
-      else if (v >= 115 && v < 135) label = 'درشت';
-      else if (v >= 135 && v < 155) label = 'خیلی درشت';
-      else if (v >= 155) label = 'فوق برجسته و بولد';
-
       const badge = document.getElementById('priceNumScaleBadge');
-      if (badge) badge.innerText = `${v}٪ (${label})`;
-
-      // Send ONLY priceNumScale - 100% Isolated!
+      if (badge) badge.innerText = `${v}٪`;
       sendPartialUpdate({ priceNumScale: v }, 30);
-    }
-
-    function setPriceNumPreset(v, btn) {
-      const el = document.getElementById('priceNumScaleRange');
-      if (el) el.value = v;
-      onPriceNumScaleChange(v);
-      if (btn && btn.parentElement) {
-        btn.parentElement.querySelectorAll('.font-preset-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-    }
-
-    function stepPriceNumSize(delta) {
-      const el = document.getElementById('priceNumScaleRange');
-      if (!el) return;
-      let cur = parseInt(el.value, 10) || 100;
-      let next = Math.min(180, Math.max(70, cur + delta));
-      el.value = next;
-      onPriceNumScaleChange(next);
     }
 
     function onCatTitleScaleChange(val) {
       const v = parseInt(val, 10);
       appState.catTitleScale = v;
-      let label = 'استاندارد';
-      if (v < 90) label = 'ریز';
-      else if (v >= 115 && v < 130) label = 'بزرگ';
-      else if (v >= 130 && v < 150) label = 'خیلی درشت';
-      else if (v >= 150) label = 'برجسته و بولد';
-
       const badge = document.getElementById('catTitleScaleBadge');
-      if (badge) badge.innerText = `${v}٪ (${label})`;
-
-      // Send ONLY catTitleScale - 100% Isolated!
+      if (badge) badge.innerText = `${v}٪`;
       sendPartialUpdate({ catTitleScale: v }, 30);
-    }
-
-    function setCatTitlePreset(v, btn) {
-      const el = document.getElementById('catTitleScaleRange');
-      if (el) el.value = v;
-      onCatTitleScaleChange(v);
-      if (btn && btn.parentElement) {
-        btn.parentElement.querySelectorAll('.font-preset-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      }
-    }
-
-    function stepCatTitleSize(delta) {
-      const el = document.getElementById('catTitleScaleRange');
-      if (!el) return;
-      let cur = parseInt(el.value, 10) || 100;
-      let next = Math.min(180, Math.max(70, cur + delta));
-      el.value = next;
-      onCatTitleScaleChange(next);
     }
 
     // Two-Page & Display Layout Functions
@@ -2249,13 +2261,8 @@
 
       const badge = document.getElementById('displayLayoutBadge');
       if (badge) {
-        badge.innerText = isTwoPage ? 'چرخشی ۲ صفحه‌ای' : 'تک‌صفحه‌ای (ثابت)';
-        badge.style.color = isTwoPage ? '#38bdf8' : 'var(--text-secondary)';
-      }
-
-      const quickLbl = document.getElementById('quickLayoutLabel');
-      if (quickLbl) {
-        quickLbl.innerText = isTwoPage ? 'چرخشی ۲ صفحه‌ای' : 'تک‌صفحه‌ای (ثابت)';
+        badge.innerText = isTwoPage ? 'چرخشی ۲ صفحه‌ای' : 'تک‌صفحه‌ای';
+        badge.style.color = isTwoPage ? '#38bdf8' : 'var(--accent)';
       }
 
       const optionsBox = document.getElementById('twoPageOptionsBox');
@@ -2263,15 +2270,8 @@
         optionsBox.style.display = isTwoPage ? 'flex' : 'none';
       }
 
-      showToast(isTwoPage ? '🔄 حالت چرخشی ۲ صفحه‌ای روی تلویزیون فعال شد' : '🖥️ حالت تک‌صفحه‌ای (ثابت) فعال شد');
+      showToast(isTwoPage ? '🔄 حالت چرخشی ۲ صفحه‌ای روی تلویزیون فعال شد' : '🖥️ حالت تک‌صفحه‌ای فعال شد');
       sendPartialUpdate({ displayLayout: layout }, 0);
-    }
-
-    function openTvLayoutSettings() {
-      const navBtns = document.querySelectorAll('.bottom-nav .nav-item');
-      const settingsBtn = navBtns[navBtns.length - 1];
-      switchTab('tabSettings', settingsBtn);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function onPageRotateSecondsChange(val) {
@@ -2498,7 +2498,7 @@
             appState = { ...appState, ...d };
             if (d.theme) {
               appState.theme = d.theme;
-              document.querySelectorAll('.theme-card-choice').forEach(c => {
+              document.querySelectorAll('#accTheme .theme-card-choice').forEach(c => {
                 c.classList.toggle('active', c.getAttribute('data-t') === d.theme);
               });
             }
@@ -2509,11 +2509,14 @@
               document.getElementById('btnModeSchedule').classList.toggle('active', d.mode === 'schedule');
               document.getElementById('scheduleBox').style.display = (d.mode === 'schedule') ? 'flex' : 'none';
             }
+            updateThemeAndModeSummary();
             if (d.fontFamily) {
               appState.fontFamily = d.fontFamily;
               document.querySelectorAll('.font-chip').forEach(c => {
                 c.classList.toggle('active', c.getAttribute('data-font') === d.fontFamily);
               });
+              const fSum = document.getElementById('accFontSummary');
+              if (fSum) fSum.innerText = FONT_LABELS[d.fontFamily] || d.fontFamily;
             }
             if (d.itemNameScale) {
               appState.itemNameScale = d.itemNameScale;
@@ -2545,12 +2548,8 @@
               if (btnT) btnT.classList.toggle('active', isTwo);
               const badge = document.getElementById('displayLayoutBadge');
               if (badge) {
-                badge.innerText = isTwo ? 'چرخشی ۲ صفحه‌ای' : 'تک‌صفحه‌ای (ثابت)';
-                badge.style.color = isTwo ? '#38bdf8' : 'var(--text-secondary)';
-              }
-              const quickLbl = document.getElementById('quickLayoutLabel');
-              if (quickLbl) {
-                quickLbl.innerText = isTwo ? 'چرخشی ۲ صفحه‌ای' : 'تک‌صفحه‌ای (ثابت)';
+                badge.innerText = isTwo ? 'چرخشی ۲ صفحه‌ای' : 'تک‌صفحه‌ای';
+                badge.style.color = isTwo ? '#38bdf8' : 'var(--accent)';
               }
               const optBox = document.getElementById('twoPageOptionsBox');
               if (optBox) optBox.style.display = isTwo ? 'flex' : 'none';
@@ -2587,7 +2586,6 @@
       }
       renderItems();
       renderCategoriesList();
-      renderLinksManager();
     }
 
     initApp();

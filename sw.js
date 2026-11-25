@@ -1,11 +1,11 @@
 // Service Worker for Nadimi Coffee PWA & TV Menu
-const CACHE_NAME = 'nadimi-cafe-v6';
+const CACHE_NAME = 'nadimi-cafe-v7';
 const STATIC_ASSETS = [
   '/nadimi_logo_vector_hd.png',
-  '/instagram_qr.png',
-  '/manifest.json',
-  '/icons/icon-192.png',
-  '/icons/icon-512.png'
+  '/manifest.json?v=2',
+  '/apple-touch-icon.png?v=2',
+  '/icon-192.png?v=2',
+  '/icon-512.png?v=2'
 ];
 
 self.addEventListener('install', (event) => {
