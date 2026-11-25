@@ -14,6 +14,9 @@ const DEFAULT_STATE = {
   itemNameScale: 100, // 70 to 160 percent (Item Titles & Descriptions)
   priceNumScale: 100, // 70 to 180 percent (Price Numbers)
   catTitleScale: 100, // 70 to 180 percent (Category Titles & Headings)
+  displayLayout: 'single', // 'single' (All-in-one) | 'two_page' (Auto-rotate 2 pages)
+  pageRotateSeconds: 12, // 5 to 60 seconds per page
+  transitionEffect: 'fade', // 'fade' | 'slide' | 'zoom'
   headerLinks: [
     { id: 'instagram', title: 'اینستاگرام', handle: '@nadimi.coffee', url: 'https://instagram.com/nadimi.coffee', iconType: 'instagram', active: true },
     { id: 'telegram', title: 'تلگرام', handle: '@nadimicoffee', url: 'https://t.me/nadimicoffee', iconType: 'telegram', active: true }
@@ -217,6 +220,15 @@ export default async function handler(req, res) {
       }
       if (incoming.catTitleScale !== undefined && incoming.catTitleScale !== null) {
         memoryStore.catTitleScale = parseInt(incoming.catTitleScale, 10) || 100;
+      }
+      if (incoming.displayLayout !== undefined && incoming.displayLayout !== null) {
+        memoryStore.displayLayout = String(incoming.displayLayout);
+      }
+      if (incoming.pageRotateSeconds !== undefined && incoming.pageRotateSeconds !== null) {
+        memoryStore.pageRotateSeconds = Math.max(3, Math.min(120, parseInt(incoming.pageRotateSeconds, 10) || 12));
+      }
+      if (incoming.transitionEffect !== undefined && incoming.transitionEffect !== null) {
+        memoryStore.transitionEffect = String(incoming.transitionEffect);
       }
       if (incoming.fullscreenToggleId !== undefined) {
         memoryStore.fullscreenToggleId = incoming.fullscreenToggleId;
