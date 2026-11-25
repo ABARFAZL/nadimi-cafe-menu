@@ -1302,6 +1302,15 @@
   <!-- ================= TAB 1: PRICING & SLIDER ================= -->
   <div class="tab-content active" id="tabPricing">
     
+    <!-- Quick TV Display Mode Shortcut Bar -->
+    <div onclick="openTvLayoutSettings()" style="display:flex; justify-content:space-between; align-items:center; background:rgba(56, 189, 248, 0.08); border:1px solid rgba(56, 189, 248, 0.25); padding:8px 12px; border-radius:12px; margin-bottom:10px; cursor:pointer;">
+      <div style="display:flex; align-items:center; gap:6px;">
+        <span style="font-size:15px;">📺</span>
+        <span style="font-size:11.5px; font-weight:800; color:var(--text-main);">حالت پخش: <span id="quickLayoutLabel" style="color:var(--accent);">تک‌صفحه‌ای (ثابت)</span></span>
+      </div>
+      <span style="font-size:10.5px; font-weight:800; color:var(--accent); background:rgba(56,189,248,0.12); padding:3px 8px; border-radius:8px;">تنظیم تایمر / تغییر ⚙</span>
+    </div>
+
     <div class="search-wrap">
       <input type="text" id="searchInput" class="search-input" placeholder="🔍 جستجوی سریع نوشیدنی..." oninput="renderItems()">
     </div>
@@ -1381,6 +1390,70 @@
 
   <!-- ================= TAB 3: APPEARANCE & SETTINGS (UNIFIED) ================= -->
   <div class="tab-content" id="tabSettings">
+
+    <!-- 1. TV DISPLAY LAYOUT & 2-PAGE ROTATE CONTROLLER (TOP PRIORITY) -->
+    <div class="section-box" id="tvLayoutControlSection" style="border: 1.5px solid rgba(56, 189, 248, 0.5); background: linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%); box-shadow: 0 4px 18px rgba(56, 189, 248, 0.1);">
+      <div class="font-size-header-row">
+        <span class="form-label" style="color: var(--accent); font-size: 13.5px; font-weight: 900;">📺 حالت پخش منو روی تلویزیون:</span>
+        <span class="font-size-badge" id="displayLayoutBadge" style="color:var(--accent); border-color:var(--accent);">تک‌صفحه‌ای (ثابت)</span>
+      </div>
+
+      <!-- Mode Cards: Single Page vs Two-Page -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+        <div class="theme-card-choice active" id="btnLayoutSingle" onclick="setDisplayLayout('single')" style="padding: 12px 8px; text-align: center; border-radius: 12px; cursor: pointer;">
+          <div style="font-size: 20px; margin-bottom: 4px;">🖥️</div>
+          <div style="font-weight: 900; font-size: 12.5px; color: var(--text-main);">تک‌صفحه‌ای</div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">کل منو همزمان در ۱ صفحه</div>
+        </div>
+
+        <div class="theme-card-choice" id="btnLayoutTwoPage" onclick="setDisplayLayout('two_page')" style="padding: 12px 8px; text-align: center; border-radius: 12px; cursor: pointer;">
+          <div style="font-size: 20px; margin-bottom: 4px;">🔄</div>
+          <div style="font-weight: 900; font-size: 12.5px; color: var(--text-main);">چرخشی ۲ صفحه‌ای</div>
+          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">اسلاید خودکار با تایمر و انیمیشن</div>
+        </div>
+      </div>
+
+      <!-- Two-Page Extra Controls (Only visible when two_page is active) -->
+      <div id="twoPageOptionsBox" style="display: none; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--card-border); flex-direction: column; gap: 10px;">
+        
+        <!-- Timer Slider -->
+        <div class="font-size-header-row">
+          <span class="form-label" style="font-size: 11px;">⏱️ زمان توقف هر صفحه (تایمر تعویض):</span>
+          <span class="font-size-badge" id="pageRotateSecsBadge" style="color:#38bdf8; border-color:rgba(56,189,248,0.4);">۱۲ ثانیه</span>
+        </div>
+
+        <input type="range" min="5" max="60" step="1" value="12" class="font-scale-slider" id="pageRotateSecsRange" oninput="onPageRotateSecondsChange(this.value)">
+
+        <div class="font-presets-row">
+          <button class="font-preset-btn" onclick="setRotateSecondsPreset(7, this)">۷ ثانیه</button>
+          <button class="font-preset-btn" onclick="setRotateSecondsPreset(10, this)">۱۰ ثانیه</button>
+          <button class="font-preset-btn active" onclick="setRotateSecondsPreset(12, this)">۱۲ ثانیه</button>
+          <button class="font-preset-btn" onclick="setRotateSecondsPreset(15, this)">۱۵ ثانیه</button>
+          <button class="font-preset-btn" onclick="setRotateSecondsPreset(20, this)">۲۰ ثانیه</button>
+          <button class="font-preset-btn" onclick="setRotateSecondsPreset(30, this)">۳۰ ثانیه</button>
+        </div>
+
+        <!-- Transition Effect Selector -->
+        <div style="margin-top: 4px;">
+          <span class="form-label" style="font-size: 11px; margin-bottom: 5px; display: block;">✨ نوع انیمیشن تعویض صفحات:</span>
+          <div style="display: flex; gap: 6px;">
+            <button class="cat-btn active" id="btnAnimFade" onclick="setTransitionEffect('fade')">محو شونده نرم (Fade)</button>
+            <button class="cat-btn" id="btnAnimSlide" onclick="setTransitionEffect('slide')">ورق زدن (Slide)</button>
+            <button class="cat-btn" id="btnAnimZoom" onclick="setTransitionEffect('zoom')">زوم سینمایی (Zoom)</button>
+          </div>
+        </div>
+
+        <!-- Manual Switch Test Buttons -->
+        <div style="margin-top: 6px; padding: 8px; background: rgba(0,0,0,0.15); border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+          <span style="font-size: 10.5px; color: var(--text-secondary); font-weight: 700;">🎮 تست دستی صفحه روی تلویزیون:</span>
+          <div style="display: flex; gap: 5px;">
+            <button class="font-step-btn" onclick="manualTvPageSwitch(1)" style="padding: 4px 8px; font-size: 11px;">☕ صفحه ۱ (گرم)</button>
+            <button class="font-step-btn" onclick="manualTvPageSwitch(2)" style="padding: 4px 8px; font-size: 11px;">🌿 صفحه ۲ (سرد)</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
 
     <div class="section-box">
       <span class="form-label">🎨 انتخاب تم رنگی (تغییر همزمان تلویزیون و این اپلیکیشن):</span>
@@ -1537,70 +1610,6 @@
           <button class="cat-btn active" onclick="setAdminFontSize('normal')">عادی</button>
           <button class="cat-btn" onclick="setAdminFontSize('large')">درشت</button>
         </div>
-      </div>
-    </div>
-
-    <!-- 4. TV DISPLAY LAYOUT & 2-PAGE ROTATE CONTROLLER -->
-    <div class="section-box" style="border: 1px solid rgba(56, 189, 248, 0.35); background: rgba(56, 189, 248, 0.04);">
-      <div class="font-size-header-row">
-        <span class="form-label" style="color: var(--accent); font-size: 13px; font-weight: 900;">📺 حالت پخش منو روی تلویزیون:</span>
-        <span class="font-size-badge" id="displayLayoutBadge" style="color:var(--accent); border-color:var(--accent);">تک‌صفحه‌ای (ثابت)</span>
-      </div>
-
-      <!-- Mode Cards: Single Page vs Two-Page -->
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 6px;">
-        <div class="theme-card-choice active" id="btnLayoutSingle" onclick="setDisplayLayout('single')" style="padding: 10px 8px; text-align: center; border-radius: 12px; cursor: pointer;">
-          <div style="font-size: 18px; margin-bottom: 3px;">🖥️</div>
-          <div style="font-weight: 800; font-size: 12px; color: var(--text-main);">تک‌صفحه‌ای</div>
-          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">کل منو همزمان در ۱ صفحه</div>
-        </div>
-
-        <div class="theme-card-choice" id="btnLayoutTwoPage" onclick="setDisplayLayout('two_page')" style="padding: 10px 8px; text-align: center; border-radius: 12px; cursor: pointer;">
-          <div style="font-size: 18px; margin-bottom: 3px;">🔄</div>
-          <div style="font-weight: 800; font-size: 12px; color: var(--text-main);">چرخشی ۲ صفحه‌ای</div>
-          <div style="font-size: 10px; color: var(--text-secondary); margin-top: 2px;">اسلاید خودکار با تایمر</div>
-        </div>
-      </div>
-
-      <!-- Two-Page Extra Controls (Only visible when two_page is active) -->
-      <div id="twoPageOptionsBox" style="display: none; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--card-border); flex-direction: column; gap: 10px;">
-        
-        <!-- Timer Slider -->
-        <div class="font-size-header-row">
-          <span class="form-label" style="font-size: 11px;">⏱️ زمان توقف هر صفحه (تایمر تعویض):</span>
-          <span class="font-size-badge" id="pageRotateSecsBadge" style="color:#38bdf8; border-color:rgba(56,189,248,0.4);">۱۲ ثانیه</span>
-        </div>
-
-        <input type="range" min="5" max="60" step="1" value="12" class="font-scale-slider" id="pageRotateSecsRange" oninput="onPageRotateSecondsChange(this.value)">
-
-        <div class="font-presets-row">
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(7, this)">۷ ثانیه</button>
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(10, this)">۱۰ ثانیه</button>
-          <button class="font-preset-btn active" onclick="setRotateSecondsPreset(12, this)">۱۲ ثانیه</button>
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(15, this)">۱۵ ثانیه</button>
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(20, this)">۲۰ ثانیه</button>
-          <button class="font-preset-btn" onclick="setRotateSecondsPreset(30, this)">۳۰ ثانیه</button>
-        </div>
-
-        <!-- Transition Effect Selector -->
-        <div style="margin-top: 4px;">
-          <span class="form-label" style="font-size: 11px; margin-bottom: 5px; display: block;">✨ نوع انیمیشن تعویض صفحات:</span>
-          <div style="display: flex; gap: 6px;">
-            <button class="cat-btn active" id="btnAnimFade" onclick="setTransitionEffect('fade')">محو شونده نرم (Fade)</button>
-            <button class="cat-btn" id="btnAnimSlide" onclick="setTransitionEffect('slide')">ورق زدن (Slide)</button>
-            <button class="cat-btn" id="btnAnimZoom" onclick="setTransitionEffect('zoom')">زوم سینمایی (Zoom)</button>
-          </div>
-        </div>
-
-        <!-- Manual Switch Test Buttons -->
-        <div style="margin-top: 6px; padding: 8px; background: rgba(0,0,0,0.15); border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 10.5px; color: var(--text-secondary); font-weight: 700;">🎮 تست دستی صفحه روی تلویزیون:</span>
-          <div style="display: flex; gap: 5px;">
-            <button class="font-step-btn" onclick="manualTvPageSwitch(1)" style="padding: 4px 8px; font-size: 11px;">☕ صفحه ۱ (گرم)</button>
-            <button class="font-step-btn" onclick="manualTvPageSwitch(2)" style="padding: 4px 8px; font-size: 11px;">🌿 صفحه ۲ (سرد)</button>
-          </div>
-        </div>
-
       </div>
     </div>
 
@@ -2244,6 +2253,11 @@
         badge.style.color = isTwoPage ? '#38bdf8' : 'var(--text-secondary)';
       }
 
+      const quickLbl = document.getElementById('quickLayoutLabel');
+      if (quickLbl) {
+        quickLbl.innerText = isTwoPage ? 'چرخشی ۲ صفحه‌ای' : 'تک‌صفحه‌ای (ثابت)';
+      }
+
       const optionsBox = document.getElementById('twoPageOptionsBox');
       if (optionsBox) {
         optionsBox.style.display = isTwoPage ? 'flex' : 'none';
@@ -2251,6 +2265,13 @@
 
       showToast(isTwoPage ? '🔄 حالت چرخشی ۲ صفحه‌ای روی تلویزیون فعال شد' : '🖥️ حالت تک‌صفحه‌ای (ثابت) فعال شد');
       sendPartialUpdate({ displayLayout: layout }, 0);
+    }
+
+    function openTvLayoutSettings() {
+      const navBtns = document.querySelectorAll('.bottom-nav .nav-item');
+      const settingsBtn = navBtns[navBtns.length - 1];
+      switchTab('tabSettings', settingsBtn);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function onPageRotateSecondsChange(val) {
@@ -2292,7 +2313,7 @@
     function manualTvPageSwitch(pageIdx) {
       if (navigator.vibrate) navigator.vibrate(30);
       showToast('📄 نمایش صفحه ' + pageIdx + ' روی تلویزیون');
-      sendPartialUpdate({ manualPageSelect: pageIdx }, 0);
+      sendPartialUpdate({ manualPageSelect: pageIdx, manualPageSelectId: Date.now() }, 0);
     }
 
     // Backward compatibility helper
@@ -2526,6 +2547,10 @@
               if (badge) {
                 badge.innerText = isTwo ? 'چرخشی ۲ صفحه‌ای' : 'تک‌صفحه‌ای (ثابت)';
                 badge.style.color = isTwo ? '#38bdf8' : 'var(--text-secondary)';
+              }
+              const quickLbl = document.getElementById('quickLayoutLabel');
+              if (quickLbl) {
+                quickLbl.innerText = isTwo ? 'چرخشی ۲ صفحه‌ای' : 'تک‌صفحه‌ای (ثابت)';
               }
               const optBox = document.getElementById('twoPageOptionsBox');
               if (optBox) optBox.style.display = isTwo ? 'flex' : 'none';

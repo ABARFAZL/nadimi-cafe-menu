@@ -233,6 +233,12 @@ export default async function handler(req, res) {
       if (incoming.fullscreenToggleId !== undefined) {
         memoryStore.fullscreenToggleId = incoming.fullscreenToggleId;
       }
+      if (incoming.manualPageSelect !== undefined) {
+        memoryStore.manualPageSelect = incoming.manualPageSelect;
+      }
+      if (incoming.manualPageSelectId !== undefined) {
+        memoryStore.manualPageSelectId = incoming.manualPageSelectId;
+      }
       if (incoming.headerLinks !== undefined) {
         memoryStore.headerLinks = incoming.headerLinks;
       }
